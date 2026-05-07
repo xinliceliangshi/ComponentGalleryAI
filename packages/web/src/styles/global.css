@@ -1,0 +1,40 @@
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  height: 100%;
+  background: #0b0e14;
+}
+
+body {
+  margin: 0;
+  overflow-y: scroll;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-image:
+    radial-gradient(1000px 520px at 50% -120px, rgba(255, 255, 255, 0.08), transparent 60%),
+    radial-gradient(900px 480px at 10% 20%, rgba(255, 255, 255, 0.05), transparent 55%),
+    radial-gradient(900px 480px at 90% 35%, rgba(255, 255, 255, 0.04), transparent 55%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
