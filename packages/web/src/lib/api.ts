@@ -5,7 +5,7 @@ export async function postGenerate(input: string, signal?: AbortSignal): Promise
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ input }),
-    signal
+    signal,
   });
 
   if (!res.ok) {
@@ -13,13 +13,15 @@ export async function postGenerate(input: string, signal?: AbortSignal): Promise
     let message = `Request failed: ${res.status}`;
     try {
       const parsed = JSON.parse(text) as { error?: string };
-      if (parsed?.error) message = parsed.error;
-    } catch {
-      if (text) message = text;
+      if (parsed?.error)
+        message = parsed.error;
+    }
+    catch {
+      if (text)
+        message = text;
     }
     throw new Error(message);
   }
 
   return (await res.json()) as GenerateResponse;
 }
-

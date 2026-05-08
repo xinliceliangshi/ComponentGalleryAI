@@ -4,12 +4,15 @@ export default antfu(
   {
     vue: true,
     typescript: true,
-    formatters: false
+    formatters: false,
+    stylistic: {
+      quotes: "double",
+      semi: true,
+    },
   },
   {
     rules: {
-      "no-console": "off"
-    }
-  }
+      "no-console": "off",
+    },
+  },
 );
-

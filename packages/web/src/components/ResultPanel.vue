@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import CodeBlock from "./code/CodeBlock.vue";
 import type { GenerateResponse } from "@/types/generate";
+import CodeBlock from "./code/CodeBlock.vue";
 
 defineProps<{
   data: GenerateResponse;
@@ -58,4 +58,3 @@ defineProps<{
     </section>
   </div>
 </template>
-

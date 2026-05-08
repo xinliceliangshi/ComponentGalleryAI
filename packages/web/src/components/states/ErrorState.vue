@@ -29,4 +29,3 @@ defineEmits<{
     </div>
   </div>
 </template>
-

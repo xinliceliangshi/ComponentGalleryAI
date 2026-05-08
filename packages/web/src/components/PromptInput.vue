@@ -8,8 +8,8 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   "update:modelValue": [value: string];
-  submit: [value: string];
-  example: [];
+  "submit": [value: string];
+  "example": [];
 }>();
 
 const value = ref(props.modelValue);
@@ -21,7 +21,8 @@ const disabled = computed(() => props.busy === true);
 
 function autoGrow() {
   const t = el.value;
-  if (!t) return;
+  if (!t)
+    return;
   t.style.height = "0px";
   const next = Math.min(240, Math.max(120, t.scrollHeight));
   t.style.height = `${next}px`;
@@ -32,8 +33,10 @@ function submit() {
 }
 
 function onKeydown(e: KeyboardEvent) {
-  if (e.key !== "Enter") return;
-  if (e.shiftKey) return;
+  if (e.key !== "Enter")
+    return;
+  if (e.shiftKey)
+    return;
   e.preventDefault();
   submit();
 }
@@ -42,10 +45,11 @@ watch(value, () => autoGrow());
 watch(
   () => props.modelValue,
   (v) => {
-    if (v !== value.value) value.value = v;
-  }
+    if (v !== value.value)
+      value.value = v;
+  },
 );
-watch(value, (v) => emit("update:modelValue", v));
+watch(value, v => emit("update:modelValue", v));
 onMounted(() => autoGrow());
 </script>
 

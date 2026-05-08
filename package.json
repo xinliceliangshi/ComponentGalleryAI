@@ -9,6 +9,7 @@
     "build": "pnpm -C packages/web build",
     "preview": "pnpm -C packages/web preview",
     "lint": "pnpm -C packages/web lint",
+    "lint:fix": "pnpm -C packages/web exec eslint . --fix",
     "typecheck": "pnpm -C packages/web typecheck"
   }
 }

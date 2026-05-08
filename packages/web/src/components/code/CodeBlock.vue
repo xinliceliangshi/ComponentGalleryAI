@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
 import Prism from "prismjs";
+import { computed, ref } from "vue";
 import "prismjs/components/prism-typescript";
 import "prismjs/components/prism-jsx";
 import "prismjs/components/prism-tsx";
@@ -17,8 +17,10 @@ const collapsed = ref(false);
 const copied = ref(false);
 
 const lang = computed(() => {
-  if (!props.language) return "tsx";
-  if (props.language === "vue") return "markup";
+  if (!props.language)
+    return "tsx";
+  if (props.language === "vue")
+    return "markup";
   return props.language;
 });
 
@@ -32,7 +34,8 @@ async function copy() {
     await navigator.clipboard.writeText(props.code);
     copied.value = true;
     window.setTimeout(() => (copied.value = false), 900);
-  } catch {
+  }
+  catch {
     // ignore
   }
 }

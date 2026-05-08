@@ -1,9 +1,9 @@
+import type { GenerateResponse, GenerateStatus } from "@/types/generate";
 import { computed, ref } from "vue";
 import { postGenerate } from "@/lib/api";
-import type { GenerateResponse, GenerateStatus } from "@/types/generate";
 
-const EXAMPLE_PROMPT =
-  "做一个“团队成员列表”模块：支持头像、姓名、角色标签、在线状态；卡片 hover 微动效；提供添加成员按钮；需要可复用组件设计。";
+const EXAMPLE_PROMPT
+  = "做一个“团队成员列表”模块：支持头像、姓名、角色标签、在线状态；卡片 hover 微动效；提供添加成员按钮；需要可复用组件设计。";
 
 export function useGenerate() {
   const status = ref<GenerateStatus>("idle");
@@ -35,8 +35,10 @@ export function useGenerate() {
       const data = await postGenerate(next, abortController.signal);
       result.value = data;
       status.value = "success";
-    } catch (err) {
-      if ((err as Error).name === "AbortError") return;
+    }
+    catch (err) {
+      if ((err as Error).name === "AbortError")
+        return;
       status.value = "error";
       error.value = (err as Error).message || "请求失败";
       result.value = null;
@@ -44,7 +46,8 @@ export function useGenerate() {
   }
 
   function retry() {
-    if (input.value.trim()) generate(input.value);
+    if (input.value.trim())
+      generate(input.value);
   }
 
   function fillExample() {
@@ -59,7 +62,6 @@ export function useGenerate() {
     canSubmit,
     generate,
     retry,
-    fillExample
+    fillExample,
   };
 }
-
