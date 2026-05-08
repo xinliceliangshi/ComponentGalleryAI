@@ -117,7 +117,7 @@ function normalizeOpenAiBaseUrl(raw: string): string {
 }
 
 export const env = {
-  port: Number(process.env.PORT) || 3000,
+  port: Number(process.env.PORT) || 3002,
   apiKey: (process.env.OPENAI_API_KEY ?? "").trim(),
   model: (process.env.OPENAI_MODEL ?? "gpt-4o-mini").trim(),
   openAiBaseUrl: normalizeOpenAiBaseUrl(

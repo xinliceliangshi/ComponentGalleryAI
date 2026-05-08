@@ -6,7 +6,7 @@ vi.mock("../config/env.js", () => ({
     apiKey: "",
     model: "gpt-4o-mini",
     openAiBaseUrl: "https://api.openai.com/v1",
-    port: 3000,
+    port: 3002,
     httpsProxy: ""
   }
 }));

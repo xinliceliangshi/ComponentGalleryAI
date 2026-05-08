@@ -1,0 +1,184 @@
+import type { KeywordInput, WeightedKeyword } from "./types.js";
+
+export const KEYWORD_PATCHES_BY_ID: Record<string, WeightedKeyword[]> = {
+  ZhTable: [
+    { word: "表格", weight: 3.2, category: "component" },
+    { word: "table", weight: 3, category: "component" },
+    { word: "列表", weight: 2.8, category: "component" },
+    { word: "数据表", weight: 2.5, category: "component" },
+    { word: "分页", weight: 2.4, category: "feature" },
+    { word: "列配置", weight: 2.3, category: "feature" },
+    { word: "排序", weight: 2.2, category: "feature" },
+    { word: "合计行", weight: 2.2, category: "feature" },
+    { word: "固定列", weight: 1.8, category: "feature" },
+    { word: "多选", weight: 1.7, category: "feature" },
+    { word: "状态列", weight: 1.6, category: "feature" },
+    { word: "链接列", weight: 1.5, category: "feature" }
+  ],
+  ZhDiyDataTable: [
+    { word: "自定义表格", weight: 3.2, category: "component" },
+    { word: "数据表格", weight: 3, category: "component" },
+    { word: "table", weight: 2.7, category: "component" },
+    { word: "列配置", weight: 2.5, category: "feature" },
+    { word: "表尾合计", weight: 2.4, category: "feature" },
+    { word: "合计行", weight: 2.2, category: "feature" },
+    { word: "分页", weight: 2.2, category: "feature" },
+    { word: "排序", weight: 2, category: "feature" },
+    { word: "格式化", weight: 1.5, category: "feature" }
+  ],
+  ZhDatePicker: [
+    { word: "日期", weight: 3, category: "component" },
+    { word: "日期范围", weight: 3, category: "feature" },
+    { word: "时间范围", weight: 2.5, category: "feature" },
+    { word: "下单时间", weight: 2.2, category: "scenario" },
+    { word: "起止时间", weight: 2, category: "scenario" },
+    { word: "筛选日期", weight: 1.8, category: "scenario" }
+  ],
+  ZhInput: [
+    { word: "输入框", weight: 3, category: "component" },
+    { word: "输入", weight: 2.8, category: "component" },
+    { word: "搜索框", weight: 2.6, category: "component" },
+    { word: "编号", weight: 2, category: "scenario" },
+    { word: "合同", weight: 1.8, category: "scenario" },
+    { word: "模糊查询", weight: 2.4, category: "feature" },
+    { word: "关键字", weight: 2, category: "feature" }
+  ],
+  ZhButton: [
+    { word: "按钮", weight: 3, category: "component" },
+    { word: "查询", weight: 2.8, category: "action" },
+    { word: "搜索", weight: 2.6, category: "action" },
+    { word: "重置", weight: 2.4, category: "action" },
+    { word: "清除", weight: 2, category: "action" },
+    { word: "主按钮", weight: 1.8, category: "visual" },
+    { word: "搜索图标", weight: 1.6, category: "visual" }
+  ],
+  ZhButtonGroup: [
+    { word: "按钮组", weight: 3, category: "component" },
+    { word: "操作区", weight: 2.2, category: "layout" },
+    { word: "查询重置", weight: 2.4, category: "scenario" },
+    { word: "批量操作", weight: 1.8, category: "scenario" }
+  ],
+  ZhCascaderLoadMore: [
+    { word: "下拉", weight: 2.8, category: "component" },
+    { word: "状态下拉", weight: 2.7, category: "scenario" },
+    { word: "专区名称", weight: 2.4, category: "scenario" },
+    { word: "远程搜索", weight: 2.2, category: "feature" },
+    { word: "加载更多", weight: 2, category: "feature" },
+    { word: "分页加载", weight: 1.8, category: "feature" }
+  ],
+  ZhPageHeadPanel: [
+    { word: "页头", weight: 3, category: "component" },
+    { word: "顶部", weight: 2, category: "layout" },
+    { word: "KPI", weight: 3, category: "scenario" },
+    { word: "统计卡片", weight: 3, category: "scenario" },
+    { word: "关键指标", weight: 2.7, category: "scenario" },
+    { word: "指标卡", weight: 2.6, category: "component" },
+    { word: "标题区", weight: 2, category: "layout" }
+  ],
+  ZhBaseInfo: [
+    { word: "基础信息", weight: 3, category: "component" },
+    { word: "详情信息", weight: 2.8, category: "scenario" },
+    { word: "信息卡片", weight: 2.4, category: "component" },
+    { word: "统计卡片", weight: 2, category: "scenario" },
+    { word: "栅格展示", weight: 2.2, category: "layout" },
+    { word: "键值对", weight: 1.8, category: "component" }
+  ],
+  ZhGrid: [
+    { word: "栅格", weight: 3, category: "component" },
+    { word: "网格", weight: 2.6, category: "layout" },
+    { word: "多列布局", weight: 2.7, category: "layout" },
+    { word: "两列", weight: 2, category: "layout" },
+    { word: "布局", weight: 2, category: "layout" }
+  ],
+  ZhInfoPair: [
+    { word: "信息对", weight: 3.2, category: "component" },
+    { word: "只读", weight: 2.6, category: "scenario" },
+    { word: "只读模式", weight: 2.8, category: "scenario" },
+    { word: "字段展示", weight: 2.4, category: "feature" },
+    { word: "键值对", weight: 2.4, category: "component" },
+    { word: "label value", weight: 2, category: "component" },
+    { word: "展示", weight: 1.8, category: "scenario" }
+  ],
+  ZhEditInfoPair: [
+    { word: "可编辑信息对", weight: 3.2, category: "component" },
+    { word: "编辑模式", weight: 3, category: "scenario" },
+    { word: "编辑字段", weight: 2.7, category: "feature" },
+    { word: "行内编辑", weight: 2.6, category: "feature" },
+    { word: "保存", weight: 2.2, category: "action" },
+    { word: "取消", weight: 2, category: "action" },
+    { word: "切换", weight: 1.8, category: "action" }
+  ],
+  ZhFileWrapper: [
+    { word: "文件", weight: 3, category: "component" },
+    { word: "附件", weight: 3.2, category: "component" },
+    { word: "附件区", weight: 3, category: "scenario" },
+    { word: "上传", weight: 2.7, category: "action" },
+    { word: "预览", weight: 2.7, category: "action" },
+    { word: "下载", weight: 2.7, category: "action" },
+    { word: "删除", weight: 2.5, category: "action" },
+    { word: "文件名", weight: 2.2, category: "feature" },
+    { word: "完整路径", weight: 2, category: "feature" }
+  ],
+  ZhToolTips: [
+    { word: "tooltip", weight: 3, category: "component" },
+    { word: "提示", weight: 3, category: "component" },
+    { word: "悬浮提示", weight: 2.8, category: "visual" },
+    { word: "气泡提示", weight: 2.6, category: "visual" },
+    { word: "省略", weight: 2.5, category: "feature" },
+    { word: "完整路径", weight: 2.2, category: "feature" },
+    { word: "过长", weight: 1.8, category: "visual" }
+  ],
+  ZhDialog: [
+    { word: "弹窗", weight: 3, category: "component" },
+    { word: "对话框", weight: 3, category: "component" },
+    { word: "模态框", weight: 2.5, category: "component" },
+    { word: "确认", weight: 1.8, category: "action" }
+  ],
+  ZhMessageBox: [
+    { word: "确认弹窗", weight: 3.2, category: "component" },
+    { word: "提示弹窗", weight: 2.8, category: "component" },
+    { word: "二次确认", weight: 3, category: "scenario" },
+    { word: "删除前确认", weight: 2.8, category: "scenario" },
+    { word: "保存前", weight: 2.5, category: "scenario" },
+    { word: "未保存确认", weight: 2.8, category: "scenario" },
+    { word: "确认", weight: 2.2, category: "action" }
+  ],
+  ZhLoading: [
+    { word: "加载", weight: 3, category: "visual" },
+    { word: "loading", weight: 3, category: "visual" },
+    { word: "遮罩", weight: 2.3, category: "visual" },
+    { word: "请求中", weight: 2, category: "scenario" }
+  ]
+};
+
+export function normalizeWeightedKeywords(values: KeywordInput[] | undefined): WeightedKeyword[] {
+  if (!values?.length) return [];
+
+  const out: WeightedKeyword[] = [];
+  for (const value of values) {
+    if (typeof value === "string") {
+      const word = value.trim();
+      if (word) out.push({ word, weight: 1 });
+      continue;
+    }
+
+    const word = value.word?.trim();
+    const weight = Number(value.weight);
+    if (!word) continue;
+    out.push({
+      word,
+      weight: Number.isFinite(weight) && weight > 0 ? weight : 1,
+      category: value.category
+    });
+  }
+
+  return out;
+}
+
+export function keywordWords(values: KeywordInput[] | undefined): string[] {
+  return normalizeWeightedKeywords(values).map((item) => item.word);
+}
+
+export function keywordsForComponent(id: string | undefined, keywords: KeywordInput[] | undefined): KeywordInput[] {
+  return [...(keywords ?? []), ...(id ? KEYWORD_PATCHES_BY_ID[id] ?? [] : [])];
+}

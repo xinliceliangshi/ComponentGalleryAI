@@ -5,12 +5,15 @@
   "scripts": {
     "server:dev": "pnpm -C packages/server dev",
     "server:start": "pnpm -C packages/server start",
+    "dev:all": "concurrently -k -n server,web -c blue,green \"pnpm server:dev\" \"pnpm -C packages/web dev\"",
     "dev": "pnpm -C packages/web dev",
     "build": "pnpm -C packages/web build",
     "preview": "pnpm -C packages/web preview",
     "lint": "pnpm -C packages/web lint",
     "lint:fix": "pnpm -C packages/web exec eslint . --fix",
     "typecheck": "pnpm -C packages/web typecheck"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
   }
 }
-
