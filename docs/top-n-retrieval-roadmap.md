@@ -22,3 +22,7 @@ v3 implementation note:
 v4 implementation note:
 
 - Step 1: Add deterministic query expansion with lower-weight synonym tokens.
+
+v5 implementation note:
+
+- Step 1: Add dedupe weights to improve result diversity after relevance scoring.

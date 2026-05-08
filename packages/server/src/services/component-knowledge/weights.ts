@@ -24,3 +24,8 @@ export const CHUNK_TEXT_WEIGHTS = {
   type: { weight: 1.5, exactBoost: 5 },
   text: { weight: 1.0 }
 } satisfies Record<string, Omit<WeightedTextField, "text">>;
+
+export const DEDUPE_WEIGHTS = {
+  cardFamilyPenalty: 0.92,
+  chunkComponentPenalty: 0.72
+};
