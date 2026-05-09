@@ -107,6 +107,17 @@ const pageTypeCases: PageTypeCase[] = [
   { name: "dashboard-004 营销看板", input: "做一个营销看板，展示投放趋势、渠道占比和统计图表", pageType: "dashboard" },
   { name: "dashboard-005 财务图表", input: "做一个财务图表页面，包含收入趋势、支出统计和可视化", pageType: "dashboard" },
 
+  { name: "create-001 新增商品", input: "做一个后台新增商品页面，包含基础信息、价格设置、封面上传和提交", pageType: "admin-create" },
+  { name: "create-002 新建用户", input: "做一个后台新建用户页面，包含基本资料、角色选择、头像上传和保存", pageType: "admin-create" },
+  { name: "create-003 创建活动", input: "做一个后台创建活动页，包含活动信息、时间选择、封面图和提交按钮", pageType: "admin-create" },
+  { name: "create-004 录入商家", input: "做一个后台录入商家资料页面，包含基础信息、资质附件和提交审核", pageType: "admin-create" },
+  { name: "create-005 新增课程", input: "做一个后台新增课程页面，包含课程信息、封面上传、讲师选择和保存草稿", pageType: "admin-create" },
+  { name: "create-006 新建门店", input: "做一个后台新建门店页面，支持填写门店信息、上传门头图和提交", pageType: "admin-create" },
+  { name: "create-007 创建模板", input: "做一个后台创建模板页面，包含模板名称、html 内容、附件上传和保存", pageType: "admin-create" },
+  { name: "create-008 新增文章", input: "做一个后台新增文章页面，包含标题、正文、封面上传和发布", pageType: "admin-create" },
+  { name: "create-009 新建版本", input: "做一个后台新建版本页面，包含版本信息、更新内容和提交按钮", pageType: "admin-create" },
+  { name: "create-010 新增权限角色", input: "做一个后台新增角色页面，包含角色名称、权限选择和保存提交", pageType: "admin-create" },
+
   { name: "form-001 申请表单", input: "做一个请假申请表单，包含填写信息、提交和校验", pageType: "form-page" },
   { name: "form-002 入驻表单", input: "做一个商家入驻表单，需要填写资料、上传附件和提交审核", pageType: "form-page" },
   { name: "form-003 报名表单", input: "做一个活动报名表单，包含姓名、联系方式、提交按钮和校验", pageType: "form-page" },
@@ -205,6 +216,54 @@ describe("decomposeRequirement", () => {
     );
   });
 
+  it("后台新增页优先识别为独立新增页而不是普通管理页", () => {
+    const result = decomposeRequirement(
+      "做一个后台新增商品页面，包含基础信息、价格设置、封面上传、必填校验和提交按钮"
+    );
+
+    expect(result.enabled).toBe(true);
+    expect(result.pageType).toBe("admin-create");
+    expect(result.subtasks.map((task) => task.id)).toEqual(
+      expect.arrayContaining(["create-header", "basic-form", "upload", "field-validation", "submit-actions"])
+    );
+    expect(result.subtasks.map((task) => task.id)).not.toContain("table");
+    expect(result.constraints).toContain("页面主体必须是表单录入，不要生成成 CRUD 列表页或详情页");
+  });
+
+  it("后台新增页输出页面结构 DSL 模块", () => {
+    const result = decomposeRequirement(
+      "做一个后台新建用户页面，包含基本资料、角色选择、头像上传、校验规则和保存提交"
+    );
+
+    expect(result.modules?.map((module) => module.type)).toEqual([
+      "createHeader",
+      "formSection",
+      "groupedCardSections",
+      "uploadAttachments",
+      "validationSummary",
+      "submitBar"
+    ]);
+    expect(result.modules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          type: "formSection",
+          required: true,
+          layout: "primary-form-card"
+        }),
+        expect.objectContaining({
+          type: "validationSummary",
+          required: true,
+          layout: "inline-validation-summary"
+        }),
+        expect.objectContaining({
+          type: "submitBar",
+          required: true,
+          layout: "sticky-footer-actions"
+        })
+      ])
+    );
+  });
+
   it("包含详情抽屉的后台管理列表仍识别为普通管理页", () => {
     const result = decomposeRequirement(
       "做一个后台用户管理页面，包含筛选、表格、批量操作、详情抽屉、编辑弹窗、权限状态和分页"
@@ -216,8 +275,8 @@ describe("decomposeRequirement", () => {
     expect(result.modules).toBeUndefined();
   });
 
-  it("页面类型样例数量保持为 100 个", () => {
-    expect(pageTypeCases).toHaveLength(100);
+  it("页面类型样例数量保持为 110 个", () => {
+    expect(pageTypeCases).toHaveLength(110);
   });
 
   it.each(pageTypeCases)("$name", ({ input, pageType }) => {
@@ -267,6 +326,18 @@ describe("buildDecompositionQueries", () => {
     expect(queries.some((query) => query.includes("ZhButtonGroup"))).toBe(true);
     expect(queries.some((query) => query.includes("ZhBaseInfo"))).toBe(true);
     expect(queries.some((query) => query.includes("business-history-card"))).toBe(true);
+  });
+
+  it("新增页模块 DSL 会补充面向表单结构的召回查询", () => {
+    const input = "做一个后台新增商品页面，包含基础信息、封面上传、必填校验和提交按钮";
+    const result = decomposeRequirement(input);
+    const queries = buildDecompositionQueries(input, result);
+
+    expect(queries.some((query) => query.includes("新增页头部"))).toBe(true);
+    expect(queries.some((query) => query.includes("表单录入"))).toBe(true);
+    expect(queries.some((query) => query.includes("表单校验"))).toBe(true);
+    expect(queries.some((query) => query.includes("底部操作栏"))).toBe(true);
+    expect(queries.some((query) => query.includes("upload-card"))).toBe(true);
   });
 
   it("普通管理页不会生成详情页模块组件查询", () => {

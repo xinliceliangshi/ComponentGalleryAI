@@ -1,5 +1,6 @@
 import { includesAny } from "../matchers.js";
 import type { RequirementPageProfile } from "../types.js";
+import { adminCreateProfile } from "./admin-create.js";
 import { adminDetailProfile } from "./admin-detail.js";
 import { adminHomeDashboardProfile } from "./admin-home-dashboard.js";
 import { adminManagementProfile } from "./admin-management.js";
@@ -21,6 +22,7 @@ const formPageProfile: RequirementPageProfile = {
 export const requirementPageProfiles: RequirementPageProfile[] = [
   adminHomeDashboardProfile,
   adminDetailProfile,
+  adminCreateProfile,
   adminManagementProfile,
   dashboardProfile,
   formPageProfile

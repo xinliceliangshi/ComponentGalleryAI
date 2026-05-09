@@ -17,6 +17,30 @@ export type {
 const COMPLEX_CONNECTORS = ["包含", "支持", "同时", "以及", "并且", "需要", "还要", "包括", "实现", "带有", "具备"];
 
 const MODULE_QUERY_HINTS: Record<string, string[]> = {
+  createHeader: [
+    "新增页头部 标题 返回 操作区 保存 提交",
+    "新建页面 Header 标题栏 返回按钮 操作按钮"
+  ],
+  formSection: [
+    "表单录入 输入框 选择器 日期 开关 表单布局",
+    "后台新增表单 Form 字段 分组 校验"
+  ],
+  groupedCardSections: [
+    "卡片表单 分组表单 Section 表单分区",
+    "基础信息 配置规则 高级设置 分组卡片"
+  ],
+  uploadAttachments: [
+    "上传附件 图片上传 文件上传 封面素材",
+    "文件选择 上传列表 附件卡片"
+  ],
+  validationSummary: [
+    "表单校验 必填提示 错误提示 校验规则",
+    "提交前校验 错误汇总 未填写字段"
+  ],
+  submitBar: [
+    "底部操作栏 提交按钮 保存草稿 取消",
+    "吸底操作区 表单提交 固定底栏"
+  ],
   detailHeader: [
     "详情页头部 返回 标题 状态 操作区 ZhDetailHeader",
     "详情头部 Header 标题栏 状态标签 操作按钮"
@@ -78,7 +102,7 @@ function shouldEnableDecomposition(text: string, matchedIntentCount: number): bo
 }
 
 function shouldAlwaysEnableDecomposition(pageType: string): boolean {
-  return pageType === "admin-home-dashboard" || pageType === "admin-detail";
+  return pageType === "admin-home-dashboard" || pageType === "admin-detail" || pageType === "admin-create";
 }
 
 function buildModuleQueries(module: RequirementModule): string[] {

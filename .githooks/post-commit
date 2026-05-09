@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+# 跳过：SKIP_COMMIT_DOC=1 git commit ...
+if [ "${SKIP_COMMIT_DOC:-}" = "1" ]; then
+  exit 0
+fi
+ROOT="$(git rev-parse --show-toplevel)"
+exec bash "${ROOT}/scripts/gen-commit-summary.sh" HEAD

@@ -27,6 +27,15 @@ function formatRequirementDecomposition(decomposition: RequirementDecomposition 
       "- 审核记录表达业务行为历史，操作日志表达系统操作记录",
       "- 内容详情区可展示 markdown、html、图片、引用或 code block",
       "- 不要把详情页生成成列表页或 CRUD 表格页"
+    ],
+    "admin-create": [
+      "后台新增页专项要求：",
+      "- 页面主体必须是表单录入，不要生成成 CRUD 列表页或详情页",
+      "- 不允许让表格成为新增页主体",
+      "- 头部必须体现标题、返回和操作按钮区",
+      "- 主体必须围绕表单字段组织，并体现必填、校验、错误提示",
+      "- 长表单应拆成分组卡片，不要把所有字段平铺成一个块",
+      "- 底部必须有明确的取消、保存/保存草稿、提交操作区"
     ]
   };
   const pageTypeInstruction = pageTypeInstructionMap[decomposition.pageType]?.join("\n") ?? "";

@@ -3,6 +3,7 @@
   "private": true,
   "packageManager": "pnpm@9.15.0",
   "scripts": {
+    "doc:commit-summary": "bash scripts/gen-commit-summary.sh",
     "server:dev": "pnpm -C packages/server dev",
     "server:start": "pnpm -C packages/server start",
     "dev:all": "concurrently -k -n server,web -c blue,green \"pnpm server:dev\" \"pnpm -C packages/web dev\"",

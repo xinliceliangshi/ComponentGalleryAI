@@ -4,6 +4,7 @@ import type { RequirementPageProfile } from "../types.js";
 const ADMIN_CONTEXT_TERMS = ["后台", "管理系统", "运营", "审核", "审批", "权限"];
 const DETAIL_PAGE_TERMS = ["详情页", "详情页面", "审核详情", "审批详情", "订单详情", "内容详情", "工单详情", "用户详情"];
 const MANAGEMENT_LIST_TERMS = ["列表", "表格", "分页", "筛选", "查询", "批量", "多选"];
+const CREATE_PAGE_TERMS = ["新增", "新建", "创建", "录入"];
 
 function isAdminDetailPage(text: string): boolean {
   const hasDetailSignal = includesAny(text, DETAIL_PAGE_TERMS)
@@ -11,6 +12,7 @@ function isAdminDetailPage(text: string): boolean {
 
   return hasDetailSignal
     && includesAny(text, ADMIN_CONTEXT_TERMS)
+    && !includesAny(text, CREATE_PAGE_TERMS)
     && !includesAny(text, MANAGEMENT_LIST_TERMS);
 }
 
