@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import type { OpenAiConfigForLlm } from "./llm.service.js";
+import type { OpenAiConfigForLlm } from "../llm.service.js";
 
-vi.mock("../config/env.js", () => ({
+vi.mock("../../config/env.js", () => ({
   env: {
     apiKey: "",
     model: "gpt-4o-mini",
@@ -11,7 +11,7 @@ vi.mock("../config/env.js", () => ({
   }
 }));
 
-import { resolveLlmFromEnv, callLLM } from "./llm.service.js";
+import { resolveLlmFromEnv, callLLM } from "../llm.service.js";
 
 const OPENAI_SNAPSHOT: OpenAiConfigForLlm = {
   apiKey: "sk-openai-test",

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildDecompositionQueries, decomposeRequirement } from "./requirement-decomposition.service.js";
+import { buildDecompositionQueries, decomposeRequirement } from "../requirement-decomposition.service.js";
 
 describe("decomposeRequirement", () => {
   it("短小单意图需求不启用拆分", () => {

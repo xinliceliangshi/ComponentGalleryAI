@@ -21,6 +21,10 @@ const QUERY_EXPANSION_RULES: Array<{ triggers: string[]; expands: string[] }> = 
     expands: ["弹窗", "对话框", "modal", "dialog"]
   },
   {
+    triggers: ["弹窗表单", "表单弹窗", "表单校验", "校验失败"],
+    expands: ["弹窗", "输入框", "表单", "字段", "错误提示"]
+  },
+  {
     triggers: ["统计指标", "指标卡", "数据卡片", "统计数据"],
     expands: ["KPI", "统计卡片", "关键指标", "页头"]
   },
@@ -35,6 +39,22 @@ const QUERY_EXPANSION_RULES: Array<{ triggers: string[]; expands: string[] }> = 
   {
     triggers: ["筛选", "查询条件", "检索条件", "过滤条件"],
     expands: ["筛选区", "查询区", "输入框", "下拉", "日期范围"]
+  },
+  {
+    triggers: ["快捷入口", "快捷操作", "常用操作", "操作入口"],
+    expands: ["按钮", "按钮组", "操作区", "新建", "导出"]
+  },
+  {
+    triggers: ["视频播放器", "播放 mp4", "播放视频", "视频播放", "播放地址"],
+    expands: ["视频", "播放器", "VideoPlayer", "mp4", "全屏", "进度条"]
+  },
+  {
+    triggers: ["详情页副标题", "状态副标题", "副标题区", "状态条"],
+    expands: ["副标题", "状态", "编号信息", "有效", "已取消"]
+  },
+  {
+    triggers: ["地图模块", "地图", "marker", "点位"],
+    expands: ["地图", "marker", "点位", "缩放", "定位"]
   },
   {
     triggers: ["信息展示", "键值展示", "详情字段"],

@@ -38,6 +38,11 @@ export const KEYWORD_PATCHES_BY_ID: Record<string, WeightedKeyword[]> = {
     { word: "输入框", weight: 3, category: "component" },
     { word: "输入", weight: 2.8, category: "component" },
     { word: "搜索框", weight: 2.6, category: "component" },
+    { word: "表单", weight: 2.6, category: "scenario" },
+    { word: "表单校验", weight: 2.8, category: "feature" },
+    { word: "字段", weight: 2.4, category: "prop" },
+    { word: "校验失败", weight: 2.3, category: "scenario" },
+    { word: "错误提示", weight: 2.1, category: "visual" },
     { word: "编号", weight: 2, category: "scenario" },
     { word: "合同", weight: 1.8, category: "scenario" },
     { word: "模糊查询", weight: 2.4, category: "feature" },
@@ -45,6 +50,12 @@ export const KEYWORD_PATCHES_BY_ID: Record<string, WeightedKeyword[]> = {
   ],
   ZhButton: [
     { word: "按钮", weight: 3, category: "component" },
+    { word: "快捷入口", weight: 3, category: "scenario" },
+    { word: "快捷操作", weight: 2.8, category: "scenario" },
+    { word: "入口", weight: 2.4, category: "scenario" },
+    { word: "新建", weight: 2.5, category: "action" },
+    { word: "导出", weight: 2.3, category: "action" },
+    { word: "系统配置", weight: 2.1, category: "scenario" },
     { word: "查询", weight: 2.8, category: "action" },
     { word: "搜索", weight: 2.6, category: "action" },
     { word: "重置", weight: 2.4, category: "action" },
@@ -54,6 +65,13 @@ export const KEYWORD_PATCHES_BY_ID: Record<string, WeightedKeyword[]> = {
   ],
   ZhButtonGroup: [
     { word: "按钮组", weight: 3, category: "component" },
+    { word: "快捷入口", weight: 3.2, category: "scenario" },
+    { word: "快捷操作", weight: 3, category: "scenario" },
+    { word: "操作入口", weight: 2.8, category: "scenario" },
+    { word: "常用操作", weight: 2.6, category: "scenario" },
+    { word: "入口", weight: 2.4, category: "scenario" },
+    { word: "新建", weight: 2.4, category: "action" },
+    { word: "导出", weight: 2.2, category: "action" },
     { word: "操作区", weight: 2.2, category: "layout" },
     { word: "查询重置", weight: 2.4, category: "scenario" },
     { word: "批量操作", weight: 1.8, category: "scenario" }
@@ -131,6 +149,8 @@ export const KEYWORD_PATCHES_BY_ID: Record<string, WeightedKeyword[]> = {
   ZhDialog: [
     { word: "弹窗", weight: 3, category: "component" },
     { word: "对话框", weight: 3, category: "component" },
+    { word: "弹窗表单", weight: 3.2, category: "scenario" },
+    { word: "表单弹窗", weight: 3, category: "scenario" },
     { word: "模态框", weight: 2.5, category: "component" },
     { word: "确认", weight: 1.8, category: "action" }
   ],
@@ -142,6 +162,41 @@ export const KEYWORD_PATCHES_BY_ID: Record<string, WeightedKeyword[]> = {
     { word: "保存前", weight: 2.5, category: "scenario" },
     { word: "未保存确认", weight: 2.8, category: "scenario" },
     { word: "确认", weight: 2.2, category: "action" }
+  ],
+  ZhDetailSubTitle: [
+    { word: "副标题", weight: 3.4, category: "component" },
+    { word: "详情页副标题", weight: 3.3, category: "scenario" },
+    { word: "状态副标题", weight: 3.2, category: "scenario" },
+    { word: "副标题区", weight: 3, category: "layout" },
+    { word: "状态条", weight: 2.8, category: "component" },
+    { word: "编号信息", weight: 2.5, category: "scenario" },
+    { word: "状态", weight: 2.4, category: "visual" },
+    { word: "有效", weight: 2, category: "visual" },
+    { word: "已取消", weight: 2, category: "visual" },
+    { word: "颜色区分", weight: 1.8, category: "visual" }
+  ],
+  ZhVideoPlayer: [
+    { word: "视频播放器", weight: 3.5, category: "component" },
+    { word: "视频", weight: 3.2, category: "component" },
+    { word: "播放器", weight: 3.2, category: "component" },
+    { word: "video", weight: 3, category: "component" },
+    { word: "mp4", weight: 3, category: "scenario" },
+    { word: "播放", weight: 2.8, category: "action" },
+    { word: "播放地址", weight: 2.6, category: "prop" },
+    { word: "全屏", weight: 2.4, category: "feature" },
+    { word: "进度条", weight: 2.4, category: "feature" },
+    { word: "播放失败", weight: 2.2, category: "scenario" },
+    { word: "占位提示", weight: 2, category: "visual" }
+  ],
+  ZhMap: [
+    { word: "地图", weight: 3.4, category: "component" },
+    { word: "地图模块", weight: 3.3, category: "scenario" },
+    { word: "点位", weight: 3, category: "scenario" },
+    { word: "marker", weight: 3, category: "component" },
+    { word: "缩放", weight: 2.8, category: "feature" },
+    { word: "定位", weight: 2.7, category: "feature" },
+    { word: "行政区", weight: 2.4, category: "scenario" },
+    { word: "弹出信息", weight: 2.3, category: "feature" }
   ],
   ZhLoading: [
     { word: "加载", weight: 3, category: "visual" },

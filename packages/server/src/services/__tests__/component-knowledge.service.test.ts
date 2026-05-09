@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 import {
   retrieveKnowledgeForDecomposition,
   retrieveKnowledgeForQuery
-} from "./component-knowledge.service.js";
-import { decomposeRequirement } from "./requirement-decomposition.service.js";
+} from "../component-knowledge.service.js";
+import { decomposeRequirement } from "../requirement-decomposition.service.js";
 
 describe("component knowledge retrieval", () => {
   it("单意图表格需求可以召回表格组件", () => {
