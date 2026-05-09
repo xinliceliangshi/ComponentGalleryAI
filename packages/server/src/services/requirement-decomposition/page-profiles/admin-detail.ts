@@ -107,6 +107,80 @@ export const adminDetailProfile: RequirementPageProfile = {
       candidateKeywords: ["时间线", "Timeline", "流程节点", "历史记录"]
     }
   ],
+  modules: [
+    {
+      type: "detailHeader",
+      required: true,
+      priority: "must",
+      layout: "header-title-status-actions",
+      intent: "detail-header",
+      uiRegion: "header",
+      sourceSubtaskId: "detail-header"
+    },
+    {
+      type: "statusSummary",
+      required: true,
+      priority: "must",
+      layout: "status-driven-banner",
+      intent: "status-driven-ui",
+      uiRegion: "top",
+      sourceSubtaskId: "status-summary"
+    },
+    {
+      type: "statusActions",
+      required: true,
+      priority: "must",
+      layout: "permission-aware-button-group",
+      intent: "status-action-permission",
+      uiRegion: "header-actions",
+      sourceSubtaskId: "status-actions"
+    },
+    {
+      type: "baseInfo",
+      required: true,
+      priority: "must",
+      layout: "descriptions-grid",
+      intent: "base-info-descriptions",
+      uiRegion: "main",
+      sourceSubtaskId: "base-info"
+    },
+    {
+      type: "contentDetail",
+      required: false,
+      priority: "should",
+      layout: "rich-content-card",
+      intent: "rich-content-detail",
+      uiRegion: "main",
+      sourceSubtaskId: "content-detail"
+    },
+    {
+      type: "auditRecords",
+      required: true,
+      priority: "must",
+      layout: "business-history-card",
+      intent: "audit-history",
+      uiRegion: "main",
+      sourceSubtaskId: "audit-records"
+    },
+    {
+      type: "operationLog",
+      required: false,
+      priority: "should",
+      layout: "operation-log-card",
+      intent: "operation-log",
+      uiRegion: "bottom",
+      sourceSubtaskId: "operation-log"
+    },
+    {
+      type: "timeline",
+      required: false,
+      priority: "should",
+      layout: "vertical-timeline",
+      intent: "timeline",
+      uiRegion: "bottom",
+      sourceSubtaskId: "timeline"
+    }
+  ],
   constraints: [
     "必须包含 Header：标题、状态 Tag、操作按钮区",
     "顶部必须体现状态驱动 UI，并根据不同状态显示不同文字",

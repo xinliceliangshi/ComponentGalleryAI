@@ -39,6 +39,7 @@ function formatRequirementDecomposition(decomposition: RequirementDecomposition 
         pageType: decomposition.pageType,
         userGoal: decomposition.userGoal,
         subtasks: decomposition.subtasks,
+        modules: decomposition.modules,
         constraints: decomposition.constraints,
         risks: decomposition.risks
       },
@@ -46,7 +47,7 @@ function formatRequirementDecomposition(decomposition: RequirementDecomposition 
       2
     ),
     pageTypeInstruction,
-    "生成要求：必须覆盖所有 priority=must 的子任务；priority=should 的子任务尽量体现；不要只实现第一个子任务。"
+    "生成要求：必须覆盖所有 priority=must 的子任务；若存在 modules，必须优先按 modules 的 required=true 模块搭建页面结构；priority=should 的子任务尽量体现；不要只实现第一个子任务。"
   ].filter(Boolean).join("\n");
 }
 

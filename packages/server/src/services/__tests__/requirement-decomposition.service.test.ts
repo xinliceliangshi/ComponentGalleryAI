@@ -170,6 +170,41 @@ describe("decomposeRequirement", () => {
     expect(result.constraints).toContain("不要把后台详情页生成成列表页或 CRUD 表格页");
   });
 
+  it("后台详情页输出页面结构 DSL 模块", () => {
+    const result = decomposeRequirement(
+      "做一个后台审核详情页，顶部展示标题、状态Tag和操作按钮，包含基础信息、内容详情、审核记录和操作日志时间线"
+    );
+
+    expect(result.modules?.map((module) => module.type)).toEqual([
+      "detailHeader",
+      "statusSummary",
+      "statusActions",
+      "baseInfo",
+      "contentDetail",
+      "auditRecords",
+      "operationLog",
+      "timeline"
+    ]);
+    expect(result.modules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          type: "baseInfo",
+          required: true,
+          layout: "descriptions-grid"
+        }),
+        expect.objectContaining({
+          type: "auditRecords",
+          required: true,
+          layout: "business-history-card"
+        }),
+        expect.objectContaining({
+          type: "operationLog",
+          required: false
+        })
+      ])
+    );
+  });
+
   it("包含详情抽屉的后台管理列表仍识别为普通管理页", () => {
     const result = decomposeRequirement(
       "做一个后台用户管理页面，包含筛选、表格、批量操作、详情抽屉、编辑弹窗、权限状态和分页"
@@ -178,6 +213,7 @@ describe("decomposeRequirement", () => {
     expect(result.pageType).toBe("admin-management");
     expect(result.subtasks.map((task) => task.id)).toContain("table");
     expect(result.subtasks.map((task) => task.id)).toContain("detail-drawer");
+    expect(result.modules).toBeUndefined();
   });
 
   it("页面类型样例数量保持为 100 个", () => {
@@ -219,5 +255,27 @@ describe("buildDecompositionQueries", () => {
     expect(queries.some((query) => query.includes("基础信息区"))).toBe(true);
     expect(queries.some((query) => query.includes("审核记录"))).toBe(true);
     expect(queries.some((query) => query.includes("富文本"))).toBe(true);
+  });
+
+  it("详情页模块 DSL 会补充组件级召回查询", () => {
+    const input = "做一个后台审核详情页，包含状态Tag、基础信息、内容详情、审核记录和操作日志";
+    const result = decomposeRequirement(input);
+    const queries = buildDecompositionQueries(input, result);
+
+    expect(queries.some((query) => query.includes("ZhDetailHeader"))).toBe(true);
+    expect(queries.some((query) => query.includes("ZhDetailSubTitle"))).toBe(true);
+    expect(queries.some((query) => query.includes("ZhButtonGroup"))).toBe(true);
+    expect(queries.some((query) => query.includes("ZhBaseInfo"))).toBe(true);
+    expect(queries.some((query) => query.includes("business-history-card"))).toBe(true);
+  });
+
+  it("普通管理页不会生成详情页模块组件查询", () => {
+    const input = "做一个后台用户管理页面，包含筛选、表格、详情抽屉、编辑弹窗和分页";
+    const result = decomposeRequirement(input);
+    const queries = buildDecompositionQueries(input, result);
+
+    expect(result.modules).toBeUndefined();
+    expect(queries.some((query) => query.includes("ZhDetailHeader"))).toBe(false);
+    expect(queries.some((query) => query.includes("business-history-card"))).toBe(false);
   });
 });
