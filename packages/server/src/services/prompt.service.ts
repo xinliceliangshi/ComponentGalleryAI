@@ -9,6 +9,17 @@ type BuildPromptOptions = {
 function formatRequirementDecomposition(decomposition: RequirementDecomposition | undefined): string {
   if (!decomposition?.enabled) return "";
 
+  const pageTypeInstruction =
+    decomposition.pageType === "admin-home-dashboard"
+      ? [
+          "后台首页专项要求：",
+          "- 首屏必须体现核心指标、趋势/统计、待办或快捷入口",
+          "- 不要把首页生成成单一 CRUD 表格页",
+          "- 表格只能作为辅助模块，不能成为页面主体",
+          "- 布局应适合后台首页：顶部指标区 + 主内容统计区 + 侧边待办/消息区"
+        ].join("\n")
+      : "";
+
   return [
     "【需求拆分（规则预处理）】",
     JSON.stringify(
@@ -23,8 +34,9 @@ function formatRequirementDecomposition(decomposition: RequirementDecomposition 
       null,
       2
     ),
+    pageTypeInstruction,
     "生成要求：必须覆盖所有 priority=must 的子任务；priority=should 的子任务尽量体现；不要只实现第一个子任务。"
-  ].join("\n");
+  ].filter(Boolean).join("\n");
 }
 
 export function buildPrompt(input: string, options: BuildPromptOptions = {}) {
