@@ -29,4 +29,30 @@ describe("component knowledge retrieval", () => {
     expect(cardIds).toEqual(expect.arrayContaining(["ZhPageHeadPanel", "ZhBaseInfo"]));
     expect(cardIds.slice(0, 4)).not.toEqual(["ZhTable", "ZhDiyDataTable"]);
   });
+
+  it("详情页头部和状态关键词可以召回详情组件", () => {
+    const result = retrieveKnowledgeForQuery("后台审核详情页头部：标题、状态Tag、返回按钮和操作按钮区");
+    const cardIds = result.cards.map((card) => card.id);
+    const chunkComponentIds = result.chunks.map((chunk) => chunk.component).filter(Boolean);
+
+    expect([...cardIds, ...chunkComponentIds]).toEqual(
+      expect.arrayContaining(["ZhDetailHeader", "ZhDetailSubTitle"])
+    );
+  });
+
+  it("后台详情页拆分后优先召回详情页结构组件", () => {
+    const input = "做一个后台审核详情页，包含状态Tag、基础信息、内容详情、审核记录和操作日志";
+    const decomposition = decomposeRequirement(input);
+    const result = retrieveKnowledgeForDecomposition(input, decomposition, {
+      maxCards: 12,
+      maxChunks: 8
+    });
+    const cardIds = result.cards.map((card) => card.id);
+
+    expect(decomposition.pageType).toBe("admin-detail");
+    expect(cardIds).toEqual(
+      expect.arrayContaining(["ZhDetailHeader", "ZhDetailSubTitle", "ZhBaseInfo"])
+    );
+    expect(cardIds.slice(0, 5)).not.toEqual(["ZhTable", "ZhDiyDataTable"]);
+  });
 });

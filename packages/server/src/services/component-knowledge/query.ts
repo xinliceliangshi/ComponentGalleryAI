@@ -2,8 +2,8 @@ import type { KeywordCategory, QueryIntent, QueryToken } from "./types.js";
 import { clamp } from "./utils.js";
 
 const QUERY_INTENT_RULES: Record<KeywordCategory, string[]> = {
-  component: ["组件", "表格", "table", "列表", "按钮", "输入", "输入框", "弹窗", "日期", "下拉", "卡片", "栅格"],
-  scenario: ["列表页", "详情页", "筛选区", "查询区", "顶部", "底栏", "管理页", "原型", "预约", "统计"],
+  component: ["组件", "表格", "table", "列表", "按钮", "输入", "输入框", "弹窗", "日期", "下拉", "卡片", "栅格", "页头", "副标题"],
+  scenario: ["列表页", "详情页", "筛选区", "查询区", "顶部", "底栏", "管理页", "原型", "预约", "统计", "审核记录", "操作日志", "时间线"],
   feature: ["分页", "排序", "多选", "合计", "固定", "格式化", "上传", "下载", "配置", "范围", "跳转"],
   prop: ["props", "属性", "字段", "列名", "columns", "data", "datasource"],
   event: ["事件", "change", "click", "submit", "回调"],
@@ -45,6 +45,14 @@ const QUERY_EXPANSION_RULES: Array<{ triggers: string[]; expands: string[] }> = 
     expands: ["按钮", "按钮组", "操作区", "新建", "导出"]
   },
   {
+    triggers: ["左右两栏", "双栏", "两栏展示", "左侧右侧"],
+    expands: ["栅格", "网格", "两列", "多列布局"]
+  },
+  {
+    triggers: ["待办事项", "最近动态", "动态列表", "待办列表"],
+    expands: ["列表", "表格", "数据表", "待办", "动态"]
+  },
+  {
     triggers: ["视频播放器", "播放 mp4", "播放视频", "视频播放", "播放地址"],
     expands: ["视频", "播放器", "VideoPlayer", "mp4", "全屏", "进度条"]
   },
@@ -53,12 +61,32 @@ const QUERY_EXPANSION_RULES: Array<{ triggers: string[]; expands: string[] }> = 
     expands: ["副标题", "状态", "编号信息", "有效", "已取消"]
   },
   {
+    triggers: ["详情页头部", "详情头部", "详情页头", "标题状态操作区", "头部操作区"],
+    expands: ["详情页头", "标题栏", "返回", "操作区", "DetailHeader"]
+  },
+  {
+    triggers: ["状态驱动", "状态tag", "状态标签", "当前状态", "业务状态", "审核状态", "审批状态"],
+    expands: ["状态副标题", "状态条", "副标题", "状态文案", "DetailSubTitle"]
+  },
+  {
+    triggers: ["审核记录", "审批记录", "业务历史", "流转记录", "处理意见"],
+    expands: ["基础信息", "详情信息", "记录卡片", "状态副标题", "处理意见"]
+  },
+  {
+    triggers: ["操作日志", "操作记录", "系统操作记录", "日志时间线"],
+    expands: ["基础信息", "详情信息", "记录卡片", "操作人", "操作时间"]
+  },
+  {
+    triggers: ["时间线", "timeline", "流程节点", "历史节点"],
+    expands: ["状态副标题", "流程节点", "历史记录", "基础信息"]
+  },
+  {
     triggers: ["地图模块", "地图", "marker", "点位"],
     expands: ["地图", "marker", "点位", "缩放", "定位"]
   },
   {
-    triggers: ["信息展示", "键值展示", "详情字段"],
-    expands: ["基础信息", "信息对", "键值对", "字段展示"]
+    triggers: ["信息展示", "键值展示", "详情字段", "基础信息区", "基础信息卡片"],
+    expands: ["基础信息", "信息对", "键值对", "字段展示", "栅格"]
   },
   {
     triggers: ["二次确认", "删除确认", "保存确认", "未保存"],
