@@ -40,11 +40,15 @@ function shouldEnableDecomposition(text: string, matchedIntentCount: number): bo
   return text.length > 80 || connectorCount >= 2 || matchedIntentCount >= 3;
 }
 
+function shouldAlwaysEnableDecomposition(pageType: string): boolean {
+  return pageType === "admin-home-dashboard" || pageType === "admin-detail";
+}
+
 export function decomposeRequirement(input: string): RequirementDecomposition {
   const text = normalizeInput(input);
   const profile = matchRequirementPageProfile(text);
   const matchedRules = profile.rules.filter((rule) => includesAny(text, rule.terms));
-  const enabled = profile.pageType === "admin-home-dashboard" || shouldEnableDecomposition(text, matchedRules.length);
+  const enabled = shouldAlwaysEnableDecomposition(profile.pageType) || shouldEnableDecomposition(text, matchedRules.length);
   const subtasks = matchedRules.map(toSubtask);
 
   if (enabled && subtasks.length === 0) {

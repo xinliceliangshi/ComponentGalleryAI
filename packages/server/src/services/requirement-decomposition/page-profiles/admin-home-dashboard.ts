@@ -2,7 +2,7 @@ import { includesAny } from "../matchers.js";
 import type { RequirementPageProfile } from "../types.js";
 
 const ADMIN_HOME_TERMS = ["首页", "工作台", "控制台", "仪表盘", "看板", "概览", "总览", "dashboard", "Dashboard"];
-const ADMIN_CONTEXT_TERMS = ["后台", "管理系统", "运营", "数据", "统计", "管理"];
+const ADMIN_CONTEXT_TERMS = ["后台", "管理系统", "运营", "管理"];
 
 export const adminHomeDashboardProfile: RequirementPageProfile = {
   pageType: "admin-home-dashboard",

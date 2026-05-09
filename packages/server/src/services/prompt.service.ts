@@ -9,16 +9,27 @@ type BuildPromptOptions = {
 function formatRequirementDecomposition(decomposition: RequirementDecomposition | undefined): string {
   if (!decomposition?.enabled) return "";
 
-  const pageTypeInstruction =
-    decomposition.pageType === "admin-home-dashboard"
-      ? [
-          "后台首页专项要求：",
-          "- 首屏必须体现核心指标、趋势/统计、待办或快捷入口",
-          "- 不要把首页生成成单一 CRUD 表格页",
-          "- 表格只能作为辅助模块，不能成为页面主体",
-          "- 布局应适合后台首页：顶部指标区 + 主内容统计区 + 侧边待办/消息区"
-        ].join("\n")
-      : "";
+  const pageTypeInstructionMap: Record<string, string[]> = {
+    "admin-home-dashboard": [
+      "后台首页专项要求：",
+      "- 首屏必须体现核心指标、趋势/统计、待办或快捷入口",
+      "- 不要把首页生成成单一 CRUD 表格页",
+      "- 表格只能作为辅助模块，不能成为页面主体",
+      "- 布局应适合后台首页：顶部指标区 + 主内容统计区 + 侧边待办/消息区"
+    ],
+    "admin-detail": [
+      "后台详情页专项要求：",
+      "- Header 必须包含标题、状态 Tag、操作按钮区",
+      "- 顶部必须体现状态驱动 UI，并根据不同状态显示不同文字",
+      "- 操作按钮必须围绕 状态 → 按钮 → 权限 → 行为 组织",
+      "- 主体按卡片组织：基础信息、内容详情、审核记录、操作日志/时间线",
+      "- 基础信息区优先使用 Descriptions + Grid",
+      "- 审核记录表达业务行为历史，操作日志表达系统操作记录",
+      "- 内容详情区可展示 markdown、html、图片、引用或 code block",
+      "- 不要把详情页生成成列表页或 CRUD 表格页"
+    ]
+  };
+  const pageTypeInstruction = pageTypeInstructionMap[decomposition.pageType]?.join("\n") ?? "";
 
   return [
     "【需求拆分（规则预处理）】",
