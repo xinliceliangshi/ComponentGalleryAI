@@ -1,0 +1,101 @@
+# 后台新增页专项用例（+100）
+{"query":"后台新增商品页头部：标题、返回按钮、右侧保存草稿和提交按钮","expectIds":["ZhPageHeadPanel","ZhButton","ZhButtonGroup"]}
+{"query":"后台新建用户页头部：左侧返回，右侧取消和保存按钮组","expectIds":["ZhPageHeadPanel","ZhButtonGroup","ZhButton"]}
+{"query":"后台创建活动页：顶部标题下有说明文案，右上角发布按钮高亮","expectIds":["ZhPageHeadPanel","ZhButton"]}
+{"query":"后台录入商家资料页：头部显示新建商家标题和必填说明 tooltip","expectIds":["ZhPageHeadPanel","ZhToolTips"]}
+{"query":"新增页操作区：提交按钮主色，旁边一个保存草稿按钮和取消按钮","expectIds":["ZhButtonGroup","ZhButton"]}
+{"query":"新增页头部：返回上一页前若有未保存更改需要确认弹窗","expectIds":["ZhPageHeadPanel","ZhMessageBox"]}
+{"query":"创建页标题过长时省略显示，悬浮 tooltip 看完整标题","expectIds":["ZhPageHeadPanel","ZhToolTips"]}
+{"query":"后台新增课程页：头部操作区根据草稿态显示保存草稿和提交审核","expectIds":["ZhPageHeadPanel","ZhButtonGroup"]}
+{"query":"后台新建版本页：右上角按钮区包含取消、保存、发布三个动作","expectIds":["ZhButtonGroup","ZhButton"]}
+{"query":"新增页首次加载：头部和表单区域展示 loading 骨架","expectIds":["ZhLoading","ZhPageHeadPanel"]}
+{"query":"新增页头部副说明：提示带星号字段为必填项","expectIds":["ZhPageHeadPanel","ZhToolTips"]}
+{"query":"新增页头部：左侧标题，右侧按钮组固定在页面顶端","expectIds":["ZhPageHeadPanel","ZhButtonGroup"]}
+{"query":"后台创建模板页：顶部展示标题、描述和右侧保存模板按钮","expectIds":["ZhPageHeadPanel","ZhButton"]}
+{"query":"后台新增文章页：头部操作区显示保存草稿、预览、发布按钮","expectIds":["ZhButtonGroup","ZhButton"]}
+{"query":"后台新建门店页：返回按钮旁展示当前步骤说明和必填提示","expectIds":["ZhPageHeadPanel","ZhToolTips"]}
+{"query":"新增页主表单：商品名称、商品编码、简称三项用输入框录入","expectIds":["ZhInput"]}
+{"query":"新建用户表单：姓名、手机号、邮箱使用输入框填写","expectIds":["ZhInput"]}
+{"query":"创建活动表单：活动名称输入框支持字数统计和超长提示","expectIds":["ZhInput","ZhToolTips"]}
+{"query":"录入商家表单：商家名称输入框支持回车校验重复名称","expectIds":["ZhInput"]}
+{"query":"新增文章表单：标题、副标题、作者名称都用输入框布局","expectIds":["ZhInput","ZhGrid"]}
+{"query":"后台创建角色页：角色名称输入框下方展示校验错误提示","expectIds":["ZhInput"]}
+{"query":"新增页表单字段较多：两列栅格排布基础字段和扩展字段","expectIds":["ZhGrid","ZhInput"]}
+{"query":"后台新建合同页：合同编号、甲方乙方、联系人按两列表单布局","expectIds":["ZhGrid","ZhInput"]}
+{"query":"新增页长表单：基础信息区和高级设置区分两张卡片展示","expectIds":["ZhGrid","ZhBaseInfo"]}
+{"query":"后台新增课程页：课程信息、讲师信息、售卖信息分组表单展示","expectIds":["ZhGrid","ZhInput"]}
+{"query":"创建页分组标题：每组上方有说明文案和帮助 tooltip","expectIds":["ZhGrid","ZhToolTips"]}
+{"query":"后台录入门店信息：左侧门店基础信息，右侧地址和营业设置","expectIds":["ZhGrid","ZhInput"]}
+{"query":"新增页字段联动：选择主分类后再填写副分类和标签","expectIds":["ZhCascaderLoadMore","ZhInput"]}
+{"query":"后台创建活动页：报名人数上限字段和每人限购数量字段并排展示","expectIds":["ZhGrid","ZhInputNumber"]}
+{"query":"后台新建商品页：价格、库存、重量三个字段排成一行","expectIds":["ZhGrid","ZhMoneyInput","ZhInputNumber"]}
+{"query":"新增页基础信息组：字段 label 右对齐，输入区宽度统一","expectIds":["ZhGrid","ZhInput"]}
+{"query":"新增页说明文字过长：字段旁帮助 icon 悬浮显示完整说明","expectIds":["ZhToolTips","ZhInput"]}
+{"query":"后台创建内容页：摘要和备注输入框支持多行录入和长度提示","expectIds":["ZhInput","ZhToolTips"]}
+{"query":"新增页校验：必填字段未填写时在输入框下方显示错误提示","expectIds":["ZhInput"]}
+{"query":"新建用户表单校验：手机号格式错误时立即提示","expectIds":["ZhInput"]}
+{"query":"创建活动页校验：开始时间不能晚于结束时间","expectIds":["ZhDatePicker"]}
+{"query":"新增商品表单校验：商品价格必须大于零并展示错误文案","expectIds":["ZhMoneyInput"]}
+{"query":"新增页提交前校验：顶部汇总显示还有哪些必填项未完成","expectIds":["ZhToolTips","ZhButton"]}
+{"query":"后台录入商家页：统一社会信用代码输入错误时显示格式提示","expectIds":["ZhInput","ZhToolTips"]}
+{"query":"新增页错误定位：点击顶部错误提示可滚动到对应字段","expectIds":["ZhToolTips","ZhInput"]}
+{"query":"创建页保存失败：底部操作区上方显示错误说明并保留已填数据","expectIds":["ZhButton","ZhToolTips"]}
+{"query":"新增页离开提醒：有未保存内容时点击取消先弹确认框","expectIds":["ZhMessageBox","ZhButton"]}
+{"query":"保存草稿成功后：头部按钮区更新为继续编辑和提交审核","expectIds":["ZhButtonGroup","ZhButton"]}
+{"query":"新增页只读校验提示：某些字段因权限不可编辑，悬浮展示原因","expectIds":["ZhToolTips","ZhInput"]}
+{"query":"后台创建模板页：模板编码重复时输入框下方显示错误","expectIds":["ZhInput"]}
+{"query":"后台新增合同页：签约日期和生效日期都要必填校验","expectIds":["ZhDatePicker"]}
+{"query":"新增页金额字段：预算金额输入时自动格式化千分位","expectIds":["ZhMoneyInput"]}
+{"query":"新建商品页：售价、原价、成本价都使用金额输入框","expectIds":["ZhMoneyInput"]}
+{"query":"后台创建结算规则页：起始金额和封顶金额用金额输入","expectIds":["ZhMoneyInput"]}
+{"query":"新增页数量字段：库存支持步进增减和两位小数","expectIds":["ZhInputNumber"]}
+{"query":"新建课程页：课时数和报名人数限制使用数字输入框","expectIds":["ZhInputNumber"]}
+{"query":"后台新增套餐页：每人限购数量字段限制最小值为 1","expectIds":["ZhInputNumber"]}
+{"query":"创建活动页：权重分数和排序值两个数字字段并排录入","expectIds":["ZhGrid","ZhInputNumber"]}
+{"query":"新增页金额和数量混排：左边金额，右边数量，使用统一栅格","expectIds":["ZhGrid","ZhMoneyInput","ZhInputNumber"]}
+{"query":"后台创建仓储规则页：重量上限支持小数并可步进调整","expectIds":["ZhInputNumber"]}
+{"query":"新增页数字校验：不能输入负数，超出上限高亮提示","expectIds":["ZhInputNumber","ZhToolTips"]}
+{"query":"后台录入运费模板：首重价格和续重价格都为金额输入","expectIds":["ZhMoneyInput","ZhInputNumber"]}
+{"query":"新建合同表单：签约日期、开始日期、结束日期选择器排成一行","expectIds":["ZhGrid","ZhDatePicker"]}
+{"query":"创建活动页：活动开始结束时间范围选择用于报名周期","expectIds":["ZhDatePicker"]}
+{"query":"新增页日期字段：发布日期不能早于当前日期","expectIds":["ZhDatePicker"]}
+{"query":"后台新建门店页：营业时间按时间范围选择录入","expectIds":["ZhDatePicker"]}
+{"query":"后台录入商家资质：证照有效期使用日期选择器","expectIds":["ZhDatePicker"]}
+{"query":"新增页默认值：上架时间默认今天，支持修改","expectIds":["ZhDatePicker"]}
+{"query":"新建课程页：报名截止时间选择器需要禁用过去时间","expectIds":["ZhDatePicker"]}
+{"query":"创建版本页：发布时间和灰度结束时间都可选择","expectIds":["ZhDatePicker"]}
+{"query":"新增页日期校验：结束时间为空时提交失败并提示","expectIds":["ZhDatePicker"]}
+{"query":"后台新增商品页：商品主图上传后展示文件列表和预览入口","expectIds":["ZhFileWrapper"]}
+{"query":"后台创建文章页：封面图上传完成后显示缩略文件和删除按钮","expectIds":["ZhFileWrapper","ZhButton"]}
+{"query":"录入商家资料：营业执照和许可证附件支持上传、预览、下载","expectIds":["ZhFileWrapper"]}
+{"query":"新增页附件很多：文件名过长时省略并 tooltip 查看完整名称","expectIds":["ZhFileWrapper","ZhToolTips"]}
+{"query":"后台创建课程页：上传课程视频后可直接在页面中预览播放","expectIds":["ZhFileWrapper","ZhVideoPlayer"]}
+{"query":"新增活动页：海报上传失败时展示错误提示并支持重新上传","expectIds":["ZhFileWrapper","ZhButton"]}
+{"query":"新建模板页：附件区支持多个文件上传和批量删除","expectIds":["ZhFileWrapper","ZhButton","ZhMessageBox"]}
+{"query":"新增页素材上传：图片、视频、文档分组展示在附件卡片中","expectIds":["ZhFileWrapper","ZhVideoPlayer"]}
+{"query":"后台创建广告页：视频素材在对话框中预览播放","expectIds":["ZhDialog","ZhVideoPlayer"]}
+{"query":"新增页上传中：附件卡片局部 loading，不影响其他字段录入","expectIds":["ZhLoading","ZhFileWrapper"]}
+{"query":"后台新建门店页：门头图上传后支持删除并二次确认","expectIds":["ZhFileWrapper","ZhMessageBox"]}
+{"query":"创建课程页：上传讲义文件后列表显示文件大小和下载入口","expectIds":["ZhFileWrapper"]}
+{"query":"新增页底部操作栏：固定吸底显示取消、保存草稿、提交按钮","expectIds":["ZhButtonGroup","ZhButton"]}
+{"query":"创建页底部提交区：左侧展示校验提示，右侧是保存和提交按钮","expectIds":["ZhButton","ZhToolTips"]}
+{"query":"后台新建用户页：提交按钮请求中显示 loading 并禁用取消按钮","expectIds":["ZhButton","ZhLoading"]}
+{"query":"新增商品页：保存草稿按钮点击后只校验已填写字段","expectIds":["ZhButtonGroup","ZhButton"]}
+{"query":"创建活动页：提交前弹出确认对话框二次确认发布时间","expectIds":["ZhMessageBox","ZhButton"]}
+{"query":"后台录入商家页：点击取消时提示是否放弃当前已填写内容","expectIds":["ZhMessageBox","ZhButton"]}
+{"query":"新增页提交成功：操作栏切换为继续新建和返回列表两个按钮","expectIds":["ZhButtonGroup","ZhButton"]}
+{"query":"新增页底栏：危险操作删除草稿需要红色确认按钮","expectIds":["ZhButton","ZhMessageBox"]}
+{"query":"后台创建模板页：预览按钮和保存按钮并排展示在底部操作栏","expectIds":["ZhButtonGroup","ZhButton"]}
+{"query":"新建版本页：发布按钮置灰直到必填项全部完成","expectIds":["ZhButton","ZhToolTips"]}
+{"query":"新增页提交失败：底部按钮恢复可点击，顶部保留错误说明","expectIds":["ZhButton","ZhToolTips"]}
+{"query":"后台新增角色页：权限选择器支持远程搜索和滚动加载更多","expectIds":["ZhCascaderLoadMore"]}
+{"query":"录入商家资料页：所属行业字段使用级联下拉并支持搜索","expectIds":["ZhCascaderLoadMore"]}
+{"query":"创建课程页：讲师选择器支持远程搜索和分页加载","expectIds":["ZhCascaderLoadMore"]}
+{"query":"新增商品页：品牌和类目字段联动，选择后自动刷新可选项","expectIds":["ZhCascaderLoadMore"]}
+{"query":"后台新建组织页：上级组织选择支持展开树和搜索关键字","expectIds":["ZhCascaderLoadMore"]}
+{"query":"新增页关联对象很多：下拉加载中展示局部 loading","expectIds":["ZhCascaderLoadMore","ZhLoading"]}
+{"query":"创建活动页：选择关联商品弹出对话框并在其中用表格分页选择","expectIds":["ZhDialog","ZhTable","ZhButton"]}
+{"query":"新增页选择门店：弹窗内支持搜索、表格勾选、确认带回","expectIds":["ZhDialog","ZhTable","ZhButtonGroup"]}
+{"query":"后台录入地址信息：地图点选门店位置并回填经纬度","expectIds":["ZhMap","ZhInput"]}
+{"query":"新建门店页：地图上拖动 marker 更新地址字段","expectIds":["ZhMap","ZhInput"]}
+{"query":"新增页位置选择：地点搜索后在地图展示点位并确认","expectIds":["ZhMap","ZhDialog"]}

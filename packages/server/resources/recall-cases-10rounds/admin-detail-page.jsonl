@@ -1,0 +1,101 @@
+# 后台详情页专项用例（+100）
+{"query":"后台审核详情页头部：返回按钮、标题、状态副标题和右侧通过/拒绝按钮","expectIds":["ZhDetailHeader","ZhDetailSubTitle","ZhButtonGroup"]}
+{"query":"后台订单详情页：Header 显示订单号、当前状态 Tag、操作按钮区","expectIds":["ZhDetailHeader","ZhDetailSubTitle","ZhButtonGroup"]}
+{"query":"后台内容详情页顶部：标题栏包含返回、状态条、编辑和提交审核按钮","expectIds":["ZhDetailHeader","ZhDetailSubTitle","ZhButton"]}
+{"query":"后台工单详情页：头部状态根据待处理/处理中/已关闭显示不同文案","expectIds":["ZhDetailHeader","ZhDetailSubTitle"]}
+{"query":"后台用户详情页：标题下方展示编号、状态和最近更新时间摘要","expectIds":["ZhDetailHeader","ZhDetailSubTitle"]}
+{"query":"详情页操作区：根据待审核状态显示通过、拒绝、转交三个按钮","expectIds":["ZhButtonGroup","ZhButton"]}
+{"query":"详情页权限按钮：无权限的审核按钮禁用并悬浮提示原因","expectIds":["ZhButton","ZhToolTips"]}
+{"query":"详情页状态驱动：已通过状态只显示查看日志和撤回按钮","expectIds":["ZhDetailSubTitle","ZhButtonGroup"]}
+{"query":"详情页状态驱动：已拒绝状态显示重新提交和查看原因按钮","expectIds":["ZhDetailSubTitle","ZhButtonGroup"]}
+{"query":"详情页状态驱动：草稿状态显示编辑、提交审核、删除按钮","expectIds":["ZhDetailSubTitle","ZhButtonGroup"]}
+{"query":"详情页顶部：业务状态用副标题状态条展示，颜色区分有效和已取消","expectIds":["ZhDetailSubTitle"]}
+{"query":"详情页 Header：标题过长时省略，tooltip 展示完整标题","expectIds":["ZhDetailHeader","ZhToolTips"]}
+{"query":"审核详情页：右上角危险操作删除前需要二次确认弹窗","expectIds":["ZhButton","ZhMessageBox"]}
+{"query":"订单详情页：取消订单按钮点击前弹出确认框，确认后 loading","expectIds":["ZhButton","ZhMessageBox","ZhLoading"]}
+{"query":"内容详情页：提交审核按钮请求中显示 loading 并禁用操作区","expectIds":["ZhButton","ZhLoading"]}
+{"query":"详情页基础信息卡片：两列栅格展示申请人、编号、创建时间、状态","expectIds":["ZhBaseInfo","ZhBaseItem","ZhGrid"]}
+{"query":"审核详情基础信息：Descriptions 风格 label/value，字段按三列排列","expectIds":["ZhBaseInfo","ZhBaseItem","ZhGrid"]}
+{"query":"订单详情基础信息：展示订单号、客户、金额、下单时间等只读字段","expectIds":["ZhBaseInfo","ZhBaseItem","ZhInfoPair"]}
+{"query":"用户详情基础资料：头像旁边是姓名、手机号、角色、启用状态","expectIds":["ZhBaseInfo","ZhInfoPair"]}
+{"query":"工单详情基础信息：字段很多，需要栅格布局和信息项展示","expectIds":["ZhBaseInfo","ZhBaseItem","ZhGrid"]}
+{"query":"合同详情基础信息：甲方乙方、合同编号、签署状态、有效期键值对","expectIds":["ZhBaseInfo","ZhInfoPair"]}
+{"query":"供应商详情资料：资质状态、联系人、联系电话、地址多列布局","expectIds":["ZhBaseInfo","ZhBaseItem","ZhGrid"]}
+{"query":"门店详情基础资料：营业状态、区域、负责人、营业时间信息卡片","expectIds":["ZhBaseInfo","ZhBaseItem"]}
+{"query":"会员详情基础信息：会员等级、积分、注册时间和账号状态展示","expectIds":["ZhBaseInfo","ZhInfoPair"]}
+{"query":"账户详情基础信息：冻结状态、余额、实名信息和风险等级","expectIds":["ZhBaseInfo","ZhBaseItem"]}
+{"query":"详情页字段展示：手机号字段旁边支持复制，展示为信息对","expectIds":["ZhInfoPair","ZhToolTips"]}
+{"query":"详情页可编辑字段：联系人电话支持行内编辑保存和取消","expectIds":["ZhEditInfoPair","ZhButton"]}
+{"query":"详情页备注字段：点击编辑后切换为输入态，保存前二次确认","expectIds":["ZhEditInfoPair","ZhMessageBox"]}
+{"query":"详情页金额字段：展示合同金额和已付款金额，金额格式保留两位小数","expectIds":["ZhBaseInfo","ZhMoneyInput"]}
+{"query":"详情页数量字段：展示吨数、件数等数字，支持两位小数格式","expectIds":["ZhBaseInfo","ZhInputNumber"]}
+{"query":"内容详情卡片：展示富文本正文、引用块和代码片段，外层用信息卡片承载","expectIds":["ZhBaseInfo","ZhBaseItem"]}
+{"query":"文章详情内容区：markdown 正文展示在详情卡片中，下面有附件列表","expectIds":["ZhBaseInfo","ZhFileWrapper"]}
+{"query":"内容审核详情：左侧基础信息，右侧富文本内容和图片预览","expectIds":["ZhBaseInfo","ZhGrid","ZhFileWrapper"]}
+{"query":"素材详情内容：图片素材支持预览和下载，文件名过长 tooltip","expectIds":["ZhFileWrapper","ZhToolTips"]}
+{"query":"合同详情内容：附件区展示 PDF 文件，支持预览、下载、删除","expectIds":["ZhFileWrapper","ZhButton","ZhMessageBox"]}
+{"query":"课程详情内容：视频课程需要播放器预览，加载失败可重试","expectIds":["ZhVideoPlayer","ZhButton"]}
+{"query":"广告详情内容：视频素材在弹窗中播放，播放中有 loading 遮罩","expectIds":["ZhDialog","ZhVideoPlayer","ZhLoading"]}
+{"query":"投诉详情内容：图片证据列表支持预览，附件支持下载","expectIds":["ZhFileWrapper"]}
+{"query":"举报详情内容：被举报文本过长时省略并 tooltip 展示完整内容","expectIds":["ZhToolTips","ZhBaseInfo"]}
+{"query":"工单详情内容：问题描述支持多段文本、附件预览和处理备注","expectIds":["ZhBaseInfo","ZhFileWrapper"]}
+{"query":"审核记录卡片：展示审核人、审核时间、审核结果、审核意见键值信息","expectIds":["ZhBaseInfo","ZhBaseItem"]}
+{"query":"审批记录区域：每条记录包含处理人、处理意见、通过/拒绝状态","expectIds":["ZhBaseInfo","ZhDetailSubTitle"]}
+{"query":"业务流转历史：审核记录按时间倒序展示，状态用副标题颜色区分","expectIds":["ZhBaseInfo","ZhDetailSubTitle"]}
+{"query":"内容审核记录：展示初审、复审、终审的处理意见和时间","expectIds":["ZhBaseInfo","ZhBaseItem"]}
+{"query":"订单审核记录：通过和驳回记录需要突出状态文案","expectIds":["ZhDetailSubTitle","ZhBaseInfo"]}
+{"query":"提现审批记录：每条记录展示审批人、节点、意见和附件","expectIds":["ZhBaseInfo","ZhFileWrapper"]}
+{"query":"合同审核记录：处理意见很长时折叠省略并悬浮查看完整文本","expectIds":["ZhBaseInfo","ZhToolTips"]}
+{"query":"商家资质审核记录：附件材料可预览下载，状态清晰展示","expectIds":["ZhFileWrapper","ZhDetailSubTitle"]}
+{"query":"风控处置记录：不同风险等级用状态条表达，旁边展示处置按钮","expectIds":["ZhDetailSubTitle","ZhButtonGroup"]}
+{"query":"审核记录为空：显示暂无记录提示，并提供刷新按钮","expectIds":["ZhBaseInfo","ZhButton"]}
+{"query":"操作日志卡片：展示操作人、操作时间、操作内容和 IP 信息","expectIds":["ZhBaseInfo","ZhBaseItem"]}
+{"query":"详情页操作日志：系统行为历史按时间排列，字段用信息项展示","expectIds":["ZhBaseInfo","ZhBaseItem"]}
+{"query":"订单详情操作日志：创建、支付、发货、取消记录按时间展示","expectIds":["ZhBaseInfo","ZhDetailSubTitle"]}
+{"query":"用户详情操作日志：启用、禁用、修改角色等操作记录","expectIds":["ZhBaseInfo","ZhBaseItem"]}
+{"query":"权限详情操作日志：权限变更历史展示操作人和变更前后内容","expectIds":["ZhBaseInfo","ZhInfoPair"]}
+{"query":"日志内容过长：操作详情省略显示，hover 展示完整文本","expectIds":["ZhToolTips","ZhBaseInfo"]}
+{"query":"日志列表加载中：操作日志卡片局部 loading，不影响头部按钮","expectIds":["ZhLoading","ZhBaseInfo"]}
+{"query":"操作日志筛选：按操作时间范围筛选日志记录","expectIds":["ZhDatePicker","ZhBaseInfo"]}
+{"query":"操作日志导出：日志卡片右上角导出按钮，点击后 loading","expectIds":["ZhButton","ZhLoading"]}
+{"query":"操作日志删除：删除某条日志前弹出二次确认","expectIds":["ZhMessageBox","ZhButton"]}
+{"query":"详情页时间线：展示创建、提交、审核、发布四个历史节点","expectIds":["ZhDetailSubTitle","ZhBaseInfo"]}
+{"query":"审批时间线：当前节点高亮，已完成节点和失败节点颜色不同","expectIds":["ZhDetailSubTitle"]}
+{"query":"工单处理时间线：每个节点展示处理人、处理结果和时间","expectIds":["ZhBaseInfo","ZhBaseItem"]}
+{"query":"物流详情时间线：节点包含运输状态、到达时间和地点信息","expectIds":["ZhDetailSubTitle","ZhBaseInfo"]}
+{"query":"发布流程时间线：草稿、待审核、已发布、已下线状态节点","expectIds":["ZhDetailSubTitle"]}
+{"query":"时间线节点详情：点击节点后弹窗展示完整处理信息","expectIds":["ZhDialog","ZhBaseInfo"]}
+{"query":"时间线附件：节点里有处理附件，支持预览和下载","expectIds":["ZhFileWrapper","ZhBaseInfo"]}
+{"query":"时间线加载：展开更多历史节点时显示 loading","expectIds":["ZhLoading","ZhButton"]}
+{"query":"详情页历史节点：异常节点显示悬浮提示说明失败原因","expectIds":["ZhToolTips","ZhDetailSubTitle"]}
+{"query":"详情页时间线为空：显示暂无历史并提供刷新按钮","expectIds":["ZhButton","ZhBaseInfo"]}
+{"query":"详情页布局：Header 下方先基础信息，再内容详情，再审核记录，再操作日志","expectIds":["ZhDetailHeader","ZhBaseInfo"]}
+{"query":"详情页双栏布局：左侧内容详情，右侧状态和审核记录，整体用栅格","expectIds":["ZhGrid","ZhBaseInfo"]}
+{"query":"详情页卡片分区：基础信息卡片和审核记录卡片需要清晰分隔","expectIds":["ZhBaseInfo","ZhDetailSubTitle"]}
+{"query":"详情页自由主题：不同业务状态改变顶部文案和按钮组合","expectIds":["ZhDetailSubTitle","ZhButtonGroup"]}
+{"query":"详情页权限控制：审核员和管理员看到的按钮不同","expectIds":["ZhButtonGroup","ZhToolTips"]}
+{"query":"详情页危险行为：驳回、撤回、删除等按钮需要确认弹窗","expectIds":["ZhButton","ZhMessageBox"]}
+{"query":"详情页状态变化：点击通过后刷新状态副标题和审核记录卡片","expectIds":["ZhDetailSubTitle","ZhLoading","ZhBaseInfo"]}
+{"query":"详情页行为链路：状态决定按钮，按钮触发弹窗，成功后刷新日志","expectIds":["ZhButtonGroup","ZhMessageBox","ZhLoading"]}
+{"query":"详情页只读态：已归档状态下所有编辑按钮禁用并显示原因 tooltip","expectIds":["ZhButton","ZhToolTips"]}
+{"query":"详情页编辑态：基础信息中的联系信息支持编辑并保存","expectIds":["ZhEditInfoPair","ZhButton"]}
+{"query":"详情页附件态：审核材料附件很多，需要文件列表和下载按钮","expectIds":["ZhFileWrapper","ZhButton"]}
+{"query":"详情页媒体态：视频审核材料需要播放器和全屏播放","expectIds":["ZhVideoPlayer"]}
+{"query":"详情页地图态：门店地址展示地图点位，点击 marker 展示信息","expectIds":["ZhMap","ZhToolTips"]}
+{"query":"详情页位置资料：配送地址用地图定位，旁边展示基础信息","expectIds":["ZhMap","ZhBaseInfo"]}
+{"query":"详情页全局加载：首次进入详情页时展示 loading，加载后显示信息卡片","expectIds":["ZhLoading","ZhBaseInfo"]}
+{"query":"详情页局部刷新：点击刷新审核记录时只让审核记录卡片 loading","expectIds":["ZhLoading","ZhBaseInfo"]}
+{"query":"详情页返回操作：头部返回按钮回到列表，保留当前筛选条件","expectIds":["ZhDetailHeader","ZhButton"]}
+{"query":"详情页复制编号：标题区旁边展示编号并支持 tooltip 说明","expectIds":["ZhDetailHeader","ZhToolTips"]}
+{"query":"详情页副标题：状态条展示有效、已取消、待审核等业务状态","expectIds":["ZhDetailSubTitle"]}
+{"query":"详情页摘要信息：副标题区域展示编号、创建人、创建时间","expectIds":["ZhDetailSubTitle","ZhInfoPair"]}
+{"query":"详情页基础字段过多：使用栅格折叠展示，点击展开更多","expectIds":["ZhGrid","ZhButton","ZhBaseInfo"]}
+{"query":"详情页备注过长：基础信息中的备注字段省略并 tooltip 查看全文","expectIds":["ZhBaseInfo","ZhToolTips"]}
+{"query":"详情页附件删除：删除附件前确认，删除后刷新文件列表","expectIds":["ZhFileWrapper","ZhMessageBox","ZhLoading"]}
+{"query":"详情页图片证据：多张图片文件预览，支持下载原图","expectIds":["ZhFileWrapper"]}
+{"query":"详情页审核弹窗：点击通过按钮弹出填写审核意见的对话框","expectIds":["ZhDialog","ZhButton","ZhInput"]}
+{"query":"详情页驳回弹窗：点击拒绝后需要输入驳回原因并确认","expectIds":["ZhDialog","ZhInput","ZhMessageBox"]}
+{"query":"详情页转交弹窗：转交处理人使用远程下拉加载更多","expectIds":["ZhDialog","ZhCascaderLoadMore"]}
+{"query":"详情页日期字段：基础信息展示申请时间和审核时间范围","expectIds":["ZhDatePicker","ZhBaseInfo"]}
+{"query":"详情页金额审核：基础信息展示申请金额，审核弹窗里可调整金额","expectIds":["ZhMoneyInput","ZhDialog"]}
+{"query":"详情页数量审核：审核弹窗里调整审批数量，支持步进和小数","expectIds":["ZhInputNumber","ZhDialog"]}

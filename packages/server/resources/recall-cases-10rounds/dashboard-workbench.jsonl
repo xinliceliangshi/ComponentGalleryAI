@@ -1,0 +1,102 @@
+# 后台首页 / 工作台 / Dashboard 召回测试样例（+100）
+{"query":"后台管理首页：顶部四个核心指标卡片展示今日订单、销售额、待处理工单和异常预警","expectIds":["ZhPageHeadPanel","ZhBaseInfo"]}
+{"query":"管理系统工作台：首屏需要 KPI 概览卡片，数字大号展示并带同比环比","expectIds":["ZhPageHeadPanel","ZhBaseInfo"]}
+{"query":"运营首页：顶部统计卡片显示访问量、转化率、成交金额和退款数量","expectIds":["ZhPageHeadPanel","ZhBaseInfo"]}
+{"query":"数据概览首页：指标卡片点击后联动下方趋势和明细表","expectIds":["ZhPageHeadPanel","ZhTable"]}
+{"query":"后台首页 KPI 卡片：重点指标高亮，次要指标普通展示，带说明 tooltip","expectIds":["ZhPageHeadPanel","ZhToolTips"]}
+{"query":"工作台首页：核心指标区域需要两行卡片，支持 loading 和空数据占位","expectIds":["ZhPageHeadPanel","ZhLoading","ZhBaseInfo"]}
+{"query":"管理后台首页：指标卡展示总用户数、新增用户、活跃用户和禁用用户","expectIds":["ZhPageHeadPanel","ZhBaseInfo"]}
+{"query":"运营看板：首页顶部经营指标卡片右侧有刷新按钮","expectIds":["ZhPageHeadPanel","ZhButton"]}
+{"query":"首页指标概览：金额字段需要两位小数和中文大写提示","expectIds":["ZhPageHeadPanel","ZhMoneyInput","ZhToolTips"]}
+{"query":"后台首页：指标卡里展示吨数，保留两位小数并显示单位","expectIds":["ZhPageHeadPanel","ZhInputNumber"]}
+{"query":"首页趋势统计：中部展示近 7 天订单量折线趋势和销售额柱状趋势","expectIds":["ZhPageHeadPanel","ZhBaseInfo"]}
+{"query":"管理系统首页：趋势图表区域需要支持按今天、近7天、本月快捷切换","expectIds":["ZhDatePicker","ZhButtonGroup"]}
+{"query":"运营工作台：趋势统计区带日期范围筛选，切换后刷新图表和 KPI","expectIds":["ZhDatePicker","ZhLoading","ZhPageHeadPanel"]}
+{"query":"后台首页：主内容区域展示业务趋势，加载中只遮罩图表区域","expectIds":["ZhLoading","ZhPageHeadPanel"]}
+{"query":"数据看板首页：趋势模块旁边展示指标解释 tooltip","expectIds":["ZhToolTips","ZhPageHeadPanel"]}
+{"query":"管理首页：趋势统计下方展示按状态分组的汇总表格","expectIds":["ZhTable","ZhDiyDataTable","ZhPageHeadPanel"]}
+{"query":"运营首页：趋势图表为空时显示暂无数据和刷新按钮","expectIds":["ZhLoading","ZhButton"]}
+{"query":"首页趋势模块：选择月份 YYYY-MM 后刷新月度统计","expectIds":["ZhDatePicker","ZhPageHeadPanel"]}
+{"query":"工作台趋势区：支持导出当前趋势数据为 Excel","expectIds":["ZhButton","ZhTable"]}
+{"query":"后台首页：图表旁边显示基础信息摘要，如更新时间和数据口径","expectIds":["ZhBaseInfo","ZhBaseItem"]}
+{"query":"后台首页待办事项：右侧列表展示待审批、待处理、即将超时任务","expectIds":["ZhTable","ZhButton"]}
+{"query":"管理工作台：待办列表支持点击进入处理，状态用标签区分紧急程度","expectIds":["ZhTable","ZhButton"]}
+{"query":"运营首页：待办事项过多时分页展示，并显示总条数","expectIds":["ZhTable","ZhDiyDataTable"]}
+{"query":"首页待办：审批任务点击后打开详情抽屉展示基础信息","expectIds":["ZhBaseInfo","ZhTable"]}
+{"query":"工作台待办：批量勾选任务后点击批量处理按钮","expectIds":["ZhTable","ZhButtonGroup"]}
+{"query":"后台首页：待办卡片中有查看全部按钮，点击跳转待办列表","expectIds":["ZhButton","ZhTable"]}
+{"query":"运营工作台：待办列表 loading 时只遮罩右侧列表区域","expectIds":["ZhLoading","ZhTable"]}
+{"query":"首页待办事项：空状态下显示暂无待办和刷新按钮","expectIds":["ZhButton","ZhTable"]}
+{"query":"管理首页：待办任务按截止时间排序，超时任务高亮提示 tooltip","expectIds":["ZhTable","ZhToolTips"]}
+{"query":"后台首页：待办审批弹出确认框，确认后刷新 KPI 和待办列表","expectIds":["ZhMessageBox","ZhButton","ZhLoading"]}
+{"query":"后台首页快捷入口：提供新建订单、导入文件、导出报表、系统配置四个入口","expectIds":["ZhButtonGroup","ZhButton"]}
+{"query":"管理工作台：快捷操作区是一排图标按钮，支持禁用态和 tooltip 说明","expectIds":["ZhButton","ZhToolTips"]}
+{"query":"运营首页：快捷入口点击导入时打开上传弹窗","expectIds":["ZhDialog","ZhFileWrapper","ZhButton"]}
+{"query":"后台首页：快捷入口里的导出按钮点击后弹确认框并显示 loading","expectIds":["ZhButton","ZhMessageBox","ZhLoading"]}
+{"query":"首页快捷操作：新增按钮打开表单弹窗，底部保存取消按钮固定","expectIds":["ZhDialog","ZhButtonGroup","ZhInput"]}
+{"query":"工作台快捷入口：常用操作按两列栅格排列","expectIds":["ZhGrid","ZhButton"]}
+{"query":"管理首页：快捷入口区根据权限禁用部分按钮，悬浮显示原因","expectIds":["ZhButton","ZhToolTips"]}
+{"query":"后台首页：快捷入口支持跳转地图监控页面","expectIds":["ZhButton","ZhMap"]}
+{"query":"运营工作台：快捷操作包含批量导入，上传后显示文件列表","expectIds":["ZhFileWrapper","ZhButton"]}
+{"query":"首页快捷入口：操作失败时弹出确认/提示对话框","expectIds":["ZhMessageBox","ZhButton"]}
+{"query":"后台首页最近动态：底部时间线列表展示最新操作记录和操作人","expectIds":["ZhTable","ZhInfoPair"]}
+{"query":"管理系统首页：最近动态列表支持按时间倒序和空值显示横杠","expectIds":["ZhTable","ZhDiyDataTable"]}
+{"query":"运营首页：公告消息区展示标题、发布时间和已读状态","expectIds":["ZhTable","ZhBaseInfo"]}
+{"query":"工作台首页：最近日志里长文本省略，悬浮显示完整内容","expectIds":["ZhTable","ZhToolTips"]}
+{"query":"后台首页：动态消息点击后打开详情弹窗","expectIds":["ZhDialog","ZhTable"]}
+{"query":"管理首页：系统公告支持附件预览和下载","expectIds":["ZhFileWrapper","ZhButton"]}
+{"query":"运营工作台：消息列表加载失败时显示重试按钮","expectIds":["ZhLoading","ZhButton"]}
+{"query":"首页动态区：操作记录中展示可复制的编号字段","expectIds":["ZhInfoPair","ZhToolTips"]}
+{"query":"后台首页：公告列表支持分页和刷新","expectIds":["ZhTable","ZhButton"]}
+{"query":"工作台首页：最近动态和待办事项左右两栏展示","expectIds":["ZhGrid","ZhTable"]}
+{"query":"后台首页布局：顶部指标区、中间趋势图、右侧待办、底部动态消息","expectIds":["ZhPageHeadPanel","ZhGrid","ZhTable"]}
+{"query":"管理系统首页：首屏需要左右布局，左侧统计趋势，右侧待办和公告","expectIds":["ZhGrid","ZhPageHeadPanel","ZhTable"]}
+{"query":"运营首页：卡片布局需要响应式，窄屏下指标卡两列排列","expectIds":["ZhGrid","ZhPageHeadPanel"]}
+{"query":"数据看板首页：页面头部有标题、描述和右侧刷新/导出按钮组","expectIds":["ZhPageHeadPanel","ZhButtonGroup"]}
+{"query":"后台首页：页面加载时展示整体 loading，局部模块完成后逐步显示","expectIds":["ZhLoading","ZhPageHeadPanel"]}
+{"query":"管理首页：不同模块之间用栅格对齐，避免卡片错位","expectIds":["ZhGrid","ZhPageHeadPanel"]}
+{"query":"首页工作台：顶部欢迎区显示用户名、角色和当前日期","expectIds":["ZhPageHeadPanel","ZhBaseInfo"]}
+{"query":"后台首页：页面头部右侧有刷新、导出、配置三个按钮","expectIds":["ZhPageHeadPanel","ZhButtonGroup"]}
+{"query":"管理系统首页：各模块标题旁带帮助说明 tooltip","expectIds":["ZhToolTips","ZhPageHeadPanel"]}
+{"query":"运营首页：仪表盘首屏不能是单一表格，需要统计卡和趋势区","expectIds":["ZhPageHeadPanel","ZhBaseInfo"]}
+{"query":"后台首页辅助明细：点击 KPI 后下方表格展示对应明细数据","expectIds":["ZhPageHeadPanel","ZhTable"]}
+{"query":"管理首页：异常预警卡片点击后筛选下方异常明细表","expectIds":["ZhPageHeadPanel","ZhTable","ZhButton"]}
+{"query":"运营工作台：待处理订单表格支持排序、分页和状态标签","expectIds":["ZhTable","ZhDiyDataTable"]}
+{"query":"首页明细表：展示今日新增用户列表，支持分页和操作按钮","expectIds":["ZhTable","ZhButton"]}
+{"query":"后台首页：风险预警明细表支持多选和批量忽略","expectIds":["ZhTable","ZhButtonGroup"]}
+{"query":"管理系统首页：表格列内容过长时 tooltip 显示完整文本","expectIds":["ZhTable","ZhToolTips"]}
+{"query":"运营首页：明细表为空时显示提示文案和刷新按钮","expectIds":["ZhTable","ZhButton"]}
+{"query":"首页辅助表格：金额列右对齐并保留两位小数","expectIds":["ZhTable","ZhMoneyInput"]}
+{"query":"后台首页：待办表格行操作包括查看、处理、忽略","expectIds":["ZhTable","ZhButtonGroup"]}
+{"query":"工作台首页：下方明细表局部 loading，不影响顶部指标点击","expectIds":["ZhTable","ZhLoading"]}
+{"query":"后台首页地图监控：左侧地图展示点位，右侧异常点位列表","expectIds":["ZhMap","ZhTable"]}
+{"query":"运营看板首页：地图点位点击后高亮右侧表格对应行","expectIds":["ZhMap","ZhTable","ZhToolTips"]}
+{"query":"管理首页：地图按行政区远程下拉定位，切换区域刷新指标","expectIds":["ZhMap","ZhCascaderLoadMore","ZhPageHeadPanel"]}
+{"query":"数据看板首页：地图加载中展示局部遮罩","expectIds":["ZhMap","ZhLoading"]}
+{"query":"后台首页：点位详情点击后展示基础信息面板","expectIds":["ZhMap","ZhBaseInfo"]}
+{"query":"首页地图模块：支持缩放和点击 marker 弹出信息","expectIds":["ZhMap","ZhToolTips"]}
+{"query":"运营首页：地图筛选条件包含区域级联和时间范围","expectIds":["ZhMap","ZhCascaderLoadMore","ZhDatePicker"]}
+{"query":"管理首页：地图异常点位支持导出当前列表","expectIds":["ZhMap","ZhTable","ZhButton"]}
+{"query":"后台首页：视频监控卡片点击后弹窗播放 mp4","expectIds":["ZhDialog","ZhVideoPlayer"]}
+{"query":"工作台首页：最近视频播放失败时显示重试按钮","expectIds":["ZhVideoPlayer","ZhButton"]}
+{"query":"后台首页文件中心：待处理附件列表支持预览、下载、删除","expectIds":["ZhFileWrapper","ZhButton","ZhMessageBox"]}
+{"query":"运营首页：导入任务卡片显示上传文件、解析进度和错误明细表","expectIds":["ZhFileWrapper","ZhLoading","ZhTable"]}
+{"query":"管理首页：公告附件文件名过长省略并 tooltip 显示完整路径","expectIds":["ZhFileWrapper","ZhToolTips"]}
+{"query":"首页工作台：上传报表后刷新趋势和待办模块","expectIds":["ZhFileWrapper","ZhLoading","ZhPageHeadPanel"]}
+{"query":"后台首页：文件解析错误行可展开查看原始数据","expectIds":["ZhFileWrapper","ZhTable"]}
+{"query":"运营工作台：视频证据在弹窗中播放，加载中显示遮罩","expectIds":["ZhDialog","ZhVideoPlayer","ZhLoading"]}
+{"query":"管理首页：上传入口禁用时用 tooltip 展示权限原因","expectIds":["ZhFileWrapper","ZhToolTips"]}
+{"query":"后台首页：下载附件前弹出确认框","expectIds":["ZhFileWrapper","ZhMessageBox"]}
+{"query":"后台首页筛选：全局时间范围选择器控制所有指标和趋势","expectIds":["ZhDatePicker","ZhPageHeadPanel"]}
+{"query":"管理工作台：顶部全局筛选包含组织远程下拉和日期范围","expectIds":["ZhCascaderLoadMore","ZhDatePicker"]}
+{"query":"运营首页：切换组织后清空下级筛选并刷新全部模块","expectIds":["ZhCascaderLoadMore","ZhLoading"]}
+{"query":"数据概览首页：状态筛选支持远程搜索和滚动加载更多","expectIds":["ZhCascaderLoadMore","ZhTable"]}
+{"query":"后台首页：搜索框输入关键字后刷新待办和动态列表","expectIds":["ZhInput","ZhTable"]}
+{"query":"工作台首页：日期快捷项支持今天、近7天、本月","expectIds":["ZhDatePicker","ZhButtonGroup"]}
+{"query":"管理系统首页：筛选区重置后恢复默认时间范围并刷新 KPI","expectIds":["ZhButton","ZhDatePicker","ZhPageHeadPanel"]}
+{"query":"运营首页：全局筛选查询按钮显示 loading，完成后刷新图表","expectIds":["ZhButton","ZhLoading"]}
+{"query":"后台首页：筛选条件折叠展开，避免首屏占用过高","expectIds":["ZhButton","ZhGrid"]}
+{"query":"数据看板首页：输入框支持回车触发全局搜索","expectIds":["ZhInput","ZhButton"]}
+{"query":"后台首页权限：无权限的指标卡显示锁定提示和 tooltip","expectIds":["ZhPageHeadPanel","ZhToolTips"]}
+{"query":"管理首页：权限不足时快捷按钮禁用，并显示申请权限入口","expectIds":["ZhButton","ZhToolTips"]}
+

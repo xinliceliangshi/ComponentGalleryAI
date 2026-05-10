@@ -1,0 +1,108 @@
+# 10 轮召回测试样例（TopN：组件卡片命中）
+# 一行一个 JSON：{ "query": "...", "expectIds": ["..."] }
+
+{"query":"预约单管理列表页：主表支持列排序、表尾合计、分页，编号列可点击跳详情","expectIds":["ZhTable","ZhDiyDataTable"]}
+{"query":"列表筛选区要有下单时间日期范围选择（起止时间）","expectIds":["ZhDatePicker"]}
+{"query":"查询按钮主色蓝并带搜索图标，旁边一个重置按钮","expectIds":["ZhButton","ZhButtonGroup"]}
+{"query":"筛选项：预约单编号输入框、关联合同（名称或编号模糊）","expectIds":["ZhInput"]}
+{"query":"请求状态字段做下拉选择：待审核/已审核/已取消","expectIds":["ZhCascaderLoadMore"]}
+{"query":"顶部 KPI 两张统计卡片：有效预约单蓝色强调 + 已取消预约单，圆角阴影","expectIds":["ZhPageHeadPanel","ZhBaseInfo"]}
+{"query":"详情页基础信息区域：用栅格排列多个字段（类似 label/value）","expectIds":["ZhBaseInfo","ZhBaseItem"]}
+{"query":"金额输入：只允许输入金额格式并自动格式化","expectIds":["ZhMoneyInput"]}
+{"query":"数字输入：吨数支持两位小数、可步进增减","expectIds":["ZhInputNumber"]}
+{"query":"需要一个确认弹窗：提示信息 + 确认/取消按钮","expectIds":["ZhMessageBox"]}
+
+# 扩展用例（+10）
+{"query":"综合表格：支持多选勾选、批量操作按钮在表格上方","expectIds":["ZhTable","ZhDiyDataTable","ZhButton"]}
+{"query":"表格列里要做自定义渲染：空值显示“-”，数字右对齐","expectIds":["ZhTable","ZhDiyDataTable"]}
+{"query":"表格列需要固定在左侧（编号列固定），右侧操作列固定","expectIds":["ZhTable","ZhDiyDataTable"]}
+{"query":"分页器：支持切换每页条数（10/20/50）并显示总条数","expectIds":["ZhTable","ZhDiyDataTable"]}
+{"query":"筛选区：专区名称用输入框，支持回车触发查询","expectIds":["ZhInput","ZhButton"]}
+{"query":"筛选区：下拉选择组件支持远程加载/滚动加载更多","expectIds":["ZhCascaderLoadMore"]}
+{"query":"弹窗对话框：可拖拽/可全屏，内含表单与底部按钮","expectIds":["ZhDialog","ZhButton"]}
+{"query":"详情页顶部：标题 + 返回按钮 + 右侧操作区（按钮组）","expectIds":["ZhDetailHeader","ZhButton","ZhButtonGroup"]}
+{"query":"页面加载中：局部区域骨架/加载态遮罩","expectIds":["ZhLoading"]}
+{"query":"地图组件：展示一个点位并支持缩放","expectIds":["ZhMap"]}
+
+# 扩展用例（补足到 100 条：+80）
+{"query":"表格列支持 tooltip：内容过长省略，悬浮显示完整文本","expectIds":["ZhTable","ZhToolTips"]}
+{"query":"页面头部：标题 + 描述 + 右侧操作按钮（导出/新建）","expectIds":["ZhPageHeadPanel","ZhButton","ZhButtonGroup"]}
+{"query":"详情页头部需要副标题区展示状态/编号","expectIds":["ZhDetailHeader","ZhDetailSubTitle"]}
+{"query":"基础信息两列栅格展示：左侧 label 右侧 value，支持自定义 label 宽度","expectIds":["ZhBaseInfo","ZhBaseItem","ZhGrid"]}
+{"query":"信息对（label/value）组件：用于快速展示字段，支持复制","expectIds":["ZhInfoPair"]}
+{"query":"可编辑信息对：点击进入编辑，保存后更新展示","expectIds":["ZhEditInfoPair"]}
+{"query":"文件预览包装：支持展示文件名、下载、预览入口","expectIds":["ZhFileWrapper"]}
+{"query":"视频播放器：播放 mp4，支持全屏/进度条","expectIds":["ZhVideoPlayer"]}
+{"query":"对话框里放一个表格：可分页、可排序，底部按钮固定","expectIds":["ZhDialog","ZhTable","ZhButton"]}
+{"query":"表格空数据态：无数据时显示提示文案和刷新按钮","expectIds":["ZhTable","ZhButton"]}
+{"query":"表格列支持复制：点击复制编号到剪贴板","expectIds":["ZhTable","ZhToolTips"]}
+{"query":"表格列需要合并单元格：相同合同编号的行合并显示","expectIds":["ZhTable","ZhDiyDataTable"]}
+{"query":"表格支持展开行：展开显示更多详情字段","expectIds":["ZhTable","ZhDiyDataTable"]}
+{"query":"表格行操作：编辑/删除，删除需二次确认弹窗","expectIds":["ZhTable","ZhButton","ZhMessageBox"]}
+{"query":"表格批量删除：多选后点击批量删除，弹窗确认","expectIds":["ZhTable","ZhButton","ZhMessageBox"]}
+{"query":"列表页查询区：输入框 + 日期范围 + 状态下拉，查询/重置按钮一行排布","expectIds":["ZhInput","ZhDatePicker","ZhCascaderLoadMore","ZhButton","ZhButtonGroup"]}
+{"query":"列表页筛选项很多时需要折叠展开更多条件","expectIds":["ZhTable","ZhButton"]}
+{"query":"输入框需要清空按钮并支持按 Enter 触发搜索","expectIds":["ZhInput","ZhButton"]}
+{"query":"数字输入框限制最大值最小值，并限制小数位数","expectIds":["ZhInputNumber"]}
+{"query":"金额输入框：展示中文大写金额提示，可关闭 tooltip","expectIds":["ZhMoneyInput","ZhToolTips"]}
+{"query":"日期选择器：只选月份（YYYY-MM）用于月度统计","expectIds":["ZhDatePicker"]}
+{"query":"日期选择器：限制不能选择未来日期","expectIds":["ZhDatePicker"]}
+{"query":"时间范围选择：用于查询下单时间起止","expectIds":["ZhDatePicker"]}
+{"query":"级联下拉：支持远程搜索并分页加载更多数据","expectIds":["ZhCascaderLoadMore"]}
+{"query":"级联下拉：选择合同后联动刷新表格数据","expectIds":["ZhCascaderLoadMore","ZhTable"]}
+{"query":"页面级 loading：请求接口时显示遮罩，完成后消失","expectIds":["ZhLoading"]}
+{"query":"局部 loading：只遮罩表格区域，不影响筛选区操作","expectIds":["ZhLoading","ZhTable"]}
+{"query":"确认弹窗：危险操作需要红色确认按钮","expectIds":["ZhMessageBox","ZhButton"]}
+{"query":"对话框：宽度自适应，点击遮罩不关闭","expectIds":["ZhDialog"]}
+{"query":"对话框：标题栏右侧有关闭按钮，Esc 可关闭","expectIds":["ZhDialog"]}
+{"query":"按钮组：一排三个操作（新增/导入/导出）","expectIds":["ZhButtonGroup","ZhButton"]}
+{"query":"按钮禁用态：未选择表格行时批量按钮禁用","expectIds":["ZhButton","ZhTable"]}
+{"query":"地图：显示多个点位并支持点击弹出信息","expectIds":["ZhMap","ZhToolTips"]}
+{"query":"地图：支持根据行政区划定位并缩放","expectIds":["ZhMap"]}
+{"query":"详情页头：左侧返回按钮，右侧操作按钮（编辑/删除）","expectIds":["ZhDetailHeader","ZhButton","ZhButtonGroup"]}
+{"query":"详情页副标题：显示“状态：有效/已取消”，用颜色区分","expectIds":["ZhDetailSubTitle"]}
+{"query":"基础信息区：一行三列栅格展示，超长文本自动换行","expectIds":["ZhBaseInfo","ZhGrid"]}
+{"query":"基础信息项：某字段为空时显示“-”","expectIds":["ZhBaseItem"]}
+{"query":"信息对组件：value 过长显示省略并支持 tooltip","expectIds":["ZhInfoPair","ZhToolTips"]}
+{"query":"可编辑信息对：编辑时用输入框，保存取消按钮在右侧","expectIds":["ZhEditInfoPair","ZhInput","ZhButton"]}
+{"query":"文件包装：支持上传后展示文件列表","expectIds":["ZhFileWrapper"]}
+{"query":"视频播放器：播放地址为空时显示占位提示","expectIds":["ZhVideoPlayer"]}
+{"query":"表格：列配置可保存用户偏好（显示/隐藏列）","expectIds":["ZhTable","ZhDiyDataTable"]}
+{"query":"表格：列宽可拖拽调整，调整后保持","expectIds":["ZhTable","ZhDiyDataTable"]}
+{"query":"表格：支持虚拟滚动以提升大数据渲染性能","expectIds":["ZhTable","ZhDiyDataTable"]}
+{"query":"表格：支持行拖拽排序并保存顺序","expectIds":["ZhTable","ZhDiyDataTable"]}
+{"query":"表格：导出当前筛选结果为 Excel","expectIds":["ZhTable","ZhButton"]}
+{"query":"表格：支持刷新按钮重新拉取数据","expectIds":["ZhTable","ZhButton"]}
+{"query":"表格：状态列用标签样式，支持筛选有效/已取消","expectIds":["ZhTable","ZhDiyDataTable"]}
+{"query":"表格：金额列右对齐，保留两位小数","expectIds":["ZhTable","ZhDiyDataTable"]}
+{"query":"表格：吨数列保留两位小数并显示单位“吨”","expectIds":["ZhTable","ZhDiyDataTable","ZhInputNumber"]}
+{"query":"表格：合计行固定在底部，仅汇总指定三列","expectIds":["ZhTable","ZhDiyDataTable"]}
+{"query":"表格：表头支持多级表头（分组列）","expectIds":["ZhTable","ZhDiyDataTable"]}
+{"query":"表格：列头带帮助 icon，悬浮显示说明 tooltip","expectIds":["ZhTable","ZhToolTips"]}
+{"query":"表格：点击行跳转详情，行 hover 高亮","expectIds":["ZhTable"]}
+{"query":"表格：编号列点击跳转详情，打开新标签页","expectIds":["ZhTable"]}
+{"query":"表格：单元格内有按钮/链接，点击不触发行点击事件","expectIds":["ZhTable","ZhButton"]}
+{"query":"搜索区：表单风格对齐，label 右对齐","expectIds":["ZhTable","ZhBaseItem"]}
+{"query":"搜索区：重置后清空所有条件并刷新表格","expectIds":["ZhButton","ZhTable"]}
+{"query":"搜索区：默认带上最近7天日期范围","expectIds":["ZhDatePicker"]}
+{"query":"搜索区：合同字段支持输入关键字远程搜索","expectIds":["ZhInput","ZhCascaderLoadMore"]}
+{"query":"搜索区：状态字段下拉多选","expectIds":["ZhCascaderLoadMore"]}
+{"query":"搜索区：输入框防抖，停止输入500ms再请求","expectIds":["ZhInput"]}
+{"query":"弹窗表单：提交时按钮 loading，提交成功后关闭弹窗","expectIds":["ZhDialog","ZhButton","ZhLoading"]}
+{"query":"弹窗表单：表单校验失败时在字段下方提示错误","expectIds":["ZhDialog","ZhInput"]}
+{"query":"弹窗确认：关闭弹窗前提示“未保存更改”","expectIds":["ZhMessageBox","ZhDialog"]}
+{"query":"页面头部：面包屑+标题+副标题+操作区","expectIds":["ZhPageHeadPanel","ZhDetailSubTitle"]}
+{"query":"页面头部 KPI：左卡高亮重点指标，右卡普通展示","expectIds":["ZhPageHeadPanel"]}
+{"query":"KPI 卡片：数字字体更大，附带同比/环比小字","expectIds":["ZhPageHeadPanel","ZhBaseInfo"]}
+{"query":"KPI 卡片：点击卡片切换表格筛选（有效/已取消）","expectIds":["ZhPageHeadPanel","ZhTable"]}
+{"query":"地图+表格联动：点击地图点位高亮表格对应行","expectIds":["ZhMap","ZhTable"]}
+{"query":"地图筛选：在地图上画框筛选点位并刷新表格","expectIds":["ZhMap","ZhTable"]}
+{"query":"视频预览：在对话框中播放视频","expectIds":["ZhDialog","ZhVideoPlayer"]}
+{"query":"文件预览：点击文件项打开对话框预览","expectIds":["ZhFileWrapper","ZhDialog"]}
+{"query":"列表页：顶部统计卡片+筛选区+表格+分页，整体风格统一","expectIds":["ZhPageHeadPanel","ZhTable","ZhDiyDataTable"]}
+{"query":"列表页：筛选区和表格之间需要分割线与适当间距","expectIds":["ZhPageHeadPanel","ZhTable"]}
+{"query":"表格行内编辑：某列可直接编辑输入数字并保存","expectIds":["ZhTable","ZhInputNumber","ZhButton"]}
+{"query":"表格行内编辑：金额列用金额输入框编辑","expectIds":["ZhTable","ZhMoneyInput","ZhButton"]}
+{"query":"表格列筛选：按日期范围筛选某列","expectIds":["ZhTable","ZhDatePicker"]}
+{"query":"表格列筛选：按状态下拉筛选","expectIds":["ZhTable","ZhCascaderLoadMore"]}
+

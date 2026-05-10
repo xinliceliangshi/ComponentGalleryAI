@@ -1,0 +1,112 @@
+# 后台复杂编辑页专项用例（+100）
+{"query":"后台编辑活动页头部：左侧返回和标题，右侧保存、提交审核、发布按钮组","expectIds":["ZhPageHeadPanel","ZhButtonGroup","ZhButton"]}
+{"query":"后台修改商品页头部：标题旁显示状态副说明，右上角操作区有保存修改和下线按钮","expectIds":["ZhPageHeadPanel","ZhDetailSubTitle","ZhButtonGroup"]}
+{"query":"后台维护配置页头部：标题下方展示最近更新时间，右侧发布按钮高亮","expectIds":["ZhPageHeadPanel","ZhButton"]}
+{"query":"复杂编辑页头部：返回上一页前若有未保存修改，需要二次确认弹窗","expectIds":["ZhPageHeadPanel","ZhMessageBox"]}
+{"query":"编辑页操作区：取消、保存草稿、提交审核三个按钮并排，主次分明","expectIds":["ZhButtonGroup","ZhButton"]}
+{"query":"编辑页状态横幅：草稿、审核中、已发布三种状态显示不同文案和颜色","expectIds":["ZhDetailSubTitle","ZhPageHeadPanel"]}
+{"query":"编辑页状态区：已锁定时显示锁定人、锁定时间和解锁说明 tooltip","expectIds":["ZhDetailSubTitle","ZhToolTips"]}
+{"query":"编辑页状态驱动：已发布状态下显示下线按钮，草稿状态显示提交审核按钮","expectIds":["ZhDetailSubTitle","ZhButtonGroup"]}
+{"query":"编辑页头部：对象编号过长时省略显示，悬浮 tooltip 看完整编号","expectIds":["ZhPageHeadPanel","ZhToolTips"]}
+{"query":"编辑页首次加载：头部和主表单区域展示 loading 骨架","expectIds":["ZhLoading","ZhPageHeadPanel"]}
+
+{"query":"编辑页基础信息区：两列栅格展示名称、编号、创建人、更新时间","expectIds":["ZhBaseInfo","ZhBaseItem","ZhGrid"]}
+{"query":"编辑页基础信息：Descriptions 风格展示状态、负责人、最近发布版本","expectIds":["ZhBaseInfo","ZhInfoPair"]}
+{"query":"编辑页可编辑信息对：联系人姓名和手机号支持切换编辑态后保存","expectIds":["ZhEditInfoPair","ZhButton"]}
+{"query":"编辑页只读信息对：系统生成编号不可编辑，但需展示 tooltip 解释原因","expectIds":["ZhInfoPair","ZhToolTips"]}
+{"query":"编辑页字段混排：左侧只读信息，右侧可编辑信息对，整体三列布局","expectIds":["ZhBaseInfo","ZhEditInfoPair","ZhGrid"]}
+{"query":"编辑页价格配置：金额字段用金额输入框编辑，自动格式化并显示中文大写提示","expectIds":["ZhMoneyInput","ZhToolTips"]}
+{"query":"编辑页阈值配置：数值字段支持两位小数、步进加减和单位展示","expectIds":["ZhInputNumber"]}
+{"query":"编辑页表单：名称、编码、备注三项用输入框录入，支持回车校验","expectIds":["ZhInput"]}
+{"query":"编辑页联动表单：切换状态后禁用部分输入框，并悬浮提示原因","expectIds":["ZhInput","ZhToolTips"]}
+{"query":"编辑页长表单：基础信息、投放规则、高级设置按分组卡片排列","expectIds":["ZhGrid","ZhBaseInfo"]}
+
+{"query":"编辑页校验摘要：顶部汇总展示缺失字段、错误文案和一键定位入口","expectIds":["ZhInput","ZhEditInfoPair","ZhButton"]}
+{"query":"编辑页提交前校验：必填项缺失时在字段下方提示错误并阻止提交","expectIds":["ZhInput","ZhToolTips"]}
+{"query":"编辑页差异提示：顶部展示本次修改了哪些字段和风险级别","expectIds":["ZhDetailSubTitle","ZhToolTips"]}
+{"query":"编辑页保存按钮：请求中显示 loading，并禁用整个操作区","expectIds":["ZhLoading","ZhButton"]}
+{"query":"编辑页发布按钮：点击前弹窗确认变更摘要和影响范围","expectIds":["ZhButton","ZhMessageBox","ZhBaseInfo"]}
+{"query":"编辑页未保存提示：切路由或关闭弹窗前弹出确认框","expectIds":["ZhMessageBox","ZhButton"]}
+{"query":"编辑页校验失败：滚动到第一个错误字段，并在顶部展示错误汇总","expectIds":["ZhToolTips","ZhInput"]}
+{"query":"编辑页操作区：危险操作删除前需要红色确认弹窗","expectIds":["ZhMessageBox","ZhButton"]}
+{"query":"编辑页局部保存：某个分组保存时只遮罩当前卡片区域 loading","expectIds":["ZhLoading","ZhButton"]}
+{"query":"编辑页提交成功后：头部状态区从草稿切换为审核中，并更新按钮组","expectIds":["ZhDetailSubTitle","ZhButtonGroup"]}
+
+{"query":"复杂编辑页关联数据：右侧列表维护标签、规则项和关联资源，可增删改","expectIds":["ZhTable","ZhButtonGroup","ZhButton"]}
+{"query":"编辑页子项配置：子项列表支持新增、删除、拖拽排序和分页","expectIds":["ZhTable","ZhDiyDataTable","ZhButton"]}
+{"query":"编辑页关联配置：左侧主表单，右侧关联数据表，切换主配置时右侧刷新","expectIds":["ZhGrid","ZhTable","ZhLoading"]}
+{"query":"编辑页权限分配：角色列表支持多选勾选和批量移除","expectIds":["ZhTable","ZhButtonGroup"]}
+{"query":"编辑页关联明细：表格行展开后展示子配置详情和操作按钮","expectIds":["ZhTable","ZhDiyDataTable","ZhButton"]}
+{"query":"编辑页规则列表：支持行内编辑数字阈值并立即保存","expectIds":["ZhTable","ZhInputNumber","ZhButton"]}
+{"query":"编辑页关联资源选择器：弹窗顶部筛选，下方分页表格，多选后确认回填","expectIds":["ZhDialog","ZhInput","ZhTable","ZhButton"]}
+{"query":"编辑页标签选择：支持远程搜索标签并滚动加载更多","expectIds":["ZhCascaderLoadMore","ZhInput"]}
+{"query":"编辑页子项为空时：表格区域展示暂无数据和新增按钮","expectIds":["ZhTable","ZhButton"]}
+{"query":"编辑页批量变更子项：勾选多条后统一修改状态并显示 loading","expectIds":["ZhTable","ZhButtonGroup","ZhLoading"]}
+
+{"query":"编辑页预览区：右侧固定预览卡片，实时反映表单修改结果","expectIds":["ZhBaseInfo","ZhGrid"]}
+{"query":"编辑页图片预览：上传封面后右侧展示预览、下载和删除入口","expectIds":["ZhFileWrapper","ZhButton"]}
+{"query":"编辑页视频预览：视频素材支持在页面中直接播放预览","expectIds":["ZhVideoPlayer","ZhFileWrapper"]}
+{"query":"编辑页富文本预览：左侧编辑，右侧实时预览内容和图片","expectIds":["ZhGrid","ZhFileWrapper"]}
+{"query":"编辑页附件区：展示上传、预览、下载、删除，文件名过长 tooltip 显示完整值","expectIds":["ZhFileWrapper","ZhToolTips","ZhButton"]}
+{"query":"编辑页图片列表：多张图片文件支持预览原图和批量下载","expectIds":["ZhFileWrapper","ZhButtonGroup"]}
+{"query":"编辑页视频预览失败：展示重试按钮和错误提示","expectIds":["ZhVideoPlayer","ZhButton","ZhLoading"]}
+{"query":"编辑页预览弹窗：点击放大预览后在对话框中展示完整内容","expectIds":["ZhDialog","ZhFileWrapper"]}
+{"query":"编辑页内容预览：Markdown 图片和附件都需要可点击预览","expectIds":["ZhFileWrapper","ZhDialog"]}
+{"query":"编辑页右侧预览：无内容时显示空态和去填写按钮","expectIds":["ZhButton","ZhBaseInfo"]}
+
+{"query":"编辑页变更记录：底部时间线展示每次修改人、时间、修改说明","expectIds":["ZhBaseInfo","ZhDetailSubTitle"]}
+{"query":"编辑页版本记录：列表展示版本号、发布时间、发布人和对比按钮","expectIds":["ZhTable","ZhButton"]}
+{"query":"编辑页操作日志：按时间倒序展示操作人、操作时间和操作内容","expectIds":["ZhTable","ZhBaseInfo"]}
+{"query":"编辑页差异对比：点击版本对比后弹窗展示左右字段差异","expectIds":["ZhDialog","ZhBaseInfo","ZhGrid"]}
+{"query":"编辑页历史区：某条记录附带附件，需要预览和下载","expectIds":["ZhFileWrapper","ZhTable"]}
+{"query":"编辑页回滚版本：点击回滚前弹窗确认版本摘要和影响范围","expectIds":["ZhButton","ZhMessageBox","ZhBaseInfo"]}
+{"query":"编辑页历史列表：支持按操作类型筛选和分页","expectIds":["ZhTable","ZhButton","ZhDiyDataTable"]}
+{"query":"编辑页版本摘要：每个版本卡片展示状态标签和变更数","expectIds":["ZhDetailSubTitle","ZhBaseInfo"]}
+{"query":"编辑页日志为空：展示暂无变更记录提示和刷新按钮","expectIds":["ZhButton","ZhLoading"]}
+{"query":"编辑页底部历史区：切换不同 tab 查看版本记录、操作日志和审核记录","expectIds":["ZhButtonGroup","ZhTable"]}
+
+{"query":"后台编辑商品页面：基础信息表单 + 右侧实时预览 + 底部保存发布按钮","expectIds":["ZhInput","ZhFileWrapper","ZhButtonGroup"]}
+{"query":"后台编辑文章页面：标题输入、正文编辑、封面预览、发布按钮","expectIds":["ZhInput","ZhFileWrapper","ZhButton"]}
+{"query":"后台编辑活动配置页面：状态横幅、规则表格、差异对比和提交审核按钮","expectIds":["ZhDetailSubTitle","ZhTable","ZhButton"]}
+{"query":"后台维护角色权限页面：角色基础信息、权限列表、多选保存发布","expectIds":["ZhBaseInfo","ZhTable","ZhButtonGroup"]}
+{"query":"后台修改课程页面：课程信息输入、讲师关联表、视频预览和版本记录","expectIds":["ZhInput","ZhTable","ZhVideoPlayer","ZhButton"]}
+{"query":"后台编辑门店设置页面：营业状态、地址信息、图片预览、保存草稿","expectIds":["ZhDetailSubTitle","ZhInput","ZhFileWrapper","ZhButton"]}
+{"query":"后台维护模板配置页面：只读元信息、可编辑内容、右侧预览、发布按钮","expectIds":["ZhInfoPair","ZhInput","ZhDialog","ZhButton"]}
+{"query":"后台修改会员权益页面：权益规则表格、数值配置、变更记录和下线按钮","expectIds":["ZhTable","ZhInputNumber","ZhButton","ZhBaseInfo"]}
+{"query":"后台编辑审核规则页面：审核流转状态、角色分配、日志记录和提交审核","expectIds":["ZhDetailSubTitle","ZhTable","ZhButtonGroup"]}
+{"query":"后台维护报表展示配置页面：字段列表、预览面板、保存发布和版本记录","expectIds":["ZhTable","ZhBaseInfo","ZhButtonGroup"]}
+
+{"query":"编辑弹窗：左侧基础信息预览，右侧两列表单，底部固定保存取消按钮","expectIds":["ZhDialog","ZhBaseInfo","ZhGrid","ZhButtonGroup"]}
+{"query":"编辑弹窗：提交时局部 loading，关闭前有未保存确认","expectIds":["ZhDialog","ZhLoading","ZhMessageBox"]}
+{"query":"编辑弹窗文件区：支持上传、预览、下载、删除附件","expectIds":["ZhDialog","ZhFileWrapper","ZhButton"]}
+{"query":"编辑弹窗视频素材：在对话框中播放预览，失败后可重试","expectIds":["ZhDialog","ZhVideoPlayer","ZhButton"]}
+{"query":"编辑弹窗：基础信息使用信息对展示，编辑字段在右侧表单中维护","expectIds":["ZhDialog","ZhInfoPair","ZhInput"]}
+{"query":"编辑弹窗：底部按钮固定，滚动表单时操作区不动","expectIds":["ZhDialog","ZhButtonGroup"]}
+{"query":"编辑弹窗：金额字段和数值字段并排编辑，提交前显示差异摘要","expectIds":["ZhDialog","ZhMoneyInput","ZhInputNumber","ZhToolTips"]}
+{"query":"编辑弹窗：表单区分基础设置和高级设置两个折叠分组","expectIds":["ZhDialog","ZhGrid","ZhBaseInfo"]}
+{"query":"编辑弹窗：顶部筛选选择关联资源，下方表格勾选回填","expectIds":["ZhDialog","ZhInput","ZhTable","ZhButton"]}
+{"query":"编辑弹窗：危险操作按钮禁用时通过 tooltip 说明原因","expectIds":["ZhDialog","ZhButton","ZhToolTips"]}
+
+{"query":"编辑页地图配置：左侧地图预览，右侧参数表单和保存按钮","expectIds":["ZhMap","ZhGrid","ZhButton"]}
+{"query":"编辑页区域联动：切换行政区后地图和表格同时 loading 刷新","expectIds":["ZhMap","ZhTable","ZhLoading"]}
+{"query":"编辑页坐标点位：点击地图 marker 高亮右侧配置表对应行","expectIds":["ZhMap","ZhTable","ZhToolTips"]}
+{"query":"编辑页地理围栏：配置项包含数值输入、状态开关和预览地图","expectIds":["ZhMap","ZhInputNumber","ZhButton"]}
+{"query":"编辑页地图资源：上传 KML 文件后支持预览和删除","expectIds":["ZhMap","ZhFileWrapper","ZhButton"]}
+
+{"query":"编辑页审批流：顶部显示当前节点状态，底部有提交审核和撤回按钮","expectIds":["ZhDetailSubTitle","ZhButtonGroup"]}
+{"query":"编辑页审核意见：需填写意见输入框后才能提交审核","expectIds":["ZhInput","ZhButton"]}
+{"query":"编辑页驳回原因：历史区展示驳回说明和操作人","expectIds":["ZhBaseInfo","ZhTable"]}
+{"query":"编辑页发布流：草稿、审核中、已发布三种状态切换按钮不同","expectIds":["ZhDetailSubTitle","ZhButtonGroup"]}
+{"query":"编辑页下线流程：点击下线先弹确认框，再展示 loading","expectIds":["ZhMessageBox","ZhLoading","ZhButton"]}
+
+{"query":"编辑页表格区：超宽配置表需要固定列、分页和右侧操作按钮","expectIds":["ZhTable","ZhDiyDataTable","ZhButton"]}
+{"query":"编辑页表格行操作：编辑、删除、复制三按钮，删除前确认","expectIds":["ZhTable","ZhButtonGroup","ZhMessageBox"]}
+{"query":"编辑页表格筛选：顶部有输入框、日期范围和查询按钮","expectIds":["ZhInput","ZhDatePicker","ZhButton"]}
+{"query":"编辑页表格空态：显示新增第一条配置按钮","expectIds":["ZhTable","ZhButton"]}
+{"query":"编辑页表格批量操作：勾选多行后顶部显示批量启用和批量禁用","expectIds":["ZhTable","ZhButtonGroup"]}
+
+{"query":"编辑页远程选择：标签下拉支持搜索和滚动加载更多","expectIds":["ZhCascaderLoadMore","ZhInput"]}
+{"query":"编辑页日期配置：生效时间和失效时间用日期范围选择","expectIds":["ZhDatePicker"]}
+{"query":"编辑页高级筛选：默认收起，展开后按四列栅格排列","expectIds":["ZhGrid","ZhButton","ZhInput"]}
+{"query":"编辑页快捷时间：提供今天、近7天、本月快捷切换","expectIds":["ZhDatePicker","ZhButtonGroup"]}
+{"query":"编辑页筛选重置：清空所有条件后自动刷新列表","expectIds":["ZhButton","ZhLoading","ZhTable"]}
