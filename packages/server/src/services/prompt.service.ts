@@ -36,6 +36,15 @@ function formatRequirementDecomposition(decomposition: RequirementDecomposition 
       "- 主体必须围绕表单字段组织，并体现必填、校验、错误提示",
       "- 长表单应拆成分组卡片，不要把所有字段平铺成一个块",
       "- 底部必须有明确的取消、保存/保存草稿、提交操作区"
+    ],
+    "admin-edit": [
+      "后台复杂编辑页专项要求：",
+      "- 复杂编辑页不能等同于新增页回填，必须体现当前状态和编辑上下文",
+      "- 页面主体允许表单、只读信息、关联配置、预览区混合布局",
+      "- 必须体现字段可编辑、只读、禁用等不同状态",
+      "- 必须体现校验、错误提示、变更提示等编辑反馈",
+      "- 若涉及发布流或审核流，操作按钮必须根据状态和权限动态变化",
+      "- 底部必须区分取消、保存、提交审核、发布等不同动作"
     ]
   };
   const pageTypeInstruction = pageTypeInstructionMap[decomposition.pageType]?.join("\n") ?? "";

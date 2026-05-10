@@ -55,4 +55,34 @@ describe("component knowledge retrieval", () => {
     );
     expect(cardIds.slice(0, 5)).not.toEqual(["ZhTable", "ZhDiyDataTable"]);
   });
+
+  it("新增页数量语义可以召回数字输入组件", () => {
+    const result = retrieveKnowledgeForQuery("后台创建活动页：报名人数上限字段和每人限购数量字段并排展示");
+    const cardIds = result.cards.map((card) => card.id);
+    const chunkComponentIds = result.chunks.map((chunk) => chunk.component).filter(Boolean);
+
+    expect([...cardIds, ...chunkComponentIds]).toEqual(
+      expect.arrayContaining(["ZhInputNumber"])
+    );
+  });
+
+  it("新增页金额语义可以召回金额输入组件", () => {
+    const result = retrieveKnowledgeForQuery("新增页金额字段：预算金额输入时自动格式化千分位");
+    const cardIds = result.cards.map((card) => card.id);
+    const chunkComponentIds = result.chunks.map((chunk) => chunk.component).filter(Boolean);
+
+    expect([...cardIds, ...chunkComponentIds]).toEqual(
+      expect.arrayContaining(["ZhMoneyInput"])
+    );
+  });
+
+  it("新增页上传失败语义可以召回文件组件", () => {
+    const result = retrieveKnowledgeForQuery("新增活动页：海报上传失败时展示错误提示并支持重新上传");
+    const cardIds = result.cards.map((card) => card.id);
+    const chunkComponentIds = result.chunks.map((chunk) => chunk.component).filter(Boolean);
+
+    expect([...cardIds, ...chunkComponentIds]).toEqual(
+      expect.arrayContaining(["ZhFileWrapper", "ZhButton"])
+    );
+  });
 });

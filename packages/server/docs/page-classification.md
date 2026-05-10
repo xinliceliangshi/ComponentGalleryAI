@@ -41,7 +41,7 @@ POST /api/generate { input }
 |------|---------|------|
 | `RequirementSubtaskPriority` | `"must" \| "should" \| "nice"` | 子任务优先级，决定 Prompt 里"必须覆盖 / 尽量体现"的语气 |
 | `IntentRule` | `id / title / intent / priority / uiRegion / terms / dataNeeds / interactionNeeds / candidateKeywords` | **页面分类规则的最小单元**：`terms` 用于命中拆分，`candidateKeywords` 用于召回扩词 |
-| `RequirementPageProfile` | `pageType / match(text) / rules / constraints` | 一个 **页型** = 命中函数 + 一组子任务规则 + 该页型的硬约束 |
+| `RequirementPageProfile` | `pageType / match(text) / rules / modules / constraints` | 一个 **页型** = 命中函数 + 一组子任务规则 + 可选结构模块 + 该页型的硬约束 |
 | `RequirementSubtask` | 由 `IntentRule` 转换而来，剥掉 `terms`，对外暴露 | 喂给 Prompt 与召回 |
 | `RequirementDecomposition` | `enabled / summary / pageType / userGoal / subtasks / constraints / risks` | 整个拆分结果 |
 
@@ -62,10 +62,12 @@ POST /api/generate { input }
 ```ts
 export const requirementPageProfiles: RequirementPageProfile[] = [
   adminHomeDashboardProfile, // ① 后台首页 / 工作台
-  adminManagementProfile,    // ② 后台管理列表
-  dashboardProfile,          // ③ 看板/仪表盘
-  formPageProfile,           // ④ 表单页
-  detailPageProfile          // ⑤ 详情页
+  adminDetailProfile,        // ② 后台详情页
+  adminEditProfile,          // ③ 后台复杂编辑页
+  adminCreateProfile,        // ④ 后台新增页 / 轻编辑
+  adminManagementProfile,    // ⑤ 后台管理列表
+  dashboardProfile,          // ⑥ 看板/仪表盘
+  formPageProfile            // ⑦ 表单页
 ];
 
 export function matchRequirementPageProfile(text: string): RequirementPageProfile {
@@ -73,20 +75,22 @@ export function matchRequirementPageProfile(text: string): RequirementPageProfil
 }
 ```
 
-> **顺序很关键**：把 `adminHomeDashboardProfile` 放在 `adminManagementProfile` 之前，是为了避免"做一个后台管理首页"被先归到普通管理页（命中"后台/管理"）从而被生成成 CRUD 表格页。
+> **顺序很关键**：越专的页型越要放在越前面。比如 `adminDetailProfile` 要早于 `adminManagementProfile`，避免"后台审核详情页"落成普通管理页；`adminEditProfile` 要早于 `adminCreateProfile`，让复杂编辑场景先被识别，再把轻编辑回落到新增页复用。
 
 ### 3.2 已注册的 Profile 一览
 
 | pageType | 命中条件（`match`） | rules 来源 | 备注 |
 |----------|--------------------|-----------|------|
 | `admin-home-dashboard` | **必须同时** 命中 ①家族（首页/工作台/控制台/仪表盘/看板/概览/总览/dashboard）和 ②家族（后台/管理系统/运营/数据/统计/管理） | 自有 5 条 | 首页专用，强制启用拆分 |
+| `admin-detail` | 命中详情语义，且包含状态 / 审核记录 / 基础信息等详情信号 | 自有 8 条 | 后台详情页，强制启用拆分 |
+| `admin-edit` | 命中编辑意图（编辑/修改/维护/配置）并满足复杂信号分组阈值，且排除列表/详情主体 | 自有 9 条 | 复杂编辑页，强制启用拆分 |
+| `admin-create` | 命中新增语义（新增/新建/创建/录入），或命中轻编辑但复杂度不足 | 自有 7 条 | 新增页，也承接轻编辑复用，强制启用拆分 |
 | `admin-management` | 命中 后台 / 管理 / 列表 / 表格 任意一个 | 自有 9 条 | 通用 CRUD 后台 |
 | `dashboard` | 看板 / 仪表盘 / 统计 / 图表 | **复用** `admin-management` | 占位，后续可独立 |
 | `form-page` | 表单 / 填写 / 提交 / 申请 | **复用** `admin-management` | 占位 |
-| `detail-page` | 详情 / 资料 / 信息 | **复用** `admin-management` | 占位 |
 | `general-ui`（fallback） | 始终命中 | **复用** `admin-management` | 兜底 |
 
-> 当前 `dashboard / form-page / detail-page / general-ui` 共享 `adminManagementProfile.rules` 是 **临时方案**：用相同的规则集，但 `pageType` 标签不同，方便后续替换为各自专属规则而不用动调用方。
+> 当前 `dashboard / form-page / general-ui` 共享 `adminManagementProfile.rules` 是 **临时方案**：用相同的规则集，但 `pageType` 标签不同，方便后续替换为各自专属规则而不用动调用方。
 
 ### 3.3 `adminManagementProfile`（通用后台）规则
 
@@ -127,6 +131,102 @@ export function matchRequirementPageProfile(text: string): RequirementPageProfil
 
 这两条会被 `prompt.service.ts` 翻成更显眼的指令灌进 system 区域（见 §5）。
 
+### 3.5 `adminCreateProfile`（后台新增页 / 轻编辑）规则
+
+定义在 `page-profiles/admin-create.ts`，首版目标是稳定兜住 **新增录入** 和 **轻量编辑复用** 两类场景：
+
+| id | title | priority | uiRegion |
+|----|-------|----------|----------|
+| `create-header` | 新增页头部 | must | header |
+| `basic-form` | 主表单区 | must | main |
+| `group-sections` | 分组卡片区 | should | main |
+| `upload` | 上传附件 | should | main |
+| `field-validation` | 字段校验与提示 | must | top |
+| `draft-save` | 草稿保存 | should | footer |
+| `submit-actions` | 提交操作区 | must | footer |
+
+模块层（`modules`）进一步把它结构化为：
+- `createHeader`
+- `formSection`
+- `groupedCardSections`
+- `uploadAttachments`
+- `validationSummary`
+- `submitBar`
+
+核心约束：
+- 页面主体必须是表单录入，不要生成成 CRUD 列表页或详情页；
+- 不允许让表格成为新增页主体；
+- 长表单应按分组卡片组织；
+- 必须体现必填、校验、错误提示；
+- 底部必须明确区分取消、保存/保存草稿、提交。
+
+> `admin-create` 现在也承接 **轻编辑**：例如"后台编辑商品页面，包含基础信息、封面上传和保存按钮"。这类需求虽然带有“编辑”字样，但如果没有明显的状态/权限/历史/预览复杂度，仍按新增页骨架处理。
+
+### 3.6 `adminEditProfile`（后台复杂编辑页）规则
+
+定义在 `page-profiles/admin-edit.ts`。它不是“新增页回填数据”，而是单独解决 **状态驱动 / 权限驱动 / 历史驱动 / 预览驱动** 的复杂编辑场景。
+
+页型识别采用“编辑意图 + 复杂信号分组计数”的方式：
+
+- 编辑意图词：`编辑 / 修改 / 维护 / 配置 / 调整 / 更新`
+- 复杂信号分组：
+  - 状态：`状态 / 发布 / 下线 / 审核 / 流转 / 草稿 / 锁定`
+  - 权限：`权限 / 角色 / 只读 / 禁用 / 可编辑`
+  - 历史：`变更记录 / 操作日志 / 版本记录 / 差异 / 对比`
+  - 结构：`预览 / 关联数据 / 子项 / 明细配置 / 局部保存 / 联动`
+
+只有满足足够复杂度时才会命中 `admin-edit`；如果是列表主体或详情主体，会继续留在 `admin-management` / `admin-detail`。
+
+规则层（`rules`）包括：
+
+| id | title | priority | uiRegion |
+|----|-------|----------|----------|
+| `edit-header` | 编辑页头部 | must | header |
+| `status-context` | 状态上下文 | must | top |
+| `editable-form` | 可编辑表单区 | must | main |
+| `grouped-sections` | 分组编辑区 | should | main |
+| `relation-editor` | 关联数据编辑 | should | main |
+| `preview-panel` | 预览区 | should | side |
+| `validation-diff` | 校验与变更提示 | must | top |
+| `history-panel` | 变更历史 | should | bottom |
+| `edit-actions` | 编辑操作区 | must | footer |
+
+模块层（`modules`）进一步表达推荐结构：
+- `editHeader`
+- `statusBanner`
+- `editableForm`
+- `groupedEditSections`
+- `relationEditor`
+- `previewPanel`
+- `validationDiffSummary`
+- `changeHistory`
+- `editActionBar`
+
+核心约束：
+- 复杂编辑页不能等同于新增页回填，必须体现当前状态和编辑上下文；
+- 页面主体允许表单、只读信息、关联配置、预览区混合布局；
+- 必须体现字段可编辑、只读、禁用等不同状态；
+- 必须体现校验、错误提示、变更提示等编辑反馈；
+- 若涉及发布流或审核流，操作按钮必须根据状态和权限动态变化；
+- 底部必须区分取消、保存、提交审核、发布等不同动作。
+
+### 3.7 `admin-create` 与 `admin-edit` 的边界
+
+这是本版最重要的新增规则之一，可以记成一句话：
+
+> 后台表单页分为 `admin-create` 和 `admin-edit` 两类：前者解决录入型新增与轻编辑，后者解决状态/权限/历史/预览驱动的复杂编辑。
+
+典型判定：
+
+- `admin-create`
+  - `做一个后台新增商品页面，包含基础信息、价格设置、封面上传和提交`
+  - `做一个后台编辑商品页面，包含基础信息、封面上传和保存按钮`
+
+- `admin-edit`
+  - `做一个后台编辑活动页面，包含状态流转、权限控制、变更记录和预览`
+  - `做一个后台发布配置页面，包含草稿状态、发布流程、版本记录和实时预览`
+  - `做一个后台角色权限维护页面，包含只读字段、权限分配、变更记录和保存发布`
+
 ---
 
 ## 4. 拆分流程：`decomposeRequirement`
@@ -139,7 +239,7 @@ export function decomposeRequirement(input: string): RequirementDecomposition {
   const profile       = matchRequirementPageProfile(text);     // 选 Profile
   const matchedRules  = profile.rules.filter(r => includesAny(text, r.terms));
   const enabled       =
-        profile.pageType === "admin-home-dashboard"            // 首页强制启用
+        shouldAlwaysEnableDecomposition(profile.pageType)      // 指定页型强制启用
      || shouldEnableDecomposition(text, matchedRules.length);  // 否则启发式
 
   const subtasks = matchedRules.map(toSubtask);
@@ -173,7 +273,14 @@ export function decomposeRequirement(input: string): RequirementDecomposition {
 - 命中复杂连接词 ≥ 2（"包含/支持/同时/以及/并且/需要/还要/包括/实现/带有/具备"）；
 - 命中规则数 ≥ 3。
 
-此外，**`pageType === "admin-home-dashboard"` 直接绕过这套阈值**——因为首页生成在没有拆分时极易翻车。
+此外，`shouldAlwaysEnableDecomposition(pageType)` 会让以下页型直接绕过阈值判断：
+
+- `admin-home-dashboard`
+- `admin-detail`
+- `admin-create`
+- `admin-edit`
+
+原因是这四类后台页面都已经有明确结构约束；一旦不启用拆分，生成结果很容易退化成普通 CRUD 或遗漏关键模块。
 
 短小单意图（例如 `做一个登录按钮`）则保持 `enabled=false`，`subtasks=[]`，回退到旧的"原文 → 召回 → Prompt"流。
 
@@ -204,7 +311,9 @@ export function buildDecompositionQueries(input, decomposition): string[] {
 
 1. 仅在 `enabled` 时注入"【需求拆分（规则预处理）】"段；
 2. 把 `summary / pageType / userGoal / subtasks / constraints / risks` 打成 JSON 灌进上下文；
-3. 当 `pageType === "admin-home-dashboard"` 时，额外插入一段 **首页专项要求**：
+3. 当 `pageType` 命中专用分支时，额外插入对应的 **页型专项要求**。例如：
+
+   `admin-home-dashboard`：
 
    ```
    后台首页专项要求：
@@ -212,6 +321,18 @@ export function buildDecompositionQueries(input, decomposition): string[] {
    - 不要把首页生成成单一 CRUD 表格页
    - 表格只能作为辅助模块，不能成为页面主体
    - 布局应适合后台首页：顶部指标区 + 主内容统计区 + 侧边待办/消息区
+   ```
+
+   `admin-edit`：
+
+   ```
+   后台复杂编辑页专项要求：
+   - 复杂编辑页不能等同于新增页回填，必须体现当前状态和编辑上下文
+   - 页面主体允许表单、只读信息、关联配置、预览区混合布局
+   - 必须体现字段可编辑、只读、禁用等不同状态
+   - 必须体现校验、错误提示、变更提示等编辑反馈
+   - 若涉及发布流或审核流，操作按钮必须根据状态和权限动态变化
+   - 底部必须区分取消、保存、提交审核、发布等不同动作
    ```
 
 4. 末尾补一句硬性指令：
@@ -250,7 +371,18 @@ export function buildDecompositionQueries(input, decomposition): string[] {
 - `subtasks` 包含 `kpi-overview / trend-chart / todo-list / quick-actions`，**不包含 `table`**
 - Prompt 中追加首页专项约束，避免 LLM 退化成 CRUD 表格页
 
-这三个例子在 `services/__tests__/requirement-decomposition.service.test.ts` 都有对应单测，新增/修改 Profile 时请同步覆盖。
+### 示例 D：复杂编辑页
+
+输入：`做一个后台编辑活动页面，包含状态流转、权限控制、变更记录和预览`
+
+- 命中 `adminEditProfile`
+- 复杂信号分组至少命中：状态 / 权限 / 历史 / 结构
+- 因为 `admin-edit` 属于强制启用拆分页型，所以 `enabled=true`
+- `subtasks` 会包含 `edit-header / status-context / editable-form / preview-panel / validation-diff / history-panel`
+- `modules` 会注入 `editHeader / statusBanner / previewPanel / changeHistory / editActionBar`
+- Prompt 中追加复杂编辑页专项要求，约束模型不要退化成普通新增表单
+
+这些例子在 `services/__tests__/requirement-decomposition.service.test.ts` 与 `services/__tests__/prompt.service.test.ts` 都有对应单测，新增/修改 Profile 时请同步覆盖。
 
 ---
 
@@ -288,9 +420,9 @@ export function buildDecompositionQueries(input, decomposition): string[] {
 - 想被 LLM 必须实现就用 `must`，可选用 `should`，否则 `nice`；
 - `uiRegion` 用统一的方位词（top/main/side/bottom/modal/...），保持横向一致。
 
-### 7.3 替换占位 Profile（dashboard / form-page / detail-page）
+### 7.3 替换占位 Profile（dashboard / form-page）
 
-目前这三个 Profile 的 `rules` 都直接复用了 `adminManagementProfile.rules`。当其中某个页型积累出独立的子任务集时，把它替换成自有的 `IntentRule[]` 与 `constraints` 即可，调用方无需改动。
+目前这两个 Profile 的 `rules` 都直接复用了 `adminManagementProfile.rules`。当其中某个页型积累出独立的子任务集时，把它替换成自有的 `IntentRule[]` 与 `constraints` 即可，调用方无需改动。
 
 ---
 
@@ -312,3 +444,110 @@ export function buildDecompositionQueries(input, decomposition): string[] {
 - **子任务规则结构化**：`terms / candidateKeywords` 现在是字符串数组，可考虑加权重，与 `component-knowledge` 的 `weights.ts` 对齐。
 - **Profile 与 RAG 知识包绑定**：每个 `pageType` 可以挂一份"推荐组件清单 / 反例清单"，进一步约束 LLM 输出。
 - **风险（`risks`）流向 UI**：目前 `risks` 只是写进 Prompt，前端可以把它显式呈现给用户作为"生成前提示"。
+
+---
+
+## 10. 团队约定
+
+这一节不是框架约束，而是为了让后续新增页型、补规则、补测试时保持口径一致。
+
+### 10.1 示例输入怎么写
+
+测试里的示例输入，建议统一遵循这个模板：
+
+```txt
+做一个[场景限定][页型名称]，包含[模块A]、[模块B]、[模块C]
+```
+
+例如：
+
+- `做一个后台新增商品页面，包含基础信息、价格设置、封面上传和提交`
+- `做一个后台编辑活动页面，包含状态流转、权限控制、变更记录和预览`
+- `做一个后台审核详情页，顶部展示标题、状态Tag和操作按钮，包含基础信息、审核记录和操作日志`
+- `做一个后台用户管理页面，包含筛选、表格、批量操作和分页`
+
+这样写有三个好处：
+
+- 能稳定触发 `match` 中的页型识别词；
+- 能稳定命中 `rules` 中的模块触发词；
+- 对人类和 LLM 都足够自然，不会变成只服务测试的“假输入”。
+
+### 10.2 示例输入要覆盖哪些信息
+
+一条好的页型示例，最好同时覆盖三层信息：
+
+1. `页型主语`
+   例如：`后台新增商品页面`、`后台编辑活动页面`、`后台审核详情页`
+
+2. `主体模块`
+   例如：`基础信息`、`表格`、`审核记录`、`变更记录`、`预览`
+
+3. `关键复杂度信号`
+   例如：`状态流转`、`权限控制`、`只读字段`、`版本记录`
+
+如果只有页型主语，没有模块和复杂度，测试价值会很弱；如果只有模块没有页型主语，又容易落到错误页型。
+
+### 10.3 新增页型时至少补哪些测试
+
+每新增一个独立 Profile，至少补这四类测试：
+
+1. `pageType 命中测试`
+   确认输入会命中正确页型，而不是被更泛的页型抢走。
+
+2. `subtasks 测试`
+   确认关键 `must` / `should` 子任务会被拆出来。
+
+3. `modules 测试`
+   如果该页型定义了 `modules`，确认返回的模块顺序、必选项、关键布局名正确。
+
+4. `prompt 注入测试`
+   确认该页型的专项要求会进入 `buildPrompt(...)`。
+
+如果页型还接了特殊召回策略，再加一类：
+
+5. `buildDecompositionQueries 测试`
+   确认页型特有模块关键词会进入召回查询。
+
+### 10.4 新增示例时要同时补“正例”和“反例”
+
+不要只补“它应该命中谁”，还要补“它不应该命中谁”。
+
+例如这次 `admin-edit` 的边界，就是靠这两组一起压住的：
+
+- 正例：`做一个后台编辑活动页面，包含状态流转、权限控制、变更记录和预览`
+- 反例：`做一个后台编辑商品页面，包含基础信息、封面上传和保存按钮`
+
+前者保证复杂编辑能识别出来，后者保证轻编辑不会被误伤。
+
+### 10.5 新规则优先补在文档和测试，再补代码
+
+后续如果再新增页型或调整边界，推荐顺序是：
+
+1. 先在这份文档里写清“它解决什么问题、边界在哪”
+2. 先写测试样例，明确正例和反例
+3. 最后再改 `match / rules / modules / constraints`
+
+这样做的好处是，大家讨论的对象先变成“规则说明 + 测试输入”，而不是一上来就在代码里猜边界。
+
+### 10.6 当前页型的口径速记
+
+- `admin-home-dashboard`
+  指标、趋势、待办、快捷入口驱动的后台首页。
+
+- `admin-detail`
+  状态、基础信息、审核记录、日志驱动的后台详情页。
+
+- `admin-create`
+  新增录入页，也承接轻编辑复用。
+
+- `admin-edit`
+  状态/权限/历史/预览驱动的复杂编辑页。
+
+- `admin-management`
+  筛选、表格、分页、批量操作驱动的后台管理列表。
+
+如果一个需求同时看起来像两个页型，优先问一句：
+
+> 这个页面的主体是在“录入/修改”，还是在“查看/管理”？
+
+这通常能帮我们快速判断它应该落到哪一类。

@@ -41,6 +41,42 @@ const MODULE_QUERY_HINTS: Record<string, string[]> = {
     "底部操作栏 提交按钮 保存草稿 取消",
     "吸底操作区 表单提交 固定底栏"
   ],
+  editHeader: [
+    "编辑页头部 标题 状态 操作区 保存修改 发布",
+    "编辑页面 Header 标题栏 返回按钮 状态标签"
+  ],
+  statusBanner: [
+    "状态横幅 状态上下文 风险提示 草稿 发布 下线",
+    "状态说明 状态驱动 UI 锁定提示 流转信息"
+  ],
+  editableForm: [
+    "编辑表单 字段编辑 只读字段 禁用字段 表单布局",
+    "配置维护 表单编辑 字段权限 回填数据"
+  ],
+  groupedEditSections: [
+    "分组编辑 卡片分组 Section 模块化表单",
+    "基础信息 高级设置 配置项 分组卡片"
+  ],
+  relationEditor: [
+    "关联数据编辑 子项配置 标签选择 关系维护",
+    "关联对象 子项列表 规格配置 明细配置"
+  ],
+  previewPanel: [
+    "预览区 实时预览 侧边预览 效果预览",
+    "编辑预览 结果预览 内容预览"
+  ],
+  validationDiffSummary: [
+    "校验提示 变更提示 差异摘要 错误汇总",
+    "字段校验 提交风险 变更对比"
+  ],
+  changeHistory: [
+    "变更记录 版本记录 操作日志 历史时间线",
+    "修改历史 差异对比 发布记录"
+  ],
+  editActionBar: [
+    "编辑操作区 保存修改 提交审核 发布按钮",
+    "底部操作栏 多操作按钮 固定底栏"
+  ],
   detailHeader: [
     "详情页头部 返回 标题 状态 操作区 ZhDetailHeader",
     "详情头部 Header 标题栏 状态标签 操作按钮"
@@ -102,7 +138,10 @@ function shouldEnableDecomposition(text: string, matchedIntentCount: number): bo
 }
 
 function shouldAlwaysEnableDecomposition(pageType: string): boolean {
-  return pageType === "admin-home-dashboard" || pageType === "admin-detail" || pageType === "admin-create";
+  return pageType === "admin-home-dashboard"
+    || pageType === "admin-detail"
+    || pageType === "admin-create"
+    || pageType === "admin-edit";
 }
 
 function buildModuleQueries(module: RequirementModule): string[] {

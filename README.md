@@ -29,3 +29,21 @@ pnpm dev          # 仅前端
 
 - 前端通过 `POST /api/generate` 调用生成接口；开发环境下 Vite 将 `/api` **代理**到 `http://127.0.0.1:3002`。
 - 未启动后端时，代理会返回 502 与 JSON 说明。
+
+## Page Type Quick Reference
+
+服务端在 `packages/server/src/services/requirement-decomposition/` 里会先做一层“页型识别 + 子任务拆分”，再把结果送进知识库召回和 Prompt 生成。
+
+当前后台页型口径可以先记成这 5 类：
+
+- `admin-home-dashboard`: 指标、趋势、待办、快捷入口驱动的后台首页。
+- `admin-detail`: 状态、基础信息、审核记录、日志驱动的后台详情页。
+- `admin-create`: 新增录入页，也承接轻编辑复用。
+- `admin-edit`: 状态/权限/历史/预览驱动的复杂编辑页。
+- `admin-management`: 筛选、表格、分页、批量操作驱动的后台管理列表。
+
+快速判断时，可以先问一句：
+
+> 这个页面的主体是在“录入/修改”，还是在“查看/管理”？
+
+更完整的规则说明见 [packages/server/docs/page-classification.md](/Users/wangying/Desktop/ComponentGalleryAI/packages/server/docs/page-classification.md)。

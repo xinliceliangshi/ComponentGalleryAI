@@ -154,6 +154,13 @@ export const KEYWORD_PATCHES_BY_ID: Record<string, WeightedKeyword[]> = {
     { word: "文件", weight: 3, category: "component" },
     { word: "附件", weight: 3.2, category: "component" },
     { word: "附件区", weight: 3, category: "scenario" },
+    { word: "上传区", weight: 2.9, category: "scenario" },
+    { word: "新增页附件", weight: 2.8, category: "scenario" },
+    { word: "素材上传", weight: 2.8, category: "scenario" },
+    { word: "封面图", weight: 2.7, category: "scenario" },
+    { word: "海报", weight: 2.6, category: "scenario" },
+    { word: "重新上传", weight: 2.5, category: "action" },
+    { word: "上传失败", weight: 2.4, category: "scenario" },
     { word: "上传", weight: 2.7, category: "action" },
     { word: "预览", weight: 2.7, category: "action" },
     { word: "下载", weight: 2.7, category: "action" },
@@ -249,6 +256,37 @@ export const KEYWORD_PATCHES_BY_ID: Record<string, WeightedKeyword[]> = {
     { word: "loading", weight: 3, category: "visual" },
     { word: "遮罩", weight: 2.3, category: "visual" },
     { word: "请求中", weight: 2, category: "scenario" }
+  ],
+  ZhMoneyInput: [
+    { word: "金额", weight: 3.4, category: "component" },
+    { word: "金额输入", weight: 3.3, category: "component" },
+    { word: "预算金额", weight: 3.2, category: "scenario" },
+    { word: "商品价格", weight: 3.1, category: "scenario" },
+    { word: "售价", weight: 3, category: "scenario" },
+    { word: "原价", weight: 2.9, category: "scenario" },
+    { word: "成本价", weight: 2.8, category: "scenario" },
+    { word: "自动格式化千分位", weight: 2.8, category: "feature" },
+    { word: "千分位", weight: 2.8, category: "feature" },
+    { word: "大于零", weight: 2.6, category: "scenario" },
+    { word: "价格校验", weight: 2.5, category: "scenario" },
+    { word: "货币", weight: 2.4, category: "component" },
+    { word: "大写金额", weight: 2.3, category: "feature" }
+  ],
+  ZhInputNumber: [
+    { word: "数字输入", weight: 3.3, category: "component" },
+    { word: "数值输入", weight: 3.1, category: "component" },
+    { word: "报名人数", weight: 3, category: "scenario" },
+    { word: "人数上限", weight: 3, category: "scenario" },
+    { word: "限购数量", weight: 3, category: "scenario" },
+    { word: "课时数", weight: 2.9, category: "scenario" },
+    { word: "排序值", weight: 2.8, category: "scenario" },
+    { word: "权重分数", weight: 2.8, category: "scenario" },
+    { word: "重量上限", weight: 2.8, category: "scenario" },
+    { word: "库存", weight: 2.6, category: "scenario" },
+    { word: "步进调整", weight: 2.6, category: "feature" },
+    { word: "步进", weight: 2.5, category: "feature" },
+    { word: "两位小数", weight: 2.4, category: "feature" },
+    { word: "小数", weight: 2.2, category: "feature" }
   ]
 };
 

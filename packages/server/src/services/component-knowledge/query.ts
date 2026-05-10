@@ -33,6 +33,18 @@ const QUERY_EXPANSION_RULES: Array<{ triggers: string[]; expands: string[] }> = 
     expands: ["文件", "附件区", "上传", "预览", "下载", "FileWrapper"]
   },
   {
+    triggers: ["上传失败", "重新上传", "封面图", "海报", "素材上传"],
+    expands: ["文件", "附件", "上传", "预览", "FileWrapper", "按钮"]
+  },
+  {
+    triggers: ["金额输入", "预算金额", "商品价格", "售价", "原价", "成本价", "千分位"],
+    expands: ["金额", "金额输入", "货币", "MoneyInput", "小数", "格式化"]
+  },
+  {
+    triggers: ["报名人数", "人数上限", "限购数量", "课时数", "重量上限", "步进调整"],
+    expands: ["数字输入", "数值输入", "InputNumber", "步进", "两位小数", "小数"]
+  },
+  {
     triggers: ["跳详情", "跳转详情", "可点击编号", "编号跳转"],
     expands: ["链接列", "点击", "路由", "详情页"]
   },

@@ -1,14 +1,25 @@
 import { includesAny } from "../matchers.js";
 import type { RequirementPageProfile } from "../types.js";
-
-const ADMIN_CONTEXT_TERMS = ["后台", "管理", "管理系统", "运营"];
-const CREATE_PAGE_TERMS = ["新增", "新建", "创建", "录入"];
-const EXCLUDED_TERMS = ["列表", "表格", "分页", "筛选", "查询", "详情页", "审核详情", "审批详情"];
+import {
+  ADMIN_CONTEXT_TERMS,
+  CREATE_PAGE_TERMS,
+  DETAIL_PAGE_TERMS,
+  EDIT_INTENT_TERMS,
+  LIST_PAGE_TERMS,
+  countMatchedComplexGroups
+} from "./admin-form-signals.js";
 
 function isAdminCreatePage(text: string): boolean {
-  return includesAny(text, ADMIN_CONTEXT_TERMS)
-    && includesAny(text, CREATE_PAGE_TERMS)
-    && !includesAny(text, EXCLUDED_TERMS);
+  if (!includesAny(text, ADMIN_CONTEXT_TERMS)) return false;
+  if (includesAny(text, LIST_PAGE_TERMS) || includesAny(text, DETAIL_PAGE_TERMS)) return false;
+
+  const hasCreateIntent = includesAny(text, CREATE_PAGE_TERMS);
+  const hasLightEditIntent = includesAny(text, EDIT_INTENT_TERMS);
+  const matchedComplexGroups = countMatchedComplexGroups(text);
+
+  if (hasCreateIntent) return true;
+
+  return hasLightEditIntent && matchedComplexGroups < 2;
 }
 
 export const adminCreateProfile: RequirementPageProfile = {
