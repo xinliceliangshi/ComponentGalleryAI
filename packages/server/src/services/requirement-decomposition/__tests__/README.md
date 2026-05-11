@@ -20,7 +20,7 @@
 不应该测：
 
 - `subtasks`
-- `modules`
+- `sections`
 - `constraints`
 - 召回查询
 - prompt 注入
@@ -34,14 +34,14 @@
 职责：
 
 - 验证拆分结果结构是否正确
-- 覆盖 `enabled / subtasks / modules / constraints` 的关键行为
+- 覆盖 `enabled / subtasks / sections / constraints` 的关键行为
 
 应该测：
 
 - 短需求是否不启用拆分
 - 典型后台页型是否启用拆分
 - 关键 `must/should` 子任务是否被识别
-- `modules` 顺序、必选项、布局名是否正确
+- `sections` 顺序、必选项、布局名是否正确
 - 轻编辑/复杂编辑这类边界行为
 
 不应该测：
@@ -106,7 +106,7 @@
 应该测：
 
 - 指定 `pageType` 的专项要求是否出现
-- 关键 `modules` 是否进入 prompt JSON
+- 关键 `sections` 是否进入 prompt JSON
 - 轻编辑和复杂编辑是否进入不同 prompt 分支
 
 不应该测：
@@ -187,7 +187,7 @@
 
 - 只想补页型覆盖：加到 `fixtures/page-type-cases.ts`
 - 只想补复杂编辑大样例：优先加到 `fixtures/admin-edit-page-type-cases.ts`
-- 想验证某页型拆分出的 `subtasks/modules`：加到 `decompose-requirement.test.ts`
+- 想验证某页型拆分出的 `subtasks/sections`：加到 `decompose-requirement.test.ts`
 - 想验证召回查询：加到 `build-decomposition-queries.test.ts`
 - 想验证 prompt 分支：加到 `prompt.service.test.ts`
 

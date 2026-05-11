@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
+  retrieveKnowledgeForSection,
+  retrieveKnowledgeForSections,
   retrieveKnowledgeForDecomposition,
   retrieveKnowledgeForQuery
 } from "../component-knowledge.service.js";
@@ -83,6 +85,36 @@ describe("component knowledge retrieval", () => {
 
     expect([...cardIds, ...chunkComponentIds]).toEqual(
       expect.arrayContaining(["ZhFileWrapper", "ZhButton"])
+    );
+  });
+
+  it("section-aware recall 会为页面头部召回头部类组件", () => {
+    const decomposition = decomposeRequirement("做一个后台审核详情页，包含状态Tag、基础信息、内容详情、审核记录和操作日志");
+    const headerSection = decomposition.sections?.find((section) => section.kind === "page-header");
+
+    expect(headerSection).toBeDefined();
+    const result = retrieveKnowledgeForSection(headerSection!, {
+      maxCards: 8,
+      maxChunks: 6
+    });
+    const cardIds = result.cards.map((card) => card.id);
+
+    expect(cardIds).toEqual(expect.arrayContaining(["ZhDetailHeader"]));
+  });
+
+  it("section-aware recall 会为多个区块分别返回候选组件池", () => {
+    const decomposition = decomposeRequirement("做一个后台新增商品页面，包含基础信息、封面上传、必填校验和提交按钮");
+    const result = retrieveKnowledgeForSections(decomposition, {
+      maxCardsPerSection: 6,
+      maxChunksPerSection: 4
+    });
+
+    const sectionKinds = result.map((entry) => entry.section.kind);
+    expect(sectionKinds).toEqual(expect.arrayContaining(["page-header", "form-body", "upload-panel"]));
+
+    const uploadKnowledge = result.find((entry) => entry.section.kind === "upload-panel");
+    expect(uploadKnowledge?.cards.map((card) => card.id)).toEqual(
+      expect.arrayContaining(["ZhFileWrapper"])
     );
   });
 });

@@ -22,14 +22,15 @@
 POST /api/generate { input }
   └─ generate.service.ts: generateService(input)
        1. decomposition  = decomposeRequirement(input)        ← 规则式拆分（本模块）
-       2. knowledge      = formatKnowledgeContextForDecomposition(input, decomposition)
+       2. knowledge      = retrieveKnowledgeForDecomposition(input, decomposition)
                             └─ buildDecompositionQueries(...) ← 多查询召回
-       3. prompt         = buildPrompt(input, { decomposition, knowledge })
-       4. raw            = callLLM(prompt)
-       5. return GenerateSchema.parse(safeJsonParse(raw))
+       3. generationPlan = buildGenerationPlan(decomposition, knowledge)
+       4. prompt         = buildPrompt(input, { decomposition, generationPlan, knowledge })
+       5. raw            = callLLM(prompt)
+       6. return GenerateSchema.parse(safeJsonParse(raw))
 ```
 
-可以看到，**页面分类的产物 `decomposition` 同时进入了"召回"和"提示词"两条管道**，所以它是这一版改造的中枢数据结构。
+可以看到，**页面分类的产物 `decomposition` 先进入召回，再转成 `generationPlan`，最后进入 prompt**，所以它仍然是这一版改造的中枢数据结构，只是现在多了一层更稳定的生成规划。
 
 ---
 
@@ -41,9 +42,12 @@ POST /api/generate { input }
 |------|---------|------|
 | `RequirementSubtaskPriority` | `"must" \| "should" \| "nice"` | 子任务优先级，决定 Prompt 里"必须覆盖 / 尽量体现"的语气 |
 | `IntentRule` | `id / title / intent / priority / uiRegion / terms / dataNeeds / interactionNeeds / candidateKeywords` | **页面分类规则的最小单元**：`terms` 用于命中拆分，`candidateKeywords` 用于召回扩词 |
-| `RequirementPageProfile` | `pageType / match(text) / rules / modules / constraints` | 一个 **页型** = 命中函数 + 一组子任务规则 + 可选结构模块 + 该页型的硬约束 |
+| `RequirementPageProfile` | `pageType / match(text) / rules / sections / constraints` | 一个 **页型** = 命中函数 + 一组子任务规则 + 可选结构模块 + 该页型的硬约束 |
 | `RequirementSubtask` | 由 `IntentRule` 转换而来，剥掉 `terms`，对外暴露 | 喂给 Prompt 与召回 |
-| `RequirementDecomposition` | `enabled / summary / pageType / userGoal / subtasks / constraints / risks` | 整个拆分结果 |
+| `RequirementSection` | `kind / required / priority / layout / intent / uiRegion / sourceSubtaskId` | 最终输出的页面结构区块，供 Prompt 和召回复用 |
+| `RequirementSectionBlueprint` | `kind / required / priority / layout / intent / uiRegion / sourceSubtaskIds / when` | Profile 内部使用的结构蓝图，由 `buildSections(...)` 裁剪成最终 sections |
+| `RequirementDecomposition` | `enabled / summary / pageType / userGoal / subtasks / sections / constraints / risks` | 整个拆分结果 |
+| `GenerationPlan` | `pageType / summary / userGoal / sections / globalConstraints / risks` | 面向代码生成器的施工图，串联结构区块与推荐组件 |
 
 设计要点：
 
@@ -145,13 +149,13 @@ export function matchRequirementPageProfile(text: string): RequirementPageProfil
 | `draft-save` | 草稿保存 | should | footer |
 | `submit-actions` | 提交操作区 | must | footer |
 
-模块层（`modules`）进一步把它结构化为：
-- `createHeader`
-- `formSection`
-- `groupedCardSections`
-- `uploadAttachments`
-- `validationSummary`
-- `submitBar`
+结构层（`sections`）进一步把它结构化为：
+- `page-header`
+- `form-body`
+- `grouped-form`
+- `upload-panel`
+- `validation-summary`
+- `action-footer`
 
 核心约束：
 - 页面主体必须是表单录入，不要生成成 CRUD 列表页或详情页；
@@ -191,16 +195,16 @@ export function matchRequirementPageProfile(text: string): RequirementPageProfil
 | `history-panel` | 变更历史 | should | bottom |
 | `edit-actions` | 编辑操作区 | must | footer |
 
-模块层（`modules`）进一步表达推荐结构：
-- `editHeader`
-- `statusBanner`
-- `editableForm`
-- `groupedEditSections`
-- `relationEditor`
-- `previewPanel`
-- `validationDiffSummary`
-- `changeHistory`
-- `editActionBar`
+结构层（`sections`）进一步表达推荐结构：
+- `page-header`
+- `status-banner`
+- `form-body`
+- `grouped-form`
+- `relation-editor`
+- `preview-panel`
+- `validation-summary`
+- `history-panel`
+- `action-footer`
 
 核心约束：
 - 复杂编辑页不能等同于新增页回填，必须体现当前状态和编辑上下文；
@@ -310,7 +314,8 @@ export function buildDecompositionQueries(input, decomposition): string[] {
 `prompt.service.ts` 中 `formatRequirementDecomposition` 把 `decomposition` 序列化进 prompt，关键点：
 
 1. 仅在 `enabled` 时注入"【需求拆分（规则预处理）】"段；
-2. 把 `summary / pageType / userGoal / subtasks / constraints / risks` 打成 JSON 灌进上下文；
+2. 把 `pageType / summary / subtasks / sections / constraints / risks` 组织成结构摘要灌进上下文；
+3. 把 `GenerationPlan` 以“区块计划 + 推荐组件”的形式补进 prompt；
 3. 当 `pageType` 命中专用分支时，额外插入对应的 **页型专项要求**。例如：
 
    `admin-home-dashboard`：
@@ -337,9 +342,9 @@ export function buildDecompositionQueries(input, decomposition): string[] {
 
 4. 末尾补一句硬性指令：
 
-   > 必须覆盖所有 priority=must 的子任务；priority=should 的子任务尽量体现；不要只实现第一个子任务。
+   > 必须覆盖所有 priority=must 的子任务；若存在 sections，必须优先按 required=true 的结构区块搭建页面骨架；priority=should 的子任务尽量体现；不要只实现第一个子任务。
 
-这样，**Profile 的 `constraints` + pageType 特判 + subtask 列表** 就把"页面分类"的领域知识从 LLM 的"自由发挥"中拉回到一个可控范围。
+这样，**Profile 的 `constraints` + pageType 特判 + subtask 列表 + section 骨架 + GenerationPlan** 就把"页面分类"的领域知识从 LLM 的"自由发挥"中拉回到一个可控范围。
 
 ---
 
@@ -379,10 +384,10 @@ export function buildDecompositionQueries(input, decomposition): string[] {
 - 复杂信号分组至少命中：状态 / 权限 / 历史 / 结构
 - 因为 `admin-edit` 属于强制启用拆分页型，所以 `enabled=true`
 - `subtasks` 会包含 `edit-header / status-context / editable-form / preview-panel / validation-diff / history-panel`
-- `modules` 会注入 `editHeader / statusBanner / previewPanel / changeHistory / editActionBar`
+- `sections` 会注入 `page-header / status-banner / preview-panel / history-panel / action-footer`
 - Prompt 中追加复杂编辑页专项要求，约束模型不要退化成普通新增表单
 
-这些例子在 `services/__tests__/requirement-decomposition.service.test.ts` 与 `services/__tests__/prompt.service.test.ts` 都有对应单测，新增/修改 Profile 时请同步覆盖。
+这些例子在 `services/requirement-decomposition/__tests__/decompose-requirement.test.ts`、`services/requirement-decomposition/__tests__/build-decomposition-queries.test.ts` 与 `services/__tests__/prompt.service.test.ts` 都有对应单测，新增/修改 Profile 时请同步覆盖。
 
 ---
 
@@ -497,8 +502,8 @@ export function buildDecompositionQueries(input, decomposition): string[] {
 2. `subtasks 测试`
    确认关键 `must` / `should` 子任务会被拆出来。
 
-3. `modules 测试`
-   如果该页型定义了 `modules`，确认返回的模块顺序、必选项、关键布局名正确。
+3. `sections 测试`
+   如果该页型定义了 `sections`，确认返回的结构顺序、必选项、关键布局名正确。
 
 4. `prompt 注入测试`
    确认该页型的专项要求会进入 `buildPrompt(...)`。
@@ -525,7 +530,7 @@ export function buildDecompositionQueries(input, decomposition): string[] {
 
 1. 先在这份文档里写清“它解决什么问题、边界在哪”
 2. 先写测试样例，明确正例和反例
-3. 最后再改 `match / rules / modules / constraints`
+3. 最后再改 `match / rules / sections / constraints`
 
 这样做的好处是，大家讨论的对象先变成“规则说明 + 测试输入”，而不是一上来就在代码里猜边界。
 

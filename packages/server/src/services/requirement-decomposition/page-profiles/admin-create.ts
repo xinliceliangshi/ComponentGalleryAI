@@ -102,60 +102,65 @@ export const adminCreateProfile: RequirementPageProfile = {
       candidateKeywords: ["提交按钮", "底部操作栏", "保存", "取消"]
     }
   ],
-  modules: [
+  sectionBlueprints: [
     {
-      type: "createHeader",
+      kind: "page-header",
       required: true,
       priority: "must",
       layout: "header-title-back-actions",
       intent: "create-header",
       uiRegion: "header",
-      sourceSubtaskId: "create-header"
+      sourceSubtaskIds: ["create-header"],
+      when: "always"
     },
     {
-      type: "formSection",
+      kind: "form-body",
       required: true,
       priority: "must",
       layout: "primary-form-card",
       intent: "create-form",
       uiRegion: "main",
-      sourceSubtaskId: "basic-form"
+      sourceSubtaskIds: ["basic-form"],
+      when: "always"
     },
     {
-      type: "groupedCardSections",
+      kind: "grouped-form",
       required: false,
       priority: "should",
       layout: "stacked-form-sections",
       intent: "grouped-form-sections",
       uiRegion: "main",
-      sourceSubtaskId: "group-sections"
+      sourceSubtaskIds: ["group-sections"],
+      when: "page-type"
     },
     {
-      type: "uploadAttachments",
+      kind: "upload-panel",
       required: false,
       priority: "should",
       layout: "upload-card",
       intent: "file-upload",
       uiRegion: "main",
-      sourceSubtaskId: "upload"
+      sourceSubtaskIds: ["upload"]
     },
     {
-      type: "validationSummary",
+      kind: "validation-summary",
       required: true,
       priority: "must",
       layout: "inline-validation-summary",
       intent: "form-validation",
       uiRegion: "top",
-      sourceSubtaskId: "field-validation"
+      sourceSubtaskIds: ["field-validation"],
+      when: "always"
     },
     {
-      type: "submitBar",
+      kind: "action-footer",
       required: true,
       priority: "must",
       layout: "sticky-footer-actions",
       intent: "submit-actions",
       uiRegion: "footer",
-      sourceSubtaskId: "submit-actions"
+      sourceSubtaskIds: ["submit-actions", "draft-save"],
+      when: "always"
     }
   ],
   constraints: [

@@ -62,30 +62,30 @@ describe("decomposeRequirement", () => {
       "做一个后台审核详情页，顶部展示标题、状态Tag和操作按钮，包含基础信息、内容详情、审核记录和操作日志时间线"
     );
 
-    expect(result.modules?.map((module) => module.type)).toEqual([
-      "detailHeader",
-      "statusSummary",
-      "statusActions",
-      "baseInfo",
-      "contentDetail",
-      "auditRecords",
-      "operationLog",
+    expect(result.sections?.map((section) => section.kind)).toEqual([
+      "page-header",
+      "status-banner",
+      "status-actions",
+      "base-info",
+      "content-detail",
+      "audit-records",
+      "operation-log",
       "timeline"
     ]);
-    expect(result.modules).toEqual(
+    expect(result.sections).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          type: "baseInfo",
+          kind: "base-info",
           required: true,
           layout: "descriptions-grid"
         }),
         expect.objectContaining({
-          type: "auditRecords",
+          kind: "audit-records",
           required: true,
           layout: "business-history-card"
         }),
         expect.objectContaining({
-          type: "operationLog",
+          kind: "operation-log",
           required: false
         })
       ])
@@ -111,28 +111,28 @@ describe("decomposeRequirement", () => {
       "做一个后台新建用户页面，包含基本资料、角色选择、头像上传、校验规则和保存提交"
     );
 
-    expect(result.modules?.map((module) => module.type)).toEqual([
-      "createHeader",
-      "formSection",
-      "groupedCardSections",
-      "uploadAttachments",
-      "validationSummary",
-      "submitBar"
+    expect(result.sections?.map((section) => section.kind)).toEqual([
+      "page-header",
+      "form-body",
+      "grouped-form",
+      "upload-panel",
+      "validation-summary",
+      "action-footer"
     ]);
-    expect(result.modules).toEqual(
+    expect(result.sections).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          type: "formSection",
+          kind: "form-body",
           required: true,
           layout: "primary-form-card"
         }),
         expect.objectContaining({
-          type: "validationSummary",
+          kind: "validation-summary",
           required: true,
           layout: "inline-validation-summary"
         }),
         expect.objectContaining({
-          type: "submitBar",
+          kind: "action-footer",
           required: true,
           layout: "sticky-footer-actions"
         })
@@ -172,31 +172,30 @@ describe("decomposeRequirement", () => {
       "做一个后台修改商品页面，包含发布状态、只读字段、差异对比和实时预览"
     );
 
-    expect(result.modules?.map((module) => module.type)).toEqual([
-      "editHeader",
-      "statusBanner",
-      "editableForm",
-      "groupedEditSections",
-      "relationEditor",
-      "previewPanel",
-      "validationDiffSummary",
-      "changeHistory",
-      "editActionBar"
+    expect(result.sections?.map((section) => section.kind)).toEqual([
+      "page-header",
+      "status-banner",
+      "form-body",
+      "grouped-form",
+      "preview-panel",
+      "validation-summary",
+      "history-panel",
+      "action-footer"
     ]);
-    expect(result.modules).toEqual(
+    expect(result.sections).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          type: "editHeader",
+          kind: "page-header",
           required: true,
           layout: "header-title-status-actions"
         }),
         expect.objectContaining({
-          type: "validationDiffSummary",
+          kind: "validation-summary",
           required: true,
           layout: "inline-validation-diff-summary"
         }),
         expect.objectContaining({
-          type: "editActionBar",
+          kind: "action-footer",
           required: true,
           layout: "sticky-footer-multi-actions"
         })
@@ -212,6 +211,6 @@ describe("decomposeRequirement", () => {
     expect(result.pageType).toBe("admin-management");
     expect(result.subtasks.map((task) => task.id)).toContain("table");
     expect(result.subtasks.map((task) => task.id)).toContain("detail-drawer");
-    expect(result.modules).toBeUndefined();
+    expect(result.sections).toBeUndefined();
   });
 });

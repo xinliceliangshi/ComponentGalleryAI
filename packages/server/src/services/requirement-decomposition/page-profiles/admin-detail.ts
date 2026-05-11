@@ -109,78 +109,83 @@ export const adminDetailProfile: RequirementPageProfile = {
       candidateKeywords: ["时间线", "Timeline", "流程节点", "历史记录"]
     }
   ],
-  modules: [
+  sectionBlueprints: [
     {
-      type: "detailHeader",
+      kind: "page-header",
       required: true,
       priority: "must",
       layout: "header-title-status-actions",
       intent: "detail-header",
       uiRegion: "header",
-      sourceSubtaskId: "detail-header"
+      sourceSubtaskIds: ["detail-header"],
+      when: "always"
     },
     {
-      type: "statusSummary",
+      kind: "status-banner",
       required: true,
       priority: "must",
       layout: "status-driven-banner",
       intent: "status-driven-ui",
       uiRegion: "top",
-      sourceSubtaskId: "status-summary"
+      sourceSubtaskIds: ["status-summary"],
+      when: "always"
     },
     {
-      type: "statusActions",
+      kind: "status-actions",
       required: true,
       priority: "must",
       layout: "permission-aware-button-group",
       intent: "status-action-permission",
       uiRegion: "header-actions",
-      sourceSubtaskId: "status-actions"
+      sourceSubtaskIds: ["status-actions"],
+      when: "always"
     },
     {
-      type: "baseInfo",
+      kind: "base-info",
       required: true,
       priority: "must",
       layout: "descriptions-grid",
       intent: "base-info-descriptions",
       uiRegion: "main",
-      sourceSubtaskId: "base-info"
+      sourceSubtaskIds: ["base-info"],
+      when: "always"
     },
     {
-      type: "contentDetail",
+      kind: "content-detail",
       required: false,
       priority: "should",
       layout: "rich-content-card",
       intent: "rich-content-detail",
       uiRegion: "main",
-      sourceSubtaskId: "content-detail"
+      sourceSubtaskIds: ["content-detail"]
     },
     {
-      type: "auditRecords",
+      kind: "audit-records",
       required: true,
       priority: "must",
       layout: "business-history-card",
       intent: "audit-history",
       uiRegion: "main",
-      sourceSubtaskId: "audit-records"
+      sourceSubtaskIds: ["audit-records"],
+      when: "always"
     },
     {
-      type: "operationLog",
+      kind: "operation-log",
       required: false,
       priority: "should",
       layout: "operation-log-card",
       intent: "operation-log",
       uiRegion: "bottom",
-      sourceSubtaskId: "operation-log"
+      sourceSubtaskIds: ["operation-log"]
     },
     {
-      type: "timeline",
+      kind: "timeline",
       required: false,
       priority: "should",
       layout: "vertical-timeline",
       intent: "timeline",
       uiRegion: "bottom",
-      sourceSubtaskId: "timeline"
+      sourceSubtaskIds: ["timeline"]
     }
   ],
   constraints: [

@@ -1,10 +1,77 @@
 import { formatKnowledgeContext, formatKnowledgeContextForDecomposition } from "./component-knowledge.service.js";
+import type { GenerationPlan } from "./generation-plan.service.js";
 import type { RequirementDecomposition } from "./requirement-decomposition.service.js";
 
 type BuildPromptOptions = {
   decomposition?: RequirementDecomposition;
+  generationPlan?: GenerationPlan;
   knowledge?: string;
 };
+
+function formatSubtasks(decomposition: RequirementDecomposition): string {
+  if (decomposition.subtasks.length === 0) return "无";
+
+  return decomposition.subtasks
+    .map((subtask) => `- [${subtask.priority}] ${subtask.title} (${subtask.intent})`)
+    .join("\n");
+}
+
+function formatSections(decomposition: RequirementDecomposition): string {
+  if (!decomposition.sections?.length) return "无";
+
+  return decomposition.sections
+    .map((section) => {
+      const requiredLabel = section.required ? "required" : "optional";
+      const layoutLabel = section.layout ? ` / ${section.layout}` : "";
+      return `- [${requiredLabel}] ${section.kind}${layoutLabel}`;
+    })
+    .join("\n");
+}
+
+function formatConstraints(items: string[]): string {
+  return items.length > 0 ? items.map((item) => `- ${item}`).join("\n") : "无";
+}
+
+function formatGenerationPlan(plan: GenerationPlan | undefined): string {
+  if (!plan) return "";
+
+  const sectionLines = plan.sections.length > 0
+    ? plan.sections.map((section) => {
+      const componentText = section.recommendedComponents.length > 0
+        ? section.recommendedComponents
+          .map((component) => `${component.name}(${component.priority}): ${component.usage}`)
+          .join("、")
+        : "无";
+      const snippetText = section.referenceSnippets.length > 0
+        ? section.referenceSnippets
+          .map((snippet) => {
+            const label = [snippet.component, snippet.type, snippet.title].filter(Boolean).join(" / ");
+            return `${label || "snippet"}: ${snippet.summary}`;
+          })
+          .join(" | ")
+        : "无";
+      return [
+        `- ${section.title} [${section.kind}]${section.layout ? ` / ${section.layout}` : ""}`,
+        `  goals: ${section.goals.join("；")}`,
+        `  components: ${componentText}`,
+        `  snippets: ${snippetText}`,
+        ...(section.notes?.length ? [`  notes: ${section.notes.join("；")}`] : [])
+      ].join("\n");
+    }).join("\n")
+    : "无";
+
+  return [
+    "【GenerationPlan】",
+    `页面类型：${plan.pageType}`,
+    `需求摘要：${plan.summary}`,
+    "区块计划：",
+    sectionLines,
+    "全局约束：",
+    formatConstraints(plan.globalConstraints),
+    "风险提醒：",
+    formatConstraints(plan.risks)
+  ].join("\n");
+}
 
 function formatRequirementDecomposition(decomposition: RequirementDecomposition | undefined): string {
   if (!decomposition?.enabled) return "";
@@ -51,32 +118,31 @@ function formatRequirementDecomposition(decomposition: RequirementDecomposition 
 
   return [
     "【需求拆分（规则预处理）】",
-    JSON.stringify(
-      {
-        summary: decomposition.summary,
-        pageType: decomposition.pageType,
-        userGoal: decomposition.userGoal,
-        subtasks: decomposition.subtasks,
-        modules: decomposition.modules,
-        constraints: decomposition.constraints,
-        risks: decomposition.risks
-      },
-      null,
-      2
-    ),
+    `页面类型：${decomposition.pageType}`,
+    `需求摘要：${decomposition.summary}`,
+    "必须覆盖的子任务：",
+    formatSubtasks(decomposition),
+    "推荐页面骨架：",
+    formatSections(decomposition),
+    "专项约束：",
+    formatConstraints(decomposition.constraints),
+    "风险提醒：",
+    formatConstraints(decomposition.risks),
     pageTypeInstruction,
-    "生成要求：必须覆盖所有 priority=must 的子任务；若存在 modules，必须优先按 modules 的 required=true 模块搭建页面结构；priority=should 的子任务尽量体现；不要只实现第一个子任务。"
+    "生成要求：必须覆盖所有 priority=must 的子任务；若存在 sections，必须优先按 sections 的 required=true 结构区块搭建页面骨架；priority=should 的子任务尽量体现；不要只实现第一个子任务。"
   ].filter(Boolean).join("\n");
 }
 
 export function buildPrompt(input: string, options: BuildPromptOptions = {}) {
   const decomposition = options.decomposition;
+  const generationPlan = options.generationPlan;
   const knowledge =
     options.knowledge ??
     (decomposition?.enabled
       ? formatKnowledgeContextForDecomposition(input, decomposition)
       : formatKnowledgeContext(input));
   const decompositionContext = formatRequirementDecomposition(decomposition);
+  const generationPlanContext = formatGenerationPlan(generationPlan);
 
   return `
 你是一个资深前端工程师，擅长 Vue / React 和组件库。
@@ -101,6 +167,7 @@ export function buildPrompt(input: string, options: BuildPromptOptions = {}) {
 - 若需求涉及“表格/列表/数据表格”，必须优先使用知识库中的 ZhTable / ZhDiyDataTable（若命中其示例/props），不要使用 Element Plus 的 el-table
 
 ${decompositionContext ? `${decompositionContext}\n` : ""}
+${generationPlanContext ? `${generationPlanContext}\n` : ""}
 ${knowledge ? `${knowledge}\n` : ""}用户需求：
 ${input}
 `.trim();

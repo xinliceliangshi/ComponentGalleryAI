@@ -74,7 +74,7 @@ describe("buildDecompositionQueries", () => {
     const result = decomposeRequirement(input);
     const queries = buildDecompositionQueries(input, result);
 
-    expect(result.modules).toBeUndefined();
+    expect(result.sections).toBeUndefined();
     expect(queries.some((query) => query.includes("ZhDetailHeader"))).toBe(false);
     expect(queries.some((query) => query.includes("business-history-card"))).toBe(false);
   });

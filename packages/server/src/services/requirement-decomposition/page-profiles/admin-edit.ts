@@ -131,87 +131,93 @@ export const adminEditProfile: RequirementPageProfile = {
       candidateKeywords: ["编辑操作区", "底部操作栏", "保存修改", "发布按钮"]
     }
   ],
-  modules: [
+  sectionBlueprints: [
     {
-      type: "editHeader",
+      kind: "page-header",
       required: true,
       priority: "must",
       layout: "header-title-status-actions",
       intent: "edit-header",
       uiRegion: "header",
-      sourceSubtaskId: "edit-header"
+      sourceSubtaskIds: ["edit-header"],
+      when: "always"
     },
     {
-      type: "statusBanner",
+      kind: "status-banner",
       required: true,
       priority: "must",
       layout: "status-context-banner",
       intent: "edit-status-context",
       uiRegion: "top",
-      sourceSubtaskId: "status-context"
+      sourceSubtaskIds: ["status-context"],
+      when: "always"
     },
     {
-      type: "editableForm",
+      kind: "form-body",
       required: true,
       priority: "must",
       layout: "primary-edit-form",
       intent: "editable-form",
       uiRegion: "main",
-      sourceSubtaskId: "editable-form"
+      sourceSubtaskIds: ["editable-form"],
+      when: "always"
     },
     {
-      type: "groupedEditSections",
+      kind: "grouped-form",
       required: false,
       priority: "should",
       layout: "stacked-edit-sections",
       intent: "grouped-edit-sections",
       uiRegion: "main",
-      sourceSubtaskId: "grouped-sections"
+      sourceSubtaskIds: ["grouped-sections"],
+      when: "page-type"
     },
     {
-      type: "relationEditor",
+      kind: "relation-editor",
       required: false,
       priority: "should",
       layout: "relation-config-card",
       intent: "relation-editor",
       uiRegion: "main",
-      sourceSubtaskId: "relation-editor"
+      sourceSubtaskIds: ["relation-editor"]
     },
     {
-      type: "previewPanel",
+      kind: "preview-panel",
       required: false,
       priority: "should",
       layout: "side-preview-panel",
       intent: "preview-panel",
       uiRegion: "side",
-      sourceSubtaskId: "preview-panel"
+      sourceSubtaskIds: ["preview-panel"]
     },
     {
-      type: "validationDiffSummary",
+      kind: "validation-summary",
       required: true,
       priority: "must",
       layout: "inline-validation-diff-summary",
       intent: "validation-diff",
       uiRegion: "top",
-      sourceSubtaskId: "validation-diff"
+      sourceSubtaskIds: ["validation-diff"],
+      when: "always"
     },
     {
-      type: "changeHistory",
+      kind: "history-panel",
       required: false,
       priority: "should",
       layout: "history-timeline-card",
       intent: "change-history",
       uiRegion: "bottom",
-      sourceSubtaskId: "history-panel"
+      sourceSubtaskIds: ["history-panel"]
     },
     {
-      type: "editActionBar",
+      kind: "action-footer",
       required: true,
       priority: "must",
       layout: "sticky-footer-multi-actions",
       intent: "edit-actions",
       uiRegion: "footer",
-      sourceSubtaskId: "edit-actions"
+      sourceSubtaskIds: ["edit-actions"],
+      when: "always"
     }
   ],
   constraints: [
