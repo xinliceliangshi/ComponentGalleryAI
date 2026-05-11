@@ -29,29 +29,7 @@ export const adminDetailProfile: RequirementPageProfile = {
       terms: ["详情", "详情页", "标题", "Header", "头部", "操作按钮", "按钮区"],
       dataNeeds: ["标题", "状态", "核心摘要"],
       interactionNeeds: ["查看详情标题", "识别当前状态"],
-      candidateKeywords: ["详情页头部", "标题", "状态标签", "操作按钮", "Header"]
-    },
-    {
-      id: "status-summary",
-      title: "状态驱动 UI",
-      intent: "status-driven-ui",
-      priority: "must",
-      uiRegion: "top",
-      terms: ["状态", "状态Tag", "状态标签", "待审核", "已通过", "已拒绝", "草稿", "处理中"],
-      dataNeeds: ["业务状态", "状态文案", "状态样式"],
-      interactionNeeds: ["根据状态显示不同文案"],
-      candidateKeywords: ["状态", "标签", "Tag", "状态驱动", "状态文案"]
-    },
-    {
-      id: "status-actions",
-      title: "状态关联操作",
-      intent: "status-action-permission",
-      priority: "must",
-      uiRegion: "header-actions",
-      terms: ["操作", "按钮", "权限", "行为", "通过", "拒绝", "撤回", "提交", "重新审核"],
-      dataNeeds: ["可用操作", "权限规则", "状态流转"],
-      interactionNeeds: ["根据状态和权限展示按钮", "触发业务操作"],
-      candidateKeywords: ["操作按钮", "权限", "状态流转", "按钮组", "行为"]
+      candidateKeywords: ["详情页头部", "标题", "状态标签", "操作按钮", "Header", "ZhButtonGroup", "ZhButton"]
     },
     {
       id: "base-info",
@@ -121,26 +99,6 @@ export const adminDetailProfile: RequirementPageProfile = {
       when: "always"
     },
     {
-      kind: "status-banner",
-      required: true,
-      priority: "must",
-      layout: "status-driven-banner",
-      intent: "status-driven-ui",
-      uiRegion: "top",
-      sourceSubtaskIds: ["status-summary"],
-      when: "always"
-    },
-    {
-      kind: "status-actions",
-      required: true,
-      priority: "must",
-      layout: "permission-aware-button-group",
-      intent: "status-action-permission",
-      uiRegion: "header-actions",
-      sourceSubtaskIds: ["status-actions"],
-      when: "always"
-    },
-    {
       kind: "base-info",
       required: true,
       priority: "must",
@@ -188,10 +146,18 @@ export const adminDetailProfile: RequirementPageProfile = {
       sourceSubtaskIds: ["timeline"]
     }
   ],
+  workflow: {
+    current: "草稿",
+    transitions: {
+      "草稿": ["待审核"],
+      "待审核": ["处理中", "已通过", "已拒绝"],
+      "处理中": ["已通过", "已拒绝"],
+      "已拒绝": ["草稿"],
+      "已通过": []
+    }
+  },
   constraints: [
     "必须包含 Header：标题、状态 Tag、操作按钮区",
-    "顶部必须体现状态驱动 UI，并根据不同状态显示不同文字",
-    "操作按钮必须围绕 状态 → 按钮 → 权限 → 行为 组织",
     "基础信息区优先使用 Descriptions + Grid 的布局",
     "审核记录必须体现业务行为历史，不能和普通操作日志混为一谈",
     "内容详情区可按需求展示 markdown、html、图片、引用或 code block",

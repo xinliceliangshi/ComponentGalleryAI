@@ -51,6 +51,11 @@ export type RequirementSectionBlueprint = {
   when?: RequirementSectionBlueprintWhen;
 };
 
+export type RequirementWorkflow = {
+  current: string;
+  transitions: Record<string, string[]>;
+};
+
 export type RequirementDecomposition = {
   enabled: boolean;
   summary: string;
@@ -58,6 +63,7 @@ export type RequirementDecomposition = {
   userGoal: string;
   subtasks: RequirementSubtask[];
   sections?: RequirementSection[];
+  workflow?: RequirementWorkflow;
   constraints: string[];
   risks: string[];
 };
@@ -79,5 +85,6 @@ export type RequirementPageProfile = {
   match: (text: string) => boolean;
   rules: IntentRule[];
   sectionBlueprints?: RequirementSectionBlueprint[];
+  workflow?: RequirementWorkflow;
   constraints: string[];
 };

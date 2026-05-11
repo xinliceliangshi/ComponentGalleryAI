@@ -6,14 +6,16 @@ import type {
   IntentRule,
   RequirementDecomposition,
   RequirementSection,
-  RequirementSubtask
+  RequirementSubtask,
+  RequirementWorkflow
 } from "./requirement-decomposition/types.js";
 
 export type {
   RequirementDecomposition,
   RequirementSection,
   RequirementSubtask,
-  RequirementSubtaskPriority
+  RequirementSubtaskPriority,
+  RequirementWorkflow
 } from "./requirement-decomposition/types.js";
 
 const COMPLEX_CONNECTORS = ["包含", "支持", "同时", "以及", "并且", "需要", "还要", "包括", "实现", "带有", "具备"];
@@ -37,6 +39,16 @@ function toSubtask(rule: IntentRule): RequirementSubtask {
     interactionNeeds: rule.interactionNeeds ?? [],
     candidateKeywords: rule.candidateKeywords
   };
+}
+
+function collectWorkflowStateWords(workflow: RequirementWorkflow): string[] {
+  const collected = new Set<string>();
+  collected.add(workflow.current);
+  for (const [from, tos] of Object.entries(workflow.transitions)) {
+    collected.add(from);
+    for (const to of tos) collected.add(to);
+  }
+  return Array.from(collected).filter(Boolean);
 }
 
 function shouldEnableDecomposition(text: string, matchedIntentCount: number): boolean {
@@ -63,6 +75,15 @@ function buildSectionQueries(section: RequirementSection): string[] {
   return [sectionQuery, ...(SECTION_QUERY_HINTS[section.kind] ?? [])];
 }
 
+function buildWorkflowQueries(workflow: RequirementWorkflow): string[] {
+  const stateWords = collectWorkflowStateWords(workflow);
+  if (stateWords.length === 0) return [];
+
+  return [
+    ["状态驱动 UI", ...stateWords].join(" ")
+  ];
+}
+
 export function decomposeRequirement(input: string): RequirementDecomposition {
   const text = normalizeInput(input);
   const profile = matchRequirementPageProfile(text);
@@ -84,6 +105,11 @@ export function decomposeRequirement(input: string): RequirementDecomposition {
 
   const sections = enabled ? buildSections(profile, subtasks) : undefined;
 
+  const workflow = enabled && profile.workflow
+    && includesAny(text, collectWorkflowStateWords(profile.workflow))
+    ? profile.workflow
+    : undefined;
+
   return {
     enabled,
     summary: buildSummary(text),
@@ -91,6 +117,7 @@ export function decomposeRequirement(input: string): RequirementDecomposition {
     userGoal: text,
     subtasks,
     sections,
+    workflow,
     constraints: enabled ? profile.constraints : [],
     risks: enabled ? ["原始需求较大，直接生成容易遗漏局部模块或交互"] : []
   };
@@ -105,7 +132,8 @@ export function buildDecompositionQueries(input: string, decomposition: Requirem
     ...decomposition.subtasks.map((task) =>
       [task.title, task.intent, ...task.candidateKeywords].filter(Boolean).join(" ")
     ),
-    ...(decomposition.sections ?? []).flatMap(buildSectionQueries)
+    ...(decomposition.sections ?? []).flatMap(buildSectionQueries),
+    ...(decomposition.workflow ? buildWorkflowQueries(decomposition.workflow) : [])
   ];
 
   return Array.from(new Set(queries.map((query) => query.trim()).filter(Boolean)));

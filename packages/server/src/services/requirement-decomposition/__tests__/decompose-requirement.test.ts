@@ -44,8 +44,6 @@ describe("decomposeRequirement", () => {
     expect(result.subtasks.map((task) => task.id)).toEqual(
       expect.arrayContaining([
         "detail-header",
-        "status-summary",
-        "status-actions",
         "base-info",
         "content-detail",
         "audit-records",
@@ -53,8 +51,38 @@ describe("decomposeRequirement", () => {
         "timeline"
       ])
     );
+    expect(result.subtasks.map((task) => task.id)).not.toContain("status-summary");
+    expect(result.subtasks.map((task) => task.id)).not.toContain("status-actions");
     expect(result.subtasks.map((task) => task.id)).not.toContain("table");
     expect(result.constraints).toContain("不要把后台详情页生成成列表页或 CRUD 表格页");
+  });
+
+  it("后台详情页文本命中状态词时输出 workflow 状态机模板", () => {
+    const result = decomposeRequirement(
+      "做一个后台审核详情页，顶部展示标题、状态Tag，包含草稿、待审核、已通过几种状态切换，以及基础信息、审核记录"
+    );
+
+    expect(result.workflow).toEqual({
+      current: "草稿",
+      transitions: {
+        "草稿": ["待审核"],
+        "待审核": ["处理中", "已通过", "已拒绝"],
+        "处理中": ["已通过", "已拒绝"],
+        "已拒绝": ["草稿"],
+        "已通过": []
+      }
+    });
+    expect(result.sections?.map((section) => section.kind)).not.toContain("status-banner");
+    expect(result.sections?.map((section) => section.kind)).not.toContain("status-actions");
+  });
+
+  it("后台详情页文本未命中任何状态词时不输出 workflow", () => {
+    const result = decomposeRequirement(
+      "做一个后台审核详情页，顶部展示标题和操作按钮，包含基础信息、内容详情、审核记录和操作日志时间线"
+    );
+
+    expect(result.pageType).toBe("admin-detail");
+    expect(result.workflow).toBeUndefined();
   });
 
   it("后台详情页输出页面结构 DSL 模块", () => {
@@ -64,8 +92,6 @@ describe("decomposeRequirement", () => {
 
     expect(result.sections?.map((section) => section.kind)).toEqual([
       "page-header",
-      "status-banner",
-      "status-actions",
       "base-info",
       "content-detail",
       "audit-records",
@@ -74,6 +100,11 @@ describe("decomposeRequirement", () => {
     ]);
     expect(result.sections).toEqual(
       expect.arrayContaining([
+        expect.objectContaining({
+          kind: "page-header",
+          required: true,
+          layout: "header-title-status-actions"
+        }),
         expect.objectContaining({
           kind: "base-info",
           required: true,

@@ -28,6 +28,23 @@ function formatSections(decomposition: RequirementDecomposition): string {
     .join("\n");
 }
 
+function formatWorkflow(decomposition: RequirementDecomposition): string {
+  const workflow = decomposition.workflow;
+  if (!workflow) return "";
+
+  const transitionLines = Object.entries(workflow.transitions).map(([from, tos]) => {
+    const target = tos.length > 0 ? tos.join("、") : "—";
+    return `  - ${from} → ${target}`;
+  });
+
+  return [
+    "页面工作流（状态机模板，不构成独立区块）：",
+    `- 默认当前状态 workflow.current：${workflow.current}`,
+    "- 允许的状态流转 workflow.transitions：",
+    ...transitionLines
+  ].join("\n");
+}
+
 function formatConstraints(items: string[]): string {
   return items.length > 0 ? items.map((item) => `- ${item}`).join("\n") : "无";
 }
@@ -88,7 +105,12 @@ function formatRequirementDecomposition(decomposition: RequirementDecomposition 
       "后台详情页专项要求：",
       "- Header 必须包含标题、状态 Tag、操作按钮区",
       "- 顶部必须体现状态驱动 UI，并根据不同状态显示不同文字",
+      "- “待审核 / 已通过 / 已拒绝”等状态必须设计为可配置项，不要把状态枚举写死在模板分支里",
+      "- 当前状态优先从 workflow.current 推理；若无 workflow.current，再回退到 status、nodeStatus 等业务字段",
+      "- 状态文案、状态颜色、按钮可见性/禁用态必须从集中定义的状态配置或映射推导，例如 statusConfig、statusMap、actionMap",
       "- 操作按钮必须围绕 状态 → 按钮 → 权限 → 行为 组织",
+      "- 详情页先按 workflow 推理状态、权限、按钮和内容取舍，再映射到页面，不要把这些细粒度能力机械拆成独立 section",
+      "- 生成代码时优先产出这类骨架：const currentStatus = detail.workflow?.current ?? detail.status，再基于 statusConfig/currentStatus/actionMap 组织头部状态与操作区",
       "- 主体按卡片组织：基础信息、内容详情、审核记录、操作日志/时间线",
       "- 基础信息区优先使用 Descriptions + Grid",
       "- 审核记录表达业务行为历史，操作日志表达系统操作记录",
@@ -124,12 +146,13 @@ function formatRequirementDecomposition(decomposition: RequirementDecomposition 
     formatSubtasks(decomposition),
     "推荐页面骨架：",
     formatSections(decomposition),
+    formatWorkflow(decomposition),
     "专项约束：",
     formatConstraints(decomposition.constraints),
     "风险提醒：",
     formatConstraints(decomposition.risks),
     pageTypeInstruction,
-    "生成要求：必须覆盖所有 priority=must 的子任务；若存在 sections，必须优先按 sections 的 required=true 结构区块搭建页面骨架；priority=should 的子任务尽量体现；不要只实现第一个子任务。"
+    "生成要求：必须覆盖所有 priority=must 的子任务；若存在 sections，必须优先按 sections 的 required=true 结构区块搭建页面骨架；若存在 workflow，必须按 workflow.current / workflow.transitions 在所影响区块内推导状态、按钮、权限，不要把 workflow 拆成独立区块；priority=should 的子任务尽量体现；不要只实现第一个子任务。"
   ].filter(Boolean).join("\n");
 }
 
@@ -165,6 +188,7 @@ export function buildPrompt(input: string, options: BuildPromptOptions = {}) {
 - 优先参考“可用组件（自然语言概览）”来决定该用哪些组件
 - 若引用组件库组件，优先使用知识库里出现的组件名与示例写法
 - 若需求涉及“表格/列表/数据表格”，必须优先使用知识库中的 ZhTable / ZhDiyDataTable（若命中其示例/props），不要使用 Element Plus 的 el-table
+- 若页面包含状态、权限、操作流转，必须从数据源或集中映射推导 UI；优先使用 workflow.current 推理当前状态，并输出 currentStatus、statusConfig/statusMap、actionMap 这类集中结构，避免把状态文案、Tag 颜色、按钮集合硬编码在模板零散位置
 
 ${decompositionContext ? `${decompositionContext}\n` : ""}
 ${generationPlanContext ? `${generationPlanContext}\n` : ""}

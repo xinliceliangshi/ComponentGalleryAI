@@ -42,11 +42,12 @@ POST /api/generate { input }
 |------|---------|------|
 | `RequirementSubtaskPriority` | `"must" \| "should" \| "nice"` | 子任务优先级，决定 Prompt 里"必须覆盖 / 尽量体现"的语气 |
 | `IntentRule` | `id / title / intent / priority / uiRegion / terms / dataNeeds / interactionNeeds / candidateKeywords` | **页面分类规则的最小单元**：`terms` 用于命中拆分，`candidateKeywords` 用于召回扩词 |
-| `RequirementPageProfile` | `pageType / match(text) / rules / sections / constraints` | 一个 **页型** = 命中函数 + 一组子任务规则 + 可选结构模块 + 该页型的硬约束 |
+| `RequirementPageProfile` | `pageType / match(text) / rules / sectionBlueprints / workflow / constraints` | 一个 **页型** = 命中函数 + 一组子任务规则 + 可选结构模块 + 可选状态机模板 + 该页型的硬约束 |
 | `RequirementSubtask` | 由 `IntentRule` 转换而来，剥掉 `terms`，对外暴露 | 喂给 Prompt 与召回 |
 | `RequirementSection` | `kind / required / priority / layout / intent / uiRegion / sourceSubtaskId` | 最终输出的页面结构区块，供 Prompt 和召回复用 |
 | `RequirementSectionBlueprint` | `kind / required / priority / layout / intent / uiRegion / sourceSubtaskIds / when` | Profile 内部使用的结构蓝图，由 `buildSections(...)` 裁剪成最终 sections |
-| `RequirementDecomposition` | `enabled / summary / pageType / userGoal / subtasks / sections / constraints / risks` | 整个拆分结果 |
+| `RequirementWorkflow` | `current / transitions` | **极简状态机模板**：默认当前状态 + 各状态可流转到的目标集合，跨区块驱动 LLM 推理状态、按钮、权限 |
+| `RequirementDecomposition` | `enabled / summary / pageType / userGoal / subtasks / sections / workflow / constraints / risks` | 整个拆分结果 |
 | `GenerationPlan` | `pageType / summary / userGoal / sections / globalConstraints / risks` | 面向代码生成器的施工图，串联结构区块与推荐组件 |
 
 设计要点：
@@ -54,6 +55,7 @@ POST /api/generate { input }
 1. **`terms` ≠ `candidateKeywords`**：前者是"判定子任务是否被触发"的关键词，后者是"召回知识库时用的扩词"，可以更宽泛。
 2. **`priority` 三档**：`must` 一定要在 LLM 输出里出现；`should` 尽量；`nice` 可有可无。Prompt 里直接复述了这条规则。
 3. **`uiRegion`** 是给 LLM 的布局暗示（top/main/side/modal/bottom 等），不是强校验。
+4. **`workflow` 不是 section**：它是一份纯状态机模板（`current` + `transitions`），用来在已有区块（一般是 page-header）内驱动状态/按钮/权限推理，**不要把它拆成独立区块**。详见 §3.8。
 
 ---
 
@@ -231,6 +233,49 @@ export function matchRequirementPageProfile(text: string): RequirementPageProfil
   - `做一个后台发布配置页面，包含草稿状态、发布流程、版本记录和实时预览`
   - `做一个后台角色权限维护页面，包含只读字段、权限分配、变更记录和保存发布`
 
+### 3.8 `workflow`：跨区块状态机模板（admin-detail 首发）
+
+`workflow` 是 Profile 上的可选字段，用来给某个页型提供一份 **默认状态机** 给 LLM 参考：
+
+```ts
+export type RequirementWorkflow = {
+  current: string;                          // 默认当前状态
+  transitions: Record<string, string[]>;    // 状态 → 可流转到的状态集合
+};
+```
+
+当前只在 `adminDetailProfile` 里出现：
+
+```ts
+workflow: {
+  current: "草稿",
+  transitions: {
+    "草稿":   ["待审核"],
+    "待审核": ["处理中", "已通过", "已拒绝"],
+    "处理中": ["已通过", "已拒绝"],
+    "已拒绝": ["草稿"],
+    "已通过": []
+  }
+}
+```
+
+设计上的几个明确口径：
+
+1. **只描述"状态机"，不描述"业务文案/按钮/权限"**
+   `workflow` 里 **不会** 再出现 `id / title / triggers / outcomes / candidateKeywords / aliases / appliesToSections` 这些元数据；那些都是 prompt 里要 LLM 自己根据状态推导出来的产物（`statusConfig / actionMap / statusMap`），不应该在配置里写死。
+
+2. **profile 上是单数 `workflow?`，decomposition 上也是单数 `workflow?`**
+   早期版本曾经是 `workflows: WorkflowRule[]`（一组带触发/产出的工作流规则），现在彻底简化为单个状态机对象。**一个页型一份默认状态机** 是足够的。
+
+3. **命中策略：用 `current + transitions` 里出现的状态词去匹配文本**
+   `decomposeRequirement` 会从 `current` 和 `transitions` 中抽出所有状态词（如 `草稿 / 待审核 / 处理中 / 已通过 / 已拒绝`），只要用户输入命中其中任一个，就把整份 `workflow` 透传到 `decomposition.workflow`；否则置 `undefined`。这意味着 **没有显式提到状态词的纯流水详情页不会被强行扣上状态机**。
+
+4. **作用域：跨区块推理，而不是独立 section**
+   `workflow` 主要影响 `page-header` 内的状态 Tag / 操作按钮，但严格不允许把它实例化成独立 `status-banner` 或 `status-actions` 区块。这条由 §5 里的"生成要求"和 `admin-detail` 的专项 prompt 一起兜底。
+
+5. **召回贡献：只生成一条聚合查询**
+   `buildWorkflowQueries(workflow)` 输出 `"状态驱动 UI <state-1> <state-2> ..."` 这一条召回查询，把状态词整体打包送进知识库召回，不再为每个状态单独发查询。
+
 ---
 
 ## 4. 拆分流程：`decomposeRequirement`
@@ -257,12 +302,22 @@ export function decomposeRequirement(input: string): RequirementDecomposition {
     });
   }
 
+  const sections = enabled ? buildSections(profile, subtasks) : undefined;
+
+  // workflow：profile 上挂的默认状态机，文本命中状态词时才透传
+  const workflow = enabled && profile.workflow
+    && includesAny(text, collectWorkflowStateWords(profile.workflow))
+    ? profile.workflow
+    : undefined;
+
   return {
     enabled,
     summary: buildSummary(text),                      // 截断到 60 字符
     pageType: profile.pageType,
     userGoal: text,
     subtasks,
+    sections,
+    workflow,
     constraints: enabled ? profile.constraints : [],
     risks: enabled ? ["原始需求较大，直接生成容易遗漏局部模块或交互"] : []
   };
@@ -299,11 +354,21 @@ export function buildDecompositionQueries(input, decomposition): string[] {
     decomposition.summary,                          // 摘要
     ...decomposition.subtasks.map((task) =>        // 每个子任务一条
       [task.title, task.intent, ...task.candidateKeywords].filter(Boolean).join(" ")
-    )
+    ),
+    ...(decomposition.sections ?? []).flatMap(buildSectionQueries),  // 每个 section 的扩词
+    ...(decomposition.workflow                                       // workflow 状态机：聚合成 1 条
+      ? buildWorkflowQueries(decomposition.workflow)
+      : [])
   ];
   return Array.from(new Set(queries.map(q => q.trim()).filter(Boolean)));
 }
 ```
+
+各路查询的产出口径：
+
+- 子任务：`title + intent + candidateKeywords`，每个子任务 1 条；
+- section：`kind + intent + layout + uiRegion + required` + `SECTION_QUERY_HINTS[kind]` 里挂的固定扩词；
+- workflow：`"状态驱动 UI <state-1> <state-2> ..."` 整体打包成 1 条。
 
 下游 `component-knowledge.service.ts → retrieveKnowledgeForDecomposition` 会把这些查询逐条送入打分器，再用 `Map` 去重合并卡片与代码片段。这意味着 **Profile 中 `candidateKeywords` 直接影响召回多样性与命中率**。
 
@@ -314,9 +379,21 @@ export function buildDecompositionQueries(input, decomposition): string[] {
 `prompt.service.ts` 中 `formatRequirementDecomposition` 把 `decomposition` 序列化进 prompt，关键点：
 
 1. 仅在 `enabled` 时注入"【需求拆分（规则预处理）】"段；
-2. 把 `pageType / summary / subtasks / sections / constraints / risks` 组织成结构摘要灌进上下文；
+2. 把 `pageType / summary / subtasks / sections / workflow / constraints / risks` 组织成结构摘要灌进上下文；
+   - 其中 `workflow` 通过 `formatWorkflow(...)` 渲染成下面这种状态机模板（不是普通区块）：
+
+     ```
+     页面工作流（状态机模板，不构成独立区块）：
+     - 默认当前状态 workflow.current：草稿
+     - 允许的状态流转 workflow.transitions：
+       - 草稿 → 待审核
+       - 待审核 → 处理中、已通过、已拒绝
+       - 处理中 → 已通过、已拒绝
+       - 已拒绝 → 草稿
+       - 已通过 → —
+     ```
 3. 把 `GenerationPlan` 以“区块计划 + 推荐组件”的形式补进 prompt；
-3. 当 `pageType` 命中专用分支时，额外插入对应的 **页型专项要求**。例如：
+4. 当 `pageType` 命中专用分支时，额外插入对应的 **页型专项要求**。例如：
 
    `admin-home-dashboard`：
 
@@ -340,11 +417,11 @@ export function buildDecompositionQueries(input, decomposition): string[] {
    - 底部必须区分取消、保存、提交审核、发布等不同动作
    ```
 
-4. 末尾补一句硬性指令：
+5. 末尾补一句硬性指令：
 
-   > 必须覆盖所有 priority=must 的子任务；若存在 sections，必须优先按 required=true 的结构区块搭建页面骨架；priority=should 的子任务尽量体现；不要只实现第一个子任务。
+   > 必须覆盖所有 priority=must 的子任务；若存在 sections，必须优先按 required=true 的结构区块搭建页面骨架；若存在 workflow，必须按 `workflow.current / workflow.transitions` 在所影响区块内推导状态、按钮、权限，**不要把 workflow 拆成独立区块**；priority=should 的子任务尽量体现；不要只实现第一个子任务。
 
-这样，**Profile 的 `constraints` + pageType 特判 + subtask 列表 + section 骨架 + GenerationPlan** 就把"页面分类"的领域知识从 LLM 的"自由发挥"中拉回到一个可控范围。
+这样，**Profile 的 `constraints` + pageType 特判 + subtask 列表 + section 骨架 + workflow 状态机 + GenerationPlan** 就把"页面分类"的领域知识从 LLM 的"自由发挥"中拉回到一个可控范围。
 
 ---
 
@@ -387,6 +464,26 @@ export function buildDecompositionQueries(input, decomposition): string[] {
 - `sections` 会注入 `page-header / status-banner / preview-panel / history-panel / action-footer`
 - Prompt 中追加复杂编辑页专项要求，约束模型不要退化成普通新增表单
 
+### 示例 E：后台详情页（含 workflow 命中）
+
+输入：`做一个后台审核详情页，包含草稿、待审核状态、基础信息、内容详情、审核记录和操作日志`
+
+- 命中 `adminDetailProfile`
+- 因为 `admin-detail` 属于强制启用拆分页型，所以 `enabled=true`
+- `subtasks` 会包含 `detail-header / base-info / content-detail / audit-records / operation-log / timeline`，用于驱动状态、权限、按钮和内容取舍
+- `sections` 只保留稳定页面骨架：`page-header / base-info / content-detail / audit-records / operation-log / timeline`
+- 文本里出现了 `草稿`、`待审核` 这类状态词 → 命中 `adminDetailProfile.workflow` 里的状态机，整份 `workflow = { current: "草稿", transitions: {...} }` 被透传到 `decomposition.workflow`
+- 召回查询追加一条 `"状态驱动 UI 草稿 待审核 处理中 已通过 已拒绝"`
+- Prompt 中会强调：详情页不要把状态横幅、按钮权限这类细节机械拆成独立 section；按 `workflow.current / workflow.transitions` 集中推导 `statusConfig / actionMap`
+
+### 示例 E'：后台详情页（无 workflow 命中）
+
+输入：`做一个后台审核详情页，顶部展示标题和操作按钮，包含基础信息、内容详情、审核记录和操作日志时间线`
+
+- 同样命中 `adminDetailProfile`、强制 `enabled=true`
+- 文本里**没有出现** `草稿 / 待审核 / 处理中 / 已通过 / 已拒绝` 等状态词
+- 因此 `decomposition.workflow === undefined`，prompt 里不会注入状态机段；但 `admin-detail` 的专项要求文案（含 `workflow.current` 兜底骨架）仍然出现，由 LLM 自行从 `status / nodeStatus` 等业务字段推导
+
 这些例子在 `services/requirement-decomposition/__tests__/decompose-requirement.test.ts`、`services/requirement-decomposition/__tests__/build-decomposition-queries.test.ts` 与 `services/__tests__/prompt.service.test.ts` 都有对应单测，新增/修改 Profile 时请同步覆盖。
 
 ---
@@ -428,6 +525,39 @@ export function buildDecompositionQueries(input, decomposition): string[] {
 ### 7.3 替换占位 Profile（dashboard / form-page）
 
 目前这两个 Profile 的 `rules` 都直接复用了 `adminManagementProfile.rules`。当其中某个页型积累出独立的子任务集时，把它替换成自有的 `IntentRule[]` 与 `constraints` 即可，调用方无需改动。
+
+### 7.4 给页型挂一份默认 `workflow` 状态机
+
+> 适用场景：页型本身带有"业务状态机"色彩，例如审核流详情、订单流详情、发布流配置。如果页型只是"信息展示型"，**不要** 强行挂 workflow。
+
+1. 在 Profile 上加 `workflow` 字段，遵循 §3.8 的口径，只写 `current` 和 `transitions`：
+
+   ```ts
+   export const adminDetailProfile: RequirementPageProfile = {
+     // ...
+     workflow: {
+       current: "草稿",
+       transitions: {
+         "草稿":   ["待审核"],
+         "待审核": ["处理中", "已通过", "已拒绝"],
+         "处理中": ["已通过", "已拒绝"],
+         "已拒绝": ["草稿"],
+         "已通过": []
+       }
+     }
+   };
+   ```
+
+2. **不要** 在这里加 `id / title / aliases / triggers / outcomes / candidateKeywords`，这些已经被刻意从类型里删除。若需要影响召回，请走对应 `IntentRule.candidateKeywords` 或 `SECTION_QUERY_HINTS`。
+
+3. 状态词要覆盖用户大概率会真实写出的措辞（"草稿 / 待审核 / 已通过"），避免太抽象（"S1 / S2"）导致命中不到。
+
+4. 在测试里至少补两条：
+
+   - **命中状态词**：输入里包含 `current` 或某个 `transitions` 状态 → `result.workflow` 等于该状态机；
+   - **未命中状态词**：同页型但输入不含状态词 → `result.workflow === undefined`。
+
+5. 如果需要相应的 prompt 文案（"按 workflow 推 statusConfig / actionMap"等），在 `prompt.service.ts` 的 `pageTypeInstructionMap[pageType]` 里补；workflow 本身的渲染由通用 `formatWorkflow` 统一处理，不需要改。
 
 ---
 
@@ -541,6 +671,7 @@ export function buildDecompositionQueries(input, decomposition): string[] {
 
 - `admin-detail`
   状态、基础信息、审核记录、日志驱动的后台详情页。
+  目前唯一挂了 `workflow` 默认状态机的页型（`草稿 → 待审核 → 处理中 → 已通过 / 已拒绝`），用于在 `page-header` 内驱动状态文案、按钮和权限推理；详见 §3.8。
 
 - `admin-create`
   新增录入页，也承接轻编辑复用。

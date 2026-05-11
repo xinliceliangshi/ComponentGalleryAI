@@ -23,7 +23,7 @@ describe("buildDecompositionQueries", () => {
   });
 
   it("详情页拆分会生成面向状态、基础信息和审核记录的召回查询", () => {
-    const input = "做一个后台审核详情页，包含状态Tag、基础信息、内容详情、审核记录和操作日志";
+    const input = "做一个后台审核详情页，包含草稿、待审核状态、基础信息、内容详情、审核记录和操作日志";
     const result = decomposeRequirement(input);
     const queries = buildDecompositionQueries(input, result);
 
@@ -34,7 +34,7 @@ describe("buildDecompositionQueries", () => {
   });
 
   it("详情页模块 DSL 会补充组件级召回查询", () => {
-    const input = "做一个后台审核详情页，包含状态Tag、基础信息、内容详情、审核记录和操作日志";
+    const input = "做一个后台审核详情页，包含草稿、待审核状态、基础信息、内容详情、审核记录和操作日志";
     const result = decomposeRequirement(input);
     const queries = buildDecompositionQueries(input, result);
 
@@ -43,6 +43,7 @@ describe("buildDecompositionQueries", () => {
     expect(queries.some((query) => query.includes("ZhButtonGroup"))).toBe(true);
     expect(queries.some((query) => query.includes("ZhBaseInfo"))).toBe(true);
     expect(queries.some((query) => query.includes("business-history-card"))).toBe(true);
+    expect(queries.some((query) => query.includes("permission-aware-button-group"))).toBe(false);
   });
 
   it("新增页模块 DSL 会补充面向表单结构的召回查询", () => {
