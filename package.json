@@ -17,7 +17,9 @@
     "python:structured:schema": "python3 packages/python-structured-output/schema_export.py",
     "python:structured:exercise:01": "python3 packages/python-structured-output/exercises/01_basic_generate_result.py",
     "python:structured:exercise:02": "python3 packages/python-structured-output/exercises/02_generate_result_v2.py",
-    "python:structured:exercise:03": "python3 packages/python-structured-output/exercises/03_generate_result_v3_consistency.py"
+    "python:structured:exercise:03": "python3 packages/python-structured-output/exercises/03_generate_result_v3_consistency.py",
+    "python:structured:exercise:04": "python3 packages/python-structured-output/exercises/04_generate_result_repair_report.py",
+    "python:structured:exercise:05": "python3 packages/python-structured-output/exercises/05_generate_result_retry_loop.py"
   },
   "devDependencies": {
     "concurrently": "^9.2.1"

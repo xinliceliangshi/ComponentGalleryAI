@@ -80,3 +80,15 @@ pnpm python:structured:exercise:02
 ```bash
 pnpm python:structured:exercise:03
 ```
+
+第四小关：
+
+```bash
+pnpm python:structured:exercise:04
+```
+
+第五小关：
+
+```bash
+pnpm python:structured:exercise:05
+```
