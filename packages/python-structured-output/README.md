@@ -54,3 +54,29 @@ python3 schema_export.py
 3. `GenerateResult`
 
 这个顺序比较适合学习，也方便后续逐层接回现有 Node 服务。
+
+## Exercises
+
+如果你想按训练题推进，可以先从第一题开始：
+
+```bash
+python3 exercises/01_basic_generate_result.py
+```
+
+或者在仓库根目录执行：
+
+```bash
+pnpm python:structured:exercise:01
+```
+
+第二小关：
+
+```bash
+pnpm python:structured:exercise:02
+```
+
+第三小关：
+
+```bash
+pnpm python:structured:exercise:03
+```
