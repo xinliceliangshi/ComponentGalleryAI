@@ -1,0 +1,56 @@
+# Python Structured Output Playground
+
+这个目录是给 `ComponentGalleryAI` 做增量式 Python 改造的第一步：不替换现有 TypeScript 主链路，只把最关键的结构化对象抽成 Pydantic 模型，方便学习和后续接入 LLM structured output。
+
+当前覆盖 3 个核心对象：
+
+- `RequirementDecomposition`
+- `GenerationPlan`
+- `GenerateResult`
+
+它们分别对应仓库里现有的这三段链路：
+
+- `packages/server/src/services/requirement-decomposition.service.ts`
+- `packages/server/src/services/generation-plan.service.ts`
+- `packages/server/src/schemas/generate.schema.ts`
+
+## Install
+
+建议先在当前目录创建虚拟环境：
+
+```bash
+cd packages/python-structured-output
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e .
+```
+
+## Run Demo
+
+```bash
+python3 demo.py
+```
+
+它会验证一组示例数据，并打印 3 个结构化对象的标准 JSON。
+
+## Export JSON Schema
+
+```bash
+python3 schema_export.py
+```
+
+这个脚本会输出 3 个模型的 JSON Schema，方便你：
+
+- 对照 TypeScript 类型
+- 设计 prompt 中的 structured output 约束
+- 后续接 OpenAI / 其他模型的 schema-based 输出能力
+
+## Why This Shape
+
+这次先不把知识召回层做成 Pydantic，原因是它更偏本地数据结构；更适合先把“LLM 会产出或消费的中间态”结构化：
+
+1. `RequirementDecomposition`
+2. `GenerationPlan`
+3. `GenerateResult`
+
+这个顺序比较适合学习，也方便后续逐层接回现有 Node 服务。

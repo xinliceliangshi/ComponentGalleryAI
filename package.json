@@ -12,7 +12,9 @@
     "preview": "pnpm -C packages/web preview",
     "lint": "pnpm -C packages/web lint",
     "lint:fix": "pnpm -C packages/web exec eslint . --fix",
-    "typecheck": "pnpm -C packages/web typecheck"
+    "typecheck": "pnpm -C packages/web typecheck",
+    "python:structured:demo": "python3 packages/python-structured-output/demo.py",
+    "python:structured:schema": "python3 packages/python-structured-output/schema_export.py"
   },
   "devDependencies": {
     "concurrently": "^9.2.1"

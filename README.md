@@ -30,6 +30,22 @@ pnpm dev          # 仅前端
 - 前端通过 `POST /api/generate` 调用生成接口；开发环境下 Vite 将 `/api` **代理**到 `http://127.0.0.1:3002`。
 - 未启动后端时，代理会返回 502 与 JSON 说明。
 
+## Python Structured Output
+
+仓库现在额外提供了一个独立的 Python 学习模块，用来演示如何把当前生成链路抽成 `Pydantic Schema`：
+
+- 目录：[`packages/python-structured-output`](/Users/wangying/Desktop/ComponentGalleryAI/packages/python-structured-output)
+- 覆盖对象：`RequirementDecomposition`、`GenerationPlan`、`GenerateResult`
+
+可用命令：
+
+```bash
+pnpm python:structured:demo
+pnpm python:structured:schema
+```
+
+首次使用前，请先按 [`packages/python-structured-output/README.md`](/Users/wangying/Desktop/ComponentGalleryAI/packages/python-structured-output/README.md) 安装 Python 依赖。
+
 ## Page Type Quick Reference
 
 服务端在 `packages/server/src/services/requirement-decomposition/` 里会先做一层“页型识别 + 子任务拆分”，再把结果送进知识库召回和 Prompt 生成。
