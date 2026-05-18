@@ -2,6 +2,7 @@ import { includesAny } from "./requirement-decomposition/matchers.js";
 import { buildSections } from "./requirement-decomposition/build-sections.js";
 import { matchRequirementPageProfile } from "./requirement-decomposition/page-profiles/index.js";
 import { SECTION_QUERY_HINTS } from "./requirement-decomposition/section-query-hints.js";
+import { collectWorkflowSearchTerms } from "./requirement-decomposition/workflow.js";
 import type {
   IntentRule,
   RequirementDecomposition,
@@ -17,6 +18,8 @@ export type {
   RequirementSubtaskPriority,
   RequirementWorkflow
 } from "./requirement-decomposition/types.js";
+
+export { collectWorkflowSearchTerms, deriveWorkflowActions } from "./requirement-decomposition/workflow.js";
 
 const COMPLEX_CONNECTORS = ["包含", "支持", "同时", "以及", "并且", "需要", "还要", "包括", "实现", "带有", "具备"];
 
@@ -39,16 +42,6 @@ function toSubtask(rule: IntentRule): RequirementSubtask {
     interactionNeeds: rule.interactionNeeds ?? [],
     candidateKeywords: rule.candidateKeywords
   };
-}
-
-function collectWorkflowStateWords(workflow: RequirementWorkflow): string[] {
-  const collected = new Set<string>();
-  collected.add(workflow.current);
-  for (const [from, tos] of Object.entries(workflow.transitions)) {
-    collected.add(from);
-    for (const to of tos) collected.add(to);
-  }
-  return Array.from(collected).filter(Boolean);
 }
 
 function shouldEnableDecomposition(text: string, matchedIntentCount: number): boolean {
@@ -76,7 +69,7 @@ function buildSectionQueries(section: RequirementSection): string[] {
 }
 
 function buildWorkflowQueries(workflow: RequirementWorkflow): string[] {
-  const stateWords = collectWorkflowStateWords(workflow);
+  const stateWords = collectWorkflowSearchTerms(workflow);
   if (stateWords.length === 0) return [];
 
   return [
@@ -106,7 +99,7 @@ export function decomposeRequirement(input: string): RequirementDecomposition {
   const sections = enabled ? buildSections(profile, subtasks) : undefined;
 
   const workflow = enabled && profile.workflow
-    && includesAny(text, collectWorkflowStateWords(profile.workflow))
+    && includesAny(text, collectWorkflowSearchTerms(profile.workflow))
     ? profile.workflow
     : undefined;
 

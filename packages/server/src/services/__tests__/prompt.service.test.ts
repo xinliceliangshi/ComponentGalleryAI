@@ -30,7 +30,7 @@ describe("buildPrompt", () => {
   });
 
   it("详情页会强调 workflow 驱动细节推理，sections 只保留稳定骨架", () => {
-    const input = "做一个后台审核详情页，包含状态Tag、基础信息、内容详情、审核记录和操作日志";
+    const input = "做一个后台审核详情页，包含草稿、待审核状态Tag、基础信息、内容详情、审核记录和操作日志";
     const decomposition = decomposeRequirement(input);
     const knowledgeResult = retrieveKnowledgeForDecomposition(input, decomposition);
     const sectionKnowledge = retrieveKnowledgeForSections(decomposition);
@@ -42,10 +42,10 @@ describe("buildPrompt", () => {
     expect(prompt).toContain("页面头部 [page-header] / header-title-status-actions");
     expect(prompt).toContain("基础信息区 [base-info] / descriptions-grid");
     expect(prompt).toContain("“待审核 / 已通过 / 已拒绝”等状态必须设计为可配置项");
-    expect(prompt).toContain("当前状态优先从 workflow.current 推理");
-    expect(prompt).toContain("状态文案、状态颜色、按钮可见性/禁用态必须从集中定义的状态配置或映射推导");
-    expect(prompt).toContain("const currentStatus = detail.workflow?.current ?? detail.status");
-    expect(prompt).toContain("statusConfig/currentStatus/actionMap");
+    expect(prompt).toContain("当前状态优先从 workflow.initialState 推理");
+    expect(prompt).toContain("deriveWorkflowActions(workflow, currentStatus, permissions)");
+    expect(prompt).toContain("const currentStatus = detail.workflow?.current ?? detail.workflow?.initialState ?? detail.status；const actions = deriveWorkflowActions");
+    expect(prompt).toContain("action 元信息（用于从 workflow 派生按钮区）");
     expect(prompt).not.toContain("状态横幅 [status-banner]");
     expect(prompt).not.toContain("状态操作区 [status-actions]");
   });

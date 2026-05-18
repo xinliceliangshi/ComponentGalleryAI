@@ -63,14 +63,85 @@ describe("decomposeRequirement", () => {
     );
 
     expect(result.workflow).toEqual({
-      current: "草稿",
-      transitions: {
-        "草稿": ["待审核"],
-        "待审核": ["处理中", "已通过", "已拒绝"],
-        "处理中": ["已通过", "已拒绝"],
-        "已拒绝": ["草稿"],
-        "已通过": []
-      }
+      id: "article-audit",
+      initialState: "draft",
+      transitions: [
+        {
+          from: "draft",
+          to: "pending",
+          action: {
+            key: "submit",
+            label: "提交审核",
+            variant: "primary",
+            permissions: ["article.submit"],
+            confirmText: "确认提交审核？"
+          }
+        },
+        {
+          from: "pending",
+          to: "processing",
+          action: {
+            key: "process",
+            label: "开始处理",
+            variant: "default",
+            permissions: ["article.process"]
+          }
+        },
+        {
+          from: "pending",
+          to: "approved",
+          action: {
+            key: "approve",
+            label: "审核通过",
+            variant: "success",
+            permissions: ["article.approve"],
+            confirmText: "确认审核通过？"
+          }
+        },
+        {
+          from: "pending",
+          to: "rejected",
+          action: {
+            key: "reject",
+            label: "驳回",
+            variant: "danger",
+            permissions: ["article.reject"],
+            confirmText: "确认驳回当前内容？"
+          }
+        },
+        {
+          from: "processing",
+          to: "approved",
+          action: {
+            key: "approve",
+            label: "处理完成并通过",
+            variant: "success",
+            permissions: ["article.approve"],
+            confirmText: "确认处理完成并通过？"
+          }
+        },
+        {
+          from: "processing",
+          to: "rejected",
+          action: {
+            key: "reject",
+            label: "处理后驳回",
+            variant: "danger",
+            permissions: ["article.reject"],
+            confirmText: "确认处理后驳回？"
+          }
+        },
+        {
+          from: "rejected",
+          to: "draft",
+          action: {
+            key: "resubmit",
+            label: "退回草稿",
+            variant: "default",
+            permissions: ["article.update"]
+          }
+        }
+      ]
     });
     expect(result.sections?.map((section) => section.kind)).not.toContain("status-banner");
     expect(result.sections?.map((section) => section.kind)).not.toContain("status-actions");

@@ -51,9 +51,35 @@ export type RequirementSectionBlueprint = {
   when?: RequirementSectionBlueprintWhen;
 };
 
+export type WorkflowState = "draft" | "pending" | "processing" | "approved" | "rejected";
+
+export type WorkflowAction =
+  | "submit"
+  | "process"
+  | "approve"
+  | "reject"
+  | "resubmit";
+
+export type WorkflowActionVariant = "primary" | "default" | "danger" | "success";
+
+export type WorkflowActionDefinition = {
+  key: WorkflowAction;
+  label?: string;
+  variant?: WorkflowActionVariant;
+  permissions?: string[];
+  confirmText?: string;
+};
+
+export type WorkflowTransition = {
+  from: WorkflowState;
+  to: WorkflowState;
+  action: WorkflowActionDefinition;
+};
+
 export type RequirementWorkflow = {
-  current: string;
-  transitions: Record<string, string[]>;
+  id: string;
+  initialState: WorkflowState;
+  transitions: WorkflowTransition[];
 };
 
 export type RequirementDecomposition = {
