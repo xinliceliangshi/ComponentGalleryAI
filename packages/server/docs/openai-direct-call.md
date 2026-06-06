@@ -1,6 +1,7 @@
 # OpenAI 调用说明（本项目直连方式）
 
-本文记录 **服务端如何调用 LLM**：使用 Node 内置风格请求（`undici.fetch`）直接向 **OpenAI Chat Completions** 发 HTTP 请求，**不依赖** OpenAI 官方 npm SDK，也不依赖国内聚合平台的控制台/SDK；密钥与地址仅通过环境变量配置。
+本文记录 **本项目保留的直连调用方式**：使用 Node 内置风格请求（`undici.fetch`）直接向 **OpenAI Chat Completions** 发 HTTP 请求。  
+注意：**当前主链路默认已切到 `langchain.service.ts` 的 `callLangChain()`**；本文主要用于保留直连实现、测试与排障参考。
 
 ## 调用链
 

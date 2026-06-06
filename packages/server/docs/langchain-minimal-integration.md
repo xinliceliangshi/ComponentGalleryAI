@@ -20,7 +20,7 @@
 - 总编排：`src/services/generate.service.ts`
 - 召回：`src/services/component-knowledge.service.ts`
 - Prompt 拼装：`src/services/prompt.service.ts`
-- 直连 LLM：`src/services/llm.service.ts`
+- LangChain LLM 适配层：`src/services/langchain.service.ts`
 - 输出校验：`src/schemas/generate.schema.ts`
 
 当前 `generate.service.ts` 的关键逻辑是：
@@ -29,7 +29,7 @@
 2. `retrieveKnowledge...`
 3. `buildGenerationPlan(...)`
 4. `buildPrompt(...)`
-5. `callLLM(prompt)`
+5. `callLangChain(prompt)`
 6. `safeJsonParse + GenerateSchema.parse`
 
 所以，**LangChain 最合适的第一落点** 不是前端，也不是 `prompt.service.ts`，而是：
@@ -107,7 +107,7 @@ const raw = await callLangChain(prompt);
 
 `decompose -> recall -> prompt -> langchain invoke -> safeJsonParse -> zod parse`
 
-这是当前最推荐的最小接入方案。
+这一步现在已经完成，当前主链路默认走 `callLangChain()`。
 
 ### 阶段 2：为知识召回增加可选向量检索
 
@@ -232,20 +232,7 @@ COMPONENT_GALLERY_AI_RECALL_MODE=hybrid
 
 示意：
 
-```ts
-import { buildPrompt } from "./prompt.service.js";
-import { callLangChain } from "./langchain.service.js";
-import { safeJsonParse } from "../utils/safe-json.js";
-import { GenerateSchema } from "../schemas/generate.schema.js";
-
-export async function generateService(input: string) {
-  // 省略 decomposition / knowledge / generationPlan
-  const prompt = buildPrompt(input, { decomposition, generationPlan, knowledge });
-  const raw = await callLangChain(prompt);
-  const parsed = safeJsonParse(raw);
-  return GenerateSchema.parse(parsed);
-}
-```
+当前代码就是这一路径：`buildPrompt(...) -> callLangChain(...) -> safeJsonParse(...) -> GenerateSchema.parse(...)`
 
 注意：第一阶段不建议把 `safeJsonParse` 或 `GenerateSchema` 拿掉，因为它们正是当前结构化输出稳定性的关键保护层。
 
@@ -290,8 +277,8 @@ export async function generateService(input: string) {
 当前项目最稳妥的 LangChain 最小接入结论是：
 
 1. LangChain 放在 `src/services/` 层，不放前端
-2. 第一阶段只接 `langchain.service.ts`
-3. `generate.service.ts` 只把 `callLLM` 换成 `callLangChain`
+2. 第一阶段先接 `langchain.service.ts`
+3. `generate.service.ts` 现已从 `callLLM` 切到 `callLangChain`
 4. 保留现有 `prompt.service.ts`、`component-knowledge.service.ts`、`GenerateSchema`
 5. `vectorstore.service.ts` 作为后续实验入口，不要和第一阶段一起强行上线
 
