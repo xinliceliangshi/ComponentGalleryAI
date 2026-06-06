@@ -46,6 +46,15 @@ curl -sS https://api.openai.com/v1/chat/completions \
 
 `.env` 加载顺序：先 `packages/server/.env`，再 `packages/server/src/.env`（后者覆盖前者）。
 
+如果你长期使用 OpenAI 兼容中转站，建议同时设置：
+
+```bash
+LLM_PROVIDER=openai
+OPENAI_BASE_URL=https://你的兼容网关/v1
+```
+
+原因是本项目里如果未显式设置 `LLM_PROVIDER=openai`，且本地仍保留 `DEEPSEEK_API_KEY`，则运行时可能自动切到 DeepSeek。
+
 ## 代理与自建兼容接口
 
 - **官方域名不可达**：可设置本机代理环境变量（如 Clash 本地端口），不必经过第三方「平台」控制台。  

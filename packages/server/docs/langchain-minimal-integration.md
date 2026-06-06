@@ -121,6 +121,14 @@ const raw = await callLangChain(prompt);
 
 这样即使向量召回效果不稳定，也不会把现有主流程打穿。
 
+当前仓库里这一阶段已经按“可选开启”接好了：
+
+- `src/services/vectorstore.service.ts`：把本地组件知识转成 LangChain Memory Vector Store
+- `src/services/component-knowledge.service.ts`：新增 hybrid 召回函数
+- `src/services/generate.service.ts`：主链路已经切到 hybrid 版本
+
+默认仍然是规则召回；只有配置开启后，才会尝试向量增强。
+
 ### 阶段 3：再考虑正式 chain 化
 
 只有在阶段 1 和阶段 2 稳定后，才建议把这几段组装成更正式的 Runnable / Chain：
@@ -140,17 +148,18 @@ const raw = await callLangChain(prompt);
 pnpm --filter server add @langchain/openai
 ```
 
-如果要启用向量检索骨架，再加：
+如果要启用第二阶段的向量召回，再加：
 
 ```bash
-pnpm --filter server add @langchain/community langchain chromadb
+pnpm --filter server add langchain
 ```
 
 说明：
 
 - `langchain.service.ts` 只依赖 `@langchain/openai`
-- `vectorstore.service.ts` 依赖 `@langchain/openai`、`@langchain/community`、`langchain`
-- `chromadb` 是否需要额外安装，取决于实际使用的 Chroma 适配实现与运行环境；最小试验时建议一并装上
+- 当前 `vectorstore.service.ts` 使用的是 `MemoryVectorStore`
+- 所以第二阶段最小依赖是 `@langchain/openai` + `langchain`
+- 这版没有把 `Chroma` 作为主链路依赖，因此也不要求先装 `chromadb`
 
 ## 6. 环境变量建议
 
@@ -163,6 +172,59 @@ pnpm --filter server add @langchain/community langchain chromadb
 | `OPENAI_BASE_URL` | OpenAI 兼容网关根地址 |
 
 也就是说，LangChain 接入后，项目配置口径不需要立刻改变。
+
+第二阶段额外增加了几项向量召回相关配置：
+
+| 变量 | 作用 | 默认值 |
+|------|------|--------|
+| `COMPONENT_GALLERY_AI_VECTOR_RECALL` | 是否开启 LangChain 向量召回 | `false` |
+| `COMPONENT_GALLERY_AI_RECALL_MODE` | `rule` / `hybrid` / `vector` | `rule` |
+| `COMPONENT_GALLERY_AI_VECTOR_TOP_K` | 向量召回 topK | `6` |
+| `OPENAI_EMBEDDING_MODEL` | embeddings 模型名 | `text-embedding-3-small` |
+
+推荐先这样试：
+
+```bash
+COMPONENT_GALLERY_AI_VECTOR_RECALL=true
+COMPONENT_GALLERY_AI_RECALL_MODE=hybrid
+OPENAI_EMBEDDING_MODEL=text-embedding-3-small
+```
+
+这套配置的含义是：
+
+- 规则召回继续保留
+- 向量召回作为补充结果 merge 进来
+- 即使向量层失败，主流程仍优先回退到规则召回
+
+如果你准备长期使用 OpenAI 兼容中转站，推荐把基础配置固定成：
+
+```bash
+LLM_PROVIDER=openai
+OPENAI_API_KEY=你的中转站密钥
+OPENAI_BASE_URL=https://你的网关/v1
+OPENAI_MODEL=gpt-4o-mini
+OPENAI_EMBEDDING_MODEL=text-embedding-3-small
+```
+
+原因：
+
+- `LLM_PROVIDER=openai` 可以避免项目因为本地还保留了 `DEEPSEEK_API_KEY` 而自动切到 DeepSeek
+- `OPENAI_BASE_URL` 统一控制聊天模型和 embeddings 的 OpenAI 兼容入口
+- `OPENAI_EMBEDDING_MODEL` 单独显式配置，方便排查“聊天可用但 embeddings 不可用”的情况
+
+长期使用时，建议先保持：
+
+```bash
+COMPONENT_GALLERY_AI_VECTOR_RECALL=false
+COMPONENT_GALLERY_AI_RECALL_MODE=rule
+```
+
+等确认中转站对 embeddings 也稳定后，再切到：
+
+```bash
+COMPONENT_GALLERY_AI_VECTOR_RECALL=true
+COMPONENT_GALLERY_AI_RECALL_MODE=hybrid
+```
 
 ## 7. 最小代码改法
 

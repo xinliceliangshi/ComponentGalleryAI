@@ -4,22 +4,22 @@ import { safeJsonParse } from "../utils/safe-json.js";
 import { GenerateSchema } from "../schemas/generate.schema.js";
 import { decomposeRequirement } from "./requirement-decomposition.service.js";
 import {
-  formatKnowledgeContext,
+  formatKnowledgeContextHybrid,
   formatKnowledgeContextFromResult,
-  retrieveKnowledgeForSections,
-  retrieveKnowledgeForDecomposition
+  retrieveKnowledgeForSectionsHybrid,
+  retrieveKnowledgeForDecompositionHybrid
 } from "./component-knowledge.service.js";
 import { buildGenerationPlan } from "./generation-plan.service.js";
 
 export async function generateService(input: string) {
   const decomposition = decomposeRequirement(input); // 大需求先做规则式拆分
   const knowledgeResult = decomposition.enabled
-    ? retrieveKnowledgeForDecomposition(input, decomposition)
+    ? await retrieveKnowledgeForDecompositionHybrid(input, decomposition)
     : undefined;
   const knowledge = knowledgeResult
     ? formatKnowledgeContextFromResult(knowledgeResult.cards, knowledgeResult.chunks)
-    : formatKnowledgeContext(input);
-  const sectionKnowledge = decomposition.enabled ? retrieveKnowledgeForSections(decomposition) : [];
+    : await formatKnowledgeContextHybrid(input);
+  const sectionKnowledge = decomposition.enabled ? await retrieveKnowledgeForSectionsHybrid(decomposition) : [];
   const generationPlan = knowledgeResult
     ? buildGenerationPlan(decomposition, { ...knowledgeResult, sectionKnowledge })
     : undefined;

@@ -41,5 +41,26 @@ export const env = {
    * search_json: 仅使用 components.search.json
    * hybrid: legacy + search_json 合并（去重）
    */
-  componentKnowledgeMode: (process.env.COMPONENT_GALLERY_AI_KNOWLEDGE_MODE ?? "legacy").trim()
+  componentKnowledgeMode: (process.env.COMPONENT_GALLERY_AI_KNOWLEDGE_MODE ?? "legacy").trim(),
+  /**
+   * 组件知识召回模式：
+   * - rule: 仅规则召回
+   * - hybrid: 规则召回 + LangChain 向量召回合并
+   * - vector: 仅向量召回（实验）
+   */
+  componentRecallMode: (process.env.COMPONENT_GALLERY_AI_RECALL_MODE ?? "rule").trim().toLowerCase(),
+  /**
+   * OpenAI 兼容 embeddings 模型名。
+   */
+  openAiEmbeddingModel: (process.env.OPENAI_EMBEDDING_MODEL ?? "text-embedding-3-small").trim(),
+  /**
+   * 是否启用 LangChain 向量召回。默认关闭，避免影响现有主链路。
+   */
+  componentVectorRecallEnabled: /^(1|true|yes|on)$/i.test(
+    (process.env.COMPONENT_GALLERY_AI_VECTOR_RECALL ?? "").trim()
+  ),
+  /**
+   * 向量召回 topK。
+   */
+  componentVectorTopK: Number(process.env.COMPONENT_GALLERY_AI_VECTOR_TOP_K) || 6
 };
