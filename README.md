@@ -63,3 +63,8 @@ pnpm python:structured:schema
 > 这个页面的主体是在“录入/修改”，还是在“查看/管理”？
 
 更完整的规则说明见 [packages/server/docs/page-classification.md](/Users/wangying/Desktop/ComponentGalleryAI/packages/server/docs/page-classification.md)。
+
+## Server Docs
+
+- [OpenAI 调用说明](/Users/wangying/Desktop/ComponentGalleryAI/packages/server/docs/openai-direct-call.md)
+- [LangChain 最小接入方案](/Users/wangying/Desktop/ComponentGalleryAI/packages/server/docs/langchain-minimal-integration.md)
